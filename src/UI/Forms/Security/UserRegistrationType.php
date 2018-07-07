@@ -4,6 +4,7 @@ namespace App\UI\Forms\Security;
 
 use App\Domain\DTO\Interfaces\Security\UserRegistrationDTOInterface;
 use App\Domain\DTO\Security\UserRegistrationDTO;
+use App\UI\Forms\Interfaces\Security\UserRegistrationTypeInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
