@@ -1,7 +1,16 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        user_db:
+            entity:
+              class: App\Domain\Model\User
+              property: username
+
+    encoders:
+        App\Domain\Model\User:
+            algorithm: bcrypt
+            cost: 13
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
