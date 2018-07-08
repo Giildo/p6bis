@@ -2,9 +2,10 @@
 
 namespace App\Domain\Model;
 
-use App\Domain\Model\Interfaces\UserInterface;
+use App\Domain\Model\Interfaces\UserPersonalInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class User
@@ -14,10 +15,10 @@ use Ramsey\Uuid\UuidInterface;
  * @ORM\Table(name="p6bis_user")
  * @ORM\Entity(repositoryClass="App\Domain\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserPersonalInterface, UserInterface
 {
     /**
-     * @var int
+     * @var UuidInterface
      *
      * @ORM\Id()
      * @ORM\Column(type="uuid")
@@ -50,7 +51,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $mail;
 
@@ -60,6 +61,13 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=20)
      */
     private $password;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="array")
+     */
+    private $roles;
 
     /**
      * User constructor.
@@ -83,6 +91,7 @@ class User implements UserInterface
         $this->lastName = $lastName;
         $this->mail = $mail;
         $this->password = $passwordEncoder($password, '');
+        $this->roles[] = 'ROLE_USER';
     }
 
     /**
@@ -131,5 +140,49 @@ class User implements UserInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     * <code>
+     * public function getRoles()
+     * {
+     *     return array('ROLE_USER');
+     * }
+     * </code>
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return (Role|string)[] The user roles
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }

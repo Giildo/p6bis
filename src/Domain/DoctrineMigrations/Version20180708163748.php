@@ -8,14 +8,14 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20180708153420 extends AbstractMigration
+final class Version20180708163748 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_5F2AD4665126AC48 ON p6bis_user (mail)');
+        $this->addSql('ALTER TABLE p6bis_user ADD roles LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\'');
     }
 
     public function down(Schema $schema) : void
@@ -23,6 +23,6 @@ final class Version20180708153420 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP INDEX UNIQ_5F2AD4665126AC48 ON p6bis_user');
+        $this->addSql('ALTER TABLE p6bis_user DROP roles');
     }
 }

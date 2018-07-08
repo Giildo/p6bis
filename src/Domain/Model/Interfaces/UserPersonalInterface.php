@@ -4,7 +4,7 @@ namespace App\Domain\Model\Interfaces;
 
 use Ramsey\Uuid\UuidInterface;
 
-interface UserInterface
+interface UserPersonalInterface
 {
     /**
      * @return UuidInterface
