@@ -4,6 +4,7 @@ namespace App\Domain\Model;
 
 use App\Domain\Model\Interfaces\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -72,7 +73,6 @@ class User implements UserInterface
      * @param callable $passwordEncoder
      */
     public function __construct(
-        UuidInterface $id,
         string $username,
         string $firstName,
         string $lastName,
@@ -80,12 +80,12 @@ class User implements UserInterface
         string $password,
         Callable $passwordEncoder
     ) {
-        $this->id = $id;
+        $this->id = Uuid::uuid4();
         $this->username = $username;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->mail = $mail;
-        $this->password = $passwordEncoder($password);
+        $this->password = $passwordEncoder($password, '');
     }
 
     /**

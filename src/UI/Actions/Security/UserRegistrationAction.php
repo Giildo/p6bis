@@ -7,9 +7,16 @@ use App\UI\Forms\Security\UserRegistrationType;
 use App\UI\Responders\Interfaces\Security\UserRegistrationResponderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @Route(name="Authentication_")
+ *
+ * Class UserRegistrationAction
+ * @package App\UI\Actions\Security
+ */
 class UserRegistrationAction
 {
     /**
@@ -48,11 +55,7 @@ class UserRegistrationAction
      * )
      *
      * @param Request $request
-     * @return Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @return Response|RedirectResponse
      */
     public function registration(Request $request)
     {
@@ -60,9 +63,10 @@ class UserRegistrationAction
                                   ->handleRequest($request);
 
         if ($this->handler->handle($form)) {
-            // TODO redirection
+
+            return $this->responder->userRegistrationResponse();
         }
 
-        return $this->responder->userRegistrationResponse($form);
+        return $this->responder->userRegistrationResponse(false, $form);
     }
 }
