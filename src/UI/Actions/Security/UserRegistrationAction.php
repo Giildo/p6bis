@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * @Route(name="Authentication_")
@@ -31,21 +32,28 @@ class UserRegistrationAction
      * @var UserRegistrationResponderInterface
      */
     private $responder;
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    private $authorizationChecker;
 
     /**
      * UserRegistrationAction constructor.
      * @param FormFactoryInterface $formFactory
      * @param UserRegistrationHandlerInterface $handler
      * @param UserRegistrationResponderInterface $responder
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         UserRegistrationHandlerInterface $handler,
-        UserRegistrationResponderInterface $responder
+        UserRegistrationResponderInterface $responder,
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->formFactory = $formFactory;
         $this->handler = $handler;
         $this->responder = $responder;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -59,11 +67,14 @@ class UserRegistrationAction
      */
     public function registration(Request $request)
     {
+        if ($this->authorizationChecker->isGranted('ROLE_USER')) {
+            return $this->responder->userRegistrationResponse();
+        }
+
         $form = $this->formFactory->create(UserRegistrationType::class)
                                   ->handleRequest($request);
 
         if ($this->handler->handle($form)) {
-
             return $this->responder->userRegistrationResponse();
         }
 
