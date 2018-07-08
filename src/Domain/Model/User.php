@@ -4,7 +4,6 @@ namespace App\Domain\Model;
 
 use App\Domain\Model\Interfaces\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -18,10 +17,10 @@ use Ramsey\Uuid\UuidInterface;
 class User implements UserInterface
 {
     /**
-     * @var UuidInterface
+     * @var int
      *
      * @ORM\Id()
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
@@ -51,20 +50,19 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $mail;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=20)
      */
     private $password;
 
     /**
      * User constructor.
-     * @param UuidInterface $id
      * @param string $username
      * @param string $firstName
      * @param string $lastName
@@ -80,7 +78,6 @@ class User implements UserInterface
         string $password,
         Callable $passwordEncoder
     ) {
-        $this->id = Uuid::uuid4();
         $this->username = $username;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
