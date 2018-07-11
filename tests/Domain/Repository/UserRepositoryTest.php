@@ -10,32 +10,24 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class UserRepositoryTest extends KernelTestCase
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private $repository;
 
-    /**
-     * @throws \Doctrine\ORM\Tools\ToolsException
-     */
     public function setUp()
     {
         $kernel = static::bootKernel();
-        $this->entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $this->repository = $entityManager->getRepository(User::class);
 
-        $schemaTool = new SchemaTool($this->entityManager);
-        $schemaTool->dropSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+        $schemaTool = new SchemaTool($entityManager);
+        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
+        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
 
-        $this->loadFixtures(__DIR__ . '/../../fixtures/user_registration/00.load.yml', $this->entityManager);
+        $this->loadFixtures(__DIR__ . '/../../fixtures/user_registration/00.load.yml', $entityManager);
     }
 
     use LoadFixtures;
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function testSaveUserFormRegistrationToUserRepository()
+    public function testSavingAndLoadingUserIntoTheDatabase()
     {
         $user = new User(
             'JohnDoe',
@@ -45,10 +37,9 @@ class UserRepositoryTest extends KernelTestCase
             '12345678'
         );
 
-        $repository = $this->entityManager->getRepository(User::class);
-        $repository->saveUserFromRegistration($user);
-        $userLoaded = $repository->findAll();
+        $this->repository->saveUserFromRegistration($user);
+        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
 
-        self::assertEquals($user, array_pop($userLoaded));
+        self::assertEquals($user, $userLoaded);
     }
 }

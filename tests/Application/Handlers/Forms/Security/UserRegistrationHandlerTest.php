@@ -22,9 +22,6 @@ class UserRegistrationHandlerTest extends KernelTestCase
 
     private $form;
 
-    /**
-     * @var EntityManagerInterface
-     */
     private $entityManager;
 
     protected function setUp()
