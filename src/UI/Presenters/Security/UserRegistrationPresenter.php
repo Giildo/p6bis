@@ -30,7 +30,7 @@ class UserRegistrationPresenter implements UserRegistrationPresenterInterface
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function userRegistrationPresentation(FormInterface $form)
+    public function userRegistrationPresentation(FormInterface $form): string
     {
         return $this->twig->render('Security/registration.html.twig', [
             'form' => $form->createView(),
