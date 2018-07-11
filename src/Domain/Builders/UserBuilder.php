@@ -28,14 +28,14 @@ class UserBuilder implements UserBuilderInterface
         UserRegistrationDTO $dto
     ): self {
         $encoder = $this->encoderFactory->getEncoder(User::class);
+        $passwordEncoded = $encoder->encodePassword($dto->password);
 
         $this->user = new User(
             $dto->username,
             $dto->firstName,
             $dto->lastName,
             $dto->mail,
-            $dto->password,
-            Closure::fromCallable([$encoder, 'encodePassword'])
+            $passwordEncoded
         );
 
         return $this;

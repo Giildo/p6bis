@@ -76,21 +76,19 @@ class User implements UserPersonalInterface, UserInterface
      * @param string $lastName
      * @param string $mail
      * @param string $password
-     * @param callable $passwordEncoder
-     */
+s     */
     public function __construct(
         string $username,
         string $firstName,
         string $lastName,
         string $mail,
-        string $password,
-        Callable $passwordEncoder
+        string $password
     ) {
         $this->username = $username;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->mail = $mail;
-        $this->password = $passwordEncoder($password, '');
+        $this->password = $password;
         $this->roles[] = 'ROLE_USER';
     }
 
