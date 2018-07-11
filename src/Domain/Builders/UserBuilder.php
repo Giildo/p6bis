@@ -5,7 +5,6 @@ namespace App\Domain\Builders;
 use App\Domain\Builders\Interfaces\UserBuilderInterface;
 use App\Domain\DTO\Security\UserRegistrationDTO;
 use App\Domain\Model\User;
-use Closure;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 class UserBuilder implements UserBuilderInterface
@@ -28,7 +27,7 @@ class UserBuilder implements UserBuilderInterface
         UserRegistrationDTO $dto
     ): self {
         $encoder = $this->encoderFactory->getEncoder(User::class);
-        $passwordEncoded = $encoder->encodePassword($dto->password);
+        $passwordEncoded = $encoder->encodePassword($dto->password, '');
 
         $this->user = new User(
             $dto->username,

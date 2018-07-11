@@ -16,7 +16,13 @@ class UserTest extends KernelTestCase
      */
     private $entityManager;
 
+    private $user;
+
+    private $userLoaded;
+
     /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Tools\ToolsException
      */
     public function setUp() {
@@ -28,13 +34,8 @@ class UserTest extends KernelTestCase
         $schemaTool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
 
         $this->loadFixtures(__DIR__ . '/../../fixtures/user_registration/00.load.yml', $this->entityManager);
-    }
 
-    use LoadFixtures;
-
-    public function testConstructorAndGetters()
-    {
-        $user = new User(
+        $this->user = new User(
             'JohnDoe',
             'John',
             'Doe',
@@ -42,24 +43,40 @@ class UserTest extends KernelTestCase
             '12345678'
         );
 
-        self::assertInstanceOf(User::class, $user);
-
-        $this->entityManager->persist($user);
+        $this->entityManager->persist($this->user);
         $this->entityManager->flush();
 
         $repository = $this->entityManager->getRepository(User::class);
         $users = $repository->findAll();
-        /** @var User $userLoaded */
-        $userLoaded = array_pop($users);
+        $this->userLoaded = array_pop($users);
+    }
 
-        self::assertInstanceOf(UuidInterface::class, $user->getId());
-        self::assertEquals('JohnDoe', $userLoaded->getUsername());
-        self::assertEquals('John', $userLoaded->getFirstName());
-        self::assertEquals('Doe', $userLoaded->getLastName());
-        self::assertEquals('john.doe@gmail.com', $userLoaded->getMail());
-        self::assertEquals('12345678', $userLoaded->getPassword());
-        self::assertEquals('', $userLoaded->getSalt());
-        self::assertEquals(['ROLE_USER'], $userLoaded->getRoles());
-        self::assertNull($user->eraseCredentials());
+    use LoadFixtures;
+
+    public function testConstructor()
+    {
+        self::assertInstanceOf(User::class, $this->user);
+    }
+
+    public function testConstructorAndGetters()
+    {
+        self::assertInstanceOf(UuidInterface::class, $this->userLoaded->getId());
+        self::assertEquals('JohnDoe', $this->userLoaded->getUsername());
+        self::assertEquals('John', $this->userLoaded->getFirstName());
+        self::assertEquals('Doe', $this->userLoaded->getLastName());
+        self::assertEquals('john.doe@gmail.com', $this->userLoaded->getMail());
+        self::assertEquals('12345678', $this->userLoaded->getPassword());
+        self::assertEquals('', $this->userLoaded->getSalt());
+        self::assertEquals(['ROLE_USER'], $this->userLoaded->getRoles());
+        self::assertNull($this->userLoaded->eraseCredentials());
+    }
+
+    public function testAttributesType()
+    {
+        self::assertAttributeInternalType('string', 'username', $this->userLoaded);
+        self::assertAttributeInternalType('string', 'firstName', $this->userLoaded);
+        self::assertAttributeInternalType('string', 'lastName', $this->userLoaded);
+        self::assertAttributeInternalType('string', 'mail', $this->userLoaded);
+        self::assertAttributeInternalType('string', 'password', $this->userLoaded);
     }
 }
