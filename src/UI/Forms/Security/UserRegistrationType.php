@@ -33,13 +33,11 @@ class UserRegistrationType extends AbstractType
             ])
             ->add('mail', RepeatedType::class, [
                 'type'            => EmailType::class,
-                'invalid_message' => 'Les adresse mails doivent être identiques.',
                 'first_options'   => ['label' => 'Adresse mail'],
                 'second_options'  => ['label' => 'Vérifiez votre adresse mail'],
             ])
             ->add('password', RepeatedType::class, [
                 'type'            => PasswordType::class,
-                'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'first_options'   => ['label' => 'Mot de passe'],
                 'second_options'  => ['label' => 'Vérifiez votre mot de passe'],
             ])
