@@ -2,13 +2,16 @@
 
 namespace App\Application\Authenticator\Security;
 
+use App\Application\Handlers\Interfaces\Forms\Security\UserConnectionHandlerInterface;
 use App\Domain\DTO\Interfaces\Security\UserConnectionDTOInterface;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
 use App\UI\Forms\Security\UserConnectionType;
+use App\UI\Responders\Interfaces\Security\UserConnectionResponderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -30,21 +33,42 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      * @var EncoderFactoryInterface
      */
     private $encoderFactory;
+    /**
+     * @var UserConnectionHandlerInterface
+     */
+    private $handler;
+    /**
+     * @var UserConnectionResponderInterface
+     */
+    private $responder;
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
 
     /**
      * UserConnectionTypeAuthenticator constructor.
      * @param FormFactoryInterface $formFactory
      * @param UserRepository $repository
      * @param EncoderFactoryInterface $encoderFactory
+     * @param UserConnectionHandlerInterface $handler
+     * @param UserConnectionResponderInterface $responder
+     * @param UrlGeneratorInterface $urlGenerator
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         UserRepository $repository,
-        EncoderFactoryInterface $encoderFactory
+        EncoderFactoryInterface $encoderFactory,
+        UserConnectionHandlerInterface $handler,
+        UserConnectionResponderInterface $responder,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->formFactory = $formFactory;
         $this->repository = $repository;
         $this->encoderFactory = $encoderFactory;
+        $this->handler = $handler;
+        $this->responder = $responder;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -54,7 +78,7 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      */
     protected function getLoginUrl()
     {
-        // TODO: Implement getLoginUrl() method.
+        return $this->urlGenerator->generate('Authentication_user_connection');
     }
 
     /**
@@ -68,7 +92,7 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function supports(Request $request): bool
     {
-        return $request->attributes->get('_route') === 'Authentication_connection' &&
+        return $request->attributes->get('_route') === 'Authentication_user_connection' &&
             $request->isMethod('POST') ?
             true :
             false;
@@ -102,7 +126,11 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
         $form = $this->formFactory->create(UserConnectionType::class);
         $form->handleRequest($request);
 
-        return $form->getData();
+        if ($this->handler->handle($form)) {
+            return $form->getData();
+        }
+
+        return [];
     }
 
     /**
@@ -123,7 +151,11 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        return $this->repository->loadUserByUsername($credentials->username);
+        if (!empty($credentials)) {
+            return $this->repository->loadUserByUsername($credentials->username);
+        }
+
+        return null;
     }
 
     /**
@@ -144,13 +176,17 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        $encoder = $this->encoderFactory->getEncoder(User::class);
+        if (!empty($credentials)) {
+            $encoder = $this->encoderFactory->getEncoder(User::class);
 
-        return $encoder->isPasswordValid(
-            $user->getPassword(),
-            $credentials->password,
-            ''
-        );
+            return $encoder->isPasswordValid(
+                $user->getPassword(),
+                $credentials->password,
+                ''
+            );
+        }
+
+        return false;
     }
 
     /**
@@ -170,6 +206,6 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        // TODO: Implement onAuthenticationSuccess() method.
+        return $this->responder->userConnectionResponse();
     }
 }
