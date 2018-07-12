@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Domain\Builders;
+
+use App\Domain\Builders\Interfaces\UserBuilderInterface;
+use App\Domain\DTO\Security\UserRegistrationDTO;
+use App\Domain\Model\User;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+
+class UserBuilder implements UserBuilderInterface
+{
+    /**
+     * @var User
+     */
+    private $user;
+    /**
+     * @var EncoderFactoryInterface
+     */
+    private $encoderFactory;
+
+    public function __construct(EncoderFactoryInterface $encoderFactory)
+    {
+        $this->encoderFactory = $encoderFactory;
+    }
+
+    public function createUserFromRegistration(
+        UserRegistrationDTO $dto
+    ): self {
+        $encoder = $this->encoderFactory->getEncoder(User::class);
+        $passwordEncoded = $encoder->encodePassword($dto->password, '');
+
+        $this->user = new User(
+            $dto->username,
+            $dto->firstName,
+            $dto->lastName,
+            $dto->mail,
+            $passwordEncoded
+        );
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+}
