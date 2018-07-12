@@ -21,7 +21,7 @@ class UserConnectionType extends AbstractType
                 'required' => false,
             ])
             ->add('password', PasswordType::class, [
-                'label'    => 'mot de passe',
+                'label'    => 'Mot de passe',
                 'required' => false,
             ])
         ;

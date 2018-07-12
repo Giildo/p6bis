@@ -4,6 +4,7 @@ namespace App\Tests\UI\Forms\Security;
 
 use App\Domain\DTO\Interfaces\Security\UserConnectionDTOInterface;
 use App\UI\Forms\Security\UserConnectionType;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class UserConnectionTypeTest extends TypeTestCase

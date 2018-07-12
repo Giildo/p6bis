@@ -5,6 +5,8 @@ namespace App\Domain\Repository;
 use App\Domain\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\ORMException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -35,9 +37,6 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
      * @param string $username The username
      *
      * @return UserInterface|null
-     *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function loadUserByUsername($username)
     {
@@ -46,6 +45,12 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->setParameter('username', $username)
             ->getQuery();
 
-        return $queryBuilder->getSingleResult();
+        try {
+            $user = $queryBuilder->getSingleResult();
+        } catch (NoResultException | NonUniqueResultException $e) {
+            return null;
+        }
+
+        return $user;
     }
 }

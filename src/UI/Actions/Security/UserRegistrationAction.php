@@ -3,10 +3,9 @@
 namespace App\UI\Actions\Security;
 
 use App\Application\Handlers\Interfaces\Forms\Security\UserRegistrationHandlerInterface;
-use App\UI\Forms\Security\UserConnectionType;
+use App\UI\Forms\Security\UserRegistrationType;
 use App\UI\Responders\Interfaces\Security\UserRegistrationResponderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,7 +71,7 @@ class UserRegistrationAction
             return $this->responder->userRegistrationResponse();
         }
 
-        $form = $this->formFactory->create(UserConnectionType::class)
+        $form = $this->formFactory->create(UserRegistrationType::class)
                                   ->handleRequest($request);
 
         if ($this->handler->handle($form)) {

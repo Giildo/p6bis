@@ -2,12 +2,14 @@
 
 namespace App\Application\Authenticator\Security;
 
+use App\Application\Authenticator\Interfaces\Security\UserConnectionTypeAuthenticatorInterface;
 use App\Application\Handlers\Interfaces\Forms\Security\UserConnectionHandlerInterface;
-use App\Domain\DTO\Interfaces\Security\UserConnectionDTOInterface;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
 use App\UI\Forms\Security\UserConnectionType;
 use App\UI\Responders\Interfaces\Security\UserConnectionResponderInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 
-class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
+class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator implements UserConnectionTypeAuthenticatorInterface
 {
     /**
      * @var FormFactoryInterface
@@ -62,7 +64,8 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
         UserConnectionHandlerInterface $handler,
         UserConnectionResponderInterface $responder,
         UrlGeneratorInterface $urlGenerator
-    ) {
+    )
+    {
         $this->formFactory = $formFactory;
         $this->repository = $repository;
         $this->encoderFactory = $encoderFactory;
@@ -76,7 +79,7 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      *
      * @return string
      */
-    protected function getLoginUrl()
+    public function getLoginUrl()
     {
         return $this->urlGenerator->generate('Authentication_user_connection');
     }
@@ -93,7 +96,7 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
     public function supports(Request $request): bool
     {
         return $request->attributes->get('_route') === 'Authentication_user_connection' &&
-            $request->isMethod('POST') ?
+        $request->isMethod('POST') ?
             true :
             false;
     }
@@ -121,10 +124,10 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      *
      * @throws \UnexpectedValueException If null is returned
      */
-    public function getCredentials(Request $request): UserConnectionDTOInterface
+    public function getCredentials(Request $request)
     {
-        $form = $this->formFactory->create(UserConnectionType::class);
-        $form->handleRequest($request);
+        $form = $this->formFactory->create(UserConnectionType::class)
+                                  ->handleRequest($request);
 
         if ($this->handler->handle($form)) {
             return $form->getData();
@@ -146,7 +149,6 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      *
      * @return UserInterface|null
      *
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getUser($credentials, UserProviderInterface $userProvider)

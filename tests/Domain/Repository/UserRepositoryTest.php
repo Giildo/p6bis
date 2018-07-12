@@ -27,7 +27,7 @@ class UserRepositoryTest extends KernelTestCase
 
     use LoadFixtures;
 
-    public function testSavingAndLoadingUserIntoTheDatabase()
+    public function testSavingAndLoadingUserIntoTheDatabaseIfUserIsUnique()
     {
         $user = new User(
             'JohnDoe',
@@ -41,5 +41,37 @@ class UserRepositoryTest extends KernelTestCase
         $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
 
         self::assertEquals($user, $userLoaded);
+    }
+
+    public function testSavingAndLoadingUserIntoTheDatabaseIfUserIsDouble()
+    {
+        $user = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john.doe@gmail.com',
+            '12345678'
+        );
+
+        $user2 = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john.doe@gmail.com',
+            '12345678'
+        );
+
+        $this->repository->saveUserFromRegistration($user);
+        $this->repository->saveUserFromRegistration($user2);
+        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
+
+        self::assertNull($userLoaded);
+    }
+
+    public function testLoadingUserIfUserIsntInDatabase()
+    {
+        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
+
+        self::assertNull($userLoaded);
     }
 }
