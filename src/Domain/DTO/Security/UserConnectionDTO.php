@@ -3,6 +3,7 @@
 namespace App\Domain\DTO\Security;
 
 use App\Domain\DTO\Interfaces\Security\UserConnectionDTOInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class UserConnectionDTO implements UserConnectionDTOInterface
 {

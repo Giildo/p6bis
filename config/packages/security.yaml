@@ -20,6 +20,9 @@ security:
             guard:
                 authenticators:
                     - App\Application\Authenticator\Security\UserConnectionTypeAuthenticator
+            logout:
+                path: /deconnexion
+
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
