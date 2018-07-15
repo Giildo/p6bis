@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Tests\Application\Handlers\Forms\Security;
+
+use App\Application\Handlers\Forms\Security\UserConnectionHandler;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormInterface;
+
+class UserConnectionHandlerTest extends TestCase
+{
+    private $form;
+
+    private $handler;
+
+    protected function setUp()
+    {
+        $this->form = $this->createMock(FormInterface::class);
+
+        $this->handler = new UserConnectionHandler();
+    }
+
+    public function testHandlerIfFormIsNotSubmitted()
+    {
+        $this->form->method('isSubmitted')->willReturn(false);
+
+        $response = $this->handler->handle($this->form);
+
+        self::assertFalse($response);
+    }
+
+    public function testHandlerIfFormIsSubmittedAndNotValid()
+    {
+        $this->form->method('isSubmitted')->willReturn(true);
+        $this->form->method('isValid')->willReturn(false);
+
+        $response = $this->handler->handle($this->form);
+
+        self::assertFalse($response);
+    }
+
+    public function testHandlerIfFormIsSubmittedAndIsValid()
+    {
+        $this->form->method('isSubmitted')->willReturn(true);
+        $this->form->method('isValid')->willReturn(true);
+
+        $response = $this->handler->handle($this->form);
+
+        self::assertTrue($response);
+    }
+}

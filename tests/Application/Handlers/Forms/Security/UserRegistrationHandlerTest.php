@@ -8,7 +8,6 @@ use App\Domain\Builders\UserBuilder;
 use App\Domain\DTO\Security\UserRegistrationDTO;
 use App\Domain\Model\User;
 use App\Tests\fixtures\LoadFixtures;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormInterface;
@@ -22,9 +21,6 @@ class UserRegistrationHandlerTest extends KernelTestCase
 
     private $form;
 
-    /**
-     * @var EntityManagerInterface
-     */
     private $entityManager;
 
     protected function setUp()

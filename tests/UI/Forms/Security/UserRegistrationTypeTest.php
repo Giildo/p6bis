@@ -4,7 +4,6 @@ namespace App\Tests\UI\Forms\Security;
 
 use App\Domain\DTO\Interfaces\Security\UserRegistrationDTOInterface;
 use App\UI\Forms\Security\UserRegistrationType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class UserRegistrationTypeTest extends TypeTestCase

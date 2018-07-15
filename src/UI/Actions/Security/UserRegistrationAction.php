@@ -6,7 +6,6 @@ use App\Application\Handlers\Interfaces\Forms\Security\UserRegistrationHandlerIn
 use App\UI\Forms\Security\UserRegistrationType;
 use App\UI\Responders\Interfaces\Security\UserRegistrationResponderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
