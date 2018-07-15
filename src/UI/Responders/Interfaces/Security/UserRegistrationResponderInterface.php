@@ -16,5 +16,5 @@ interface UserRegistrationResponderInterface
     public function userRegistrationResponse(
         ?bool $redirection = true,
         ?FormInterface $form = null
-    ): Response;
+    );
 }

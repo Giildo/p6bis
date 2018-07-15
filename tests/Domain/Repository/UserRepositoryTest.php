@@ -10,24 +10,32 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class UserRepositoryTest extends KernelTestCase
 {
-    private $repository;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
 
+    /**
+     * @throws \Doctrine\ORM\Tools\ToolsException
+     */
     public function setUp()
     {
         $kernel = static::bootKernel();
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $this->repository = $entityManager->getRepository(User::class);
+        $this->entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
 
-        $schemaTool = new SchemaTool($entityManager);
-        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
+        $schemaTool = new SchemaTool($this->entityManager);
+        $schemaTool->dropSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+        $schemaTool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
 
-        $this->loadFixtures(__DIR__ . '/../../fixtures/user_registration/00.load.yml', $entityManager);
+        $this->loadFixtures(__DIR__ . '/../../fixtures/user_registration/00.load.yml', $this->entityManager);
     }
 
     use LoadFixtures;
 
-    public function testSavingAndLoadingUserIntoTheDatabaseIfUserIsUnique()
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function testSaveUserFormRegistrationToUserRepository()
     {
         $user = new User(
             'JohnDoe',
@@ -37,41 +45,10 @@ class UserRepositoryTest extends KernelTestCase
             '12345678'
         );
 
-        $this->repository->saveUserFromRegistration($user);
-        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
+        $repository = $this->entityManager->getRepository(User::class);
+        $repository->saveUserFromRegistration($user);
+        $userLoaded = $repository->findAll();
 
-        self::assertEquals($user, $userLoaded);
-    }
-
-    public function testSavingAndLoadingUserIntoTheDatabaseIfUserIsDouble()
-    {
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john.doe@gmail.com',
-            '12345678'
-        );
-
-        $user2 = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john.doe@gmail.com',
-            '12345678'
-        );
-
-        $this->repository->saveUserFromRegistration($user);
-        $this->repository->saveUserFromRegistration($user2);
-        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
-
-        self::assertNull($userLoaded);
-    }
-
-    public function testLoadingUserIfUserIsntInDatabase()
-    {
-        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
-
-        self::assertNull($userLoaded);
+        self::assertEquals($user, array_pop($userLoaded));
     }
 }

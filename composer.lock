@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "79c5a0e85a7ba388dde11dbede4aa1a9",
-    "content-hash": "0ef34d8fa09ee0329d7675d63cacec2b",
+    "hash": "935249efae4f5902405a720f19be5199",
+    "content-hash": "3c948549722b97283114bf513863c0a3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2114,7 +2114,7 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.82",
+            "version": "v1.0.80",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
