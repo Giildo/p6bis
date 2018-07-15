@@ -2,6 +2,7 @@
 
 namespace App\Domain\Model;
 
+use App\Domain\Model\Interfaces\UserPersonalInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="p6bis_user")
  * @ORM\Entity(repositoryClass="App\Domain\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserPersonalInterface, UserInterface
 {
     /**
      * @var UuidInterface
@@ -57,7 +58,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=20)
      */
     private $password;
 
