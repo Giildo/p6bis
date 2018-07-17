@@ -23,7 +23,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
      *
      * @throws ORMException
      */
-    public function saveUserFromRegistration(User $user)
+    public function saveUser(User $user)
     {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
@@ -36,13 +36,33 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
      *
      * @param string $username The username
      *
-     * @return UserInterface|null
+     * @return User|null
      */
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($username): ?User
     {
         $queryBuilder = $this->createQueryBuilder('u')
             ->where('u.username = :username')
             ->setParameter('username', $username)
+            ->getQuery();
+
+        try {
+            $user = $queryBuilder->getSingleResult();
+        } catch (NoResultException | NonUniqueResultException $e) {
+            return null;
+        }
+
+        return $user;
+    }
+
+    /**
+     * @param string $token
+     * @return User|null
+     */
+    public function loadUserByToken(string $token): ?User
+    {
+        $queryBuilder = $this->createQueryBuilder('u')
+            ->where('u.token = :token')
+            ->setParameter('token', $token)
             ->getQuery();
 
         try {
