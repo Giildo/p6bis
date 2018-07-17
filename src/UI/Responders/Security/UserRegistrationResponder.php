@@ -36,7 +36,7 @@ class UserRegistrationResponder implements UserRegistrationResponderInterface
     public function userRegistrationResponse(
         ?bool $redirection = true,
         ?FormInterface $form = null
-    ) {
+    ): Response {
         return $redirection ?
             new RedirectResponse('/') :
             new Response($this->presenter->userRegistrationPresentation($form));

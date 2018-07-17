@@ -7,35 +7,33 @@ use App\Tests\fixtures\LoadFixtures;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 
 class UserRepositoryTest extends KernelTestCase
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private $repository;
 
-    /**
-     * @throws \Doctrine\ORM\Tools\ToolsException
-     */
+    private $tokenGenerator;
+
     public function setUp()
     {
         $kernel = static::bootKernel();
-        $this->entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $this->repository = $entityManager->getRepository(User::class);
 
-        $schemaTool = new SchemaTool($this->entityManager);
-        $schemaTool->dropSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+        $this->tokenGenerator = new UriSafeTokenGenerator();
 
-        $this->loadFixtures(__DIR__ . '/../../fixtures/user_registration/00.load.yml', $this->entityManager);
+        $schemaTool = new SchemaTool($entityManager);
+        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
+        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
+
+        $this->loadFixtures(__DIR__ . '/../../fixtures/user_registration/00.load.yml', $entityManager);
     }
 
     use LoadFixtures;
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function testSaveUserFormRegistrationToUserRepository()
+    public function testSavingAndLoadingUserIntoTheDatabaseIfUserIsUnique()
     {
         $user = new User(
             'JohnDoe',
@@ -45,10 +43,100 @@ class UserRepositoryTest extends KernelTestCase
             '12345678'
         );
 
-        $repository = $this->entityManager->getRepository(User::class);
-        $repository->saveUserFromRegistration($user);
-        $userLoaded = $repository->findAll();
+        $this->repository->saveUser($user);
+        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
 
-        self::assertEquals($user, array_pop($userLoaded));
+        self::assertEquals($user, $userLoaded);
+    }
+
+    public function testSavingAndLoadingUserIntoTheDatabaseIfUserIsDouble()
+    {
+        $user = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john.doe@gmail.com',
+            '12345678'
+        );
+
+        $user2 = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john.doe@gmail.com',
+            '12345678'
+        );
+
+        $this->repository->saveUser($user);
+        $this->repository->saveUser($user2);
+        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
+
+        self::assertNull($userLoaded);
+    }
+
+    public function testLoadingUserIfUserIsntInDatabase()
+    {
+        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
+
+        self::assertNull($userLoaded);
+    }
+
+    public function testLoadingUserByToken()
+    {
+        $user = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john.doe@gmail.com',
+            '12345678'
+        );
+
+        $user->createToken($this->tokenGenerator);
+        $token = $user->getToken();
+
+        $this->repository->saveUser($user);
+
+        $userLoaded = $this->repository->loadUserByToken($token);
+
+        self::assertEquals($user, $userLoaded);
+    }
+
+    public function testLoadingUserByTokenIfUserIsntIntoDatabase()
+    {
+        $userLoaded = $this->repository->loadUserByToken('token_5sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
+
+        self::assertNull($userLoaded);
+    }
+
+    public function testLoadingUserByTokenIfUserIsDouble()
+    {
+        $tokenGenerator = $this->createMock(TokenGeneratorInterface::class);
+        $tokenGenerator->method('generateToken')
+                       ->willReturn('token_5sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
+
+        $user = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john.doe@gmail.com',
+            '12345678'
+        );
+
+        $user2 = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john.doe@gmail.com',
+            '12345678'
+        );
+
+        $user->createToken($tokenGenerator);
+        $user2->createToken($tokenGenerator);
+
+        $this->repository->saveUser($user);
+        $this->repository->saveUser($user2);
+        $userLoaded = $this->repository->loadUserByToken('token_5sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
+
+        self::assertNull($userLoaded);
     }
 }

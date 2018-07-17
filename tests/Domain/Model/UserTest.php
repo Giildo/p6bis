@@ -4,10 +4,12 @@ namespace App\Tests\Domain\Model;
 
 use App\Domain\Model\User;
 use App\Tests\fixtures\LoadFixtures;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class UserTest extends KernelTestCase
 {
@@ -25,7 +27,8 @@ class UserTest extends KernelTestCase
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Tools\ToolsException
      */
-    public function setUp() {
+    public function setUp()
+    {
         $kernel = static::bootKernel();
         $this->entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
 
@@ -78,5 +81,29 @@ class UserTest extends KernelTestCase
         self::assertAttributeInternalType('string', 'lastName', $this->userLoaded);
         self::assertAttributeInternalType('string', 'mail', $this->userLoaded);
         self::assertAttributeInternalType('string', 'password', $this->userLoaded);
+    }
+
+    public function testCreationAndDeletionOfToken()
+    {
+        $tokenGenerator = $this->createMock(TokenGeneratorInterface::class);
+        $tokenGenerator->method('generateToken')
+                       ->willReturn('8_Me185sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
+
+        $this->user->createToken($tokenGenerator);
+
+        self::assertInternalType('string', $this->user->getToken());
+        self::assertInstanceOf(DateTime::class, $this->user->getTokenDate());
+
+        $this->user->deleteToken();
+
+        self::assertNull($this->user->getToken());
+        self::assertNull($this->user->getTokenDate());
+    }
+
+    public function testChangementOfPassword()
+    {
+        $this->user->changePassword('87654321');
+
+        self::assertEquals('87654321', $this->user->getPassword());
     }
 }
