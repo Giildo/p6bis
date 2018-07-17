@@ -3,6 +3,7 @@
 namespace App\Domain\DTO\Security;
 
 use App\Domain\DTO\Interfaces\Security\PasswordRecoveryForPasswordDTOInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PasswordRecoveryForPasswordDTO implements PasswordRecoveryForPasswordDTOInterface
 {
