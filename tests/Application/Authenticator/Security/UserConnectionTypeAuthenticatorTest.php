@@ -10,7 +10,6 @@ use App\Domain\DTO\Security\UserConnectionDTO;
 use App\Domain\Model\User;
 use App\Tests\fixtures\LoadFixtures;
 use App\UI\Presenters\Security\UserConnectionPresenter;
-use App\UI\Responders\Interfaces\Security\UserConnectionResponderInterface;
 use App\UI\Responders\Security\UserConnectionResponder;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

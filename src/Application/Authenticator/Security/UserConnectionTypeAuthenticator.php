@@ -8,8 +8,6 @@ use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
 use App\UI\Forms\Security\UserConnectionType;
 use App\UI\Responders\Interfaces\Security\UserConnectionResponderInterface;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -148,8 +146,6 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator imp
      * @param UserProviderInterface $userProvider
      *
      * @return UserInterface|null
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
