@@ -2,9 +2,12 @@
 
 namespace App\Domain\Model;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * Class User
@@ -67,6 +70,20 @@ class User implements UserInterface
      * @ORM\Column(type="array")
      */
     private $roles;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=43, nullable=true)
+     */
+    private $token;
+
+    /**
+     * @var DateTime|null
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $tokenDate;
 
     /**
      * User constructor.
@@ -140,6 +157,22 @@ s     */
     }
 
     /**
+     * @return null|string
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getTokenDate(): ?DateTime
+    {
+        return $this->tokenDate;
+    }
+
+    /**
      * Returns the roles granted to the user.
      *
      * <code>
@@ -181,5 +214,33 @@ s     */
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * @param string $newPassword
+     * @return void
+     */
+    public function changePassword(string $newPassword): void
+    {
+        $this->password = $newPassword;
+    }
+
+    /**
+     * @param TokenGeneratorInterface $tokenGenerator
+     * @return void
+     */
+    public function createToken(TokenGeneratorInterface $tokenGenerator): void
+    {
+        $this->token = $tokenGenerator->generateToken();
+        $this->tokenDate = new DateTime();
+    }
+
+    /**
+     * @return void
+     */
+    public function deleteToken(): void
+    {
+        $this->token = null;
+        $this->tokenDate = null;
     }
 }

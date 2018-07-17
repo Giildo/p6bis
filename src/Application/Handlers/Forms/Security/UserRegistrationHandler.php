@@ -45,7 +45,7 @@ class UserRegistrationHandler implements UserRegistrationHandlerInterface
             $user = $this->builder->createUserFromRegistration($form->getData())
                                   ->getUser();
 
-            $this->repository->saveUserFromRegistration($user);
+            $this->repository->saveUser($user);
 
             return true;
         }
