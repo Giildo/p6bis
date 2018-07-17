@@ -2,11 +2,11 @@
 
 namespace App\Tests\UI\Forms\Security;
 
-use App\Domain\DTO\Interfaces\Security\UserConnectionDTOInterface;
-use App\UI\Forms\Security\UserConnectionType;
+use App\Domain\DTO\Interfaces\Security\PasswordRecoveryForUsernameDTOInterface;
+use App\UI\Forms\Security\PasswordRecoveryForUsernameType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-class UserConnectionTypeTest extends TypeTestCase
+class PasswordRecoveryForUsernameTypeTest extends TypeTestCase
 {
     private $form;
 
@@ -14,20 +14,19 @@ class UserConnectionTypeTest extends TypeTestCase
     {
         parent::setUp();
 
-        $this->form = $this->factory->create(UserConnectionType::class);
+        $this->form = $this->factory->create(PasswordRecoveryForUsernameType::class);
     }
 
     public function testReturnOfTheFormType()
     {
         $formData = [
             'username'  => 'JohnDoe',
-            'password'  => '12345678',
         ];
 
         $this->form->submit($formData);
 
         $dto = $this->form->getData();
 
-        self::assertInstanceOf(UserConnectionDTOInterface::class, $dto);
+        self::assertInstanceOf(PasswordRecoveryForUsernameDTOInterface::class, $dto);
     }
 }
