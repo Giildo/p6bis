@@ -1,0 +1,3 @@
+App\Domain\Model\User:
+    john_doe:
+        __construct: ['JohnDoe', 'John', 'Doe', 'john.doe@gmail.com', '12345678']

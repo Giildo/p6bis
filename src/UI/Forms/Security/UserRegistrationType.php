@@ -31,16 +31,17 @@ class UserRegistrationType extends AbstractType
                 'label'    => 'Nom',
             ])
             ->add('mail', RepeatedType::class, [
-                'type'            => EmailType::class,
-                'first_options'   => ['label' => 'Adresse mail'],
-                'second_options'  => ['label' => 'Vérifiez votre adresse mail'],
+                'type'           => EmailType::class,
+                'required'       => false,
+                'first_options'  => ['label' => 'Adresse mail'],
+                'second_options' => ['label' => 'Vérifiez votre adresse mail'],
             ])
             ->add('password', RepeatedType::class, [
-                'type'            => PasswordType::class,
-                'first_options'   => ['label' => 'Mot de passe'],
-                'second_options'  => ['label' => 'Vérifiez votre mot de passe'],
-            ])
-        ;
+                'type'           => PasswordType::class,
+                'required'       => false,
+                'first_options'  => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Vérifiez votre mot de passe'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
