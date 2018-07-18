@@ -11,7 +11,7 @@ class PasswordRecoveryForUsernameDTO implements PasswordRecoveryForUsernameDTOIn
      * @var string
      *
      * @Assert\Type("string")
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="Le nom d'utilisateur doit être renseigné")
      * @Assert\Length(
      *     min="5",
      *     minMessage="Le nom d'utilisateur doit avoir au moins {{ limit }} caractères.",
@@ -21,7 +21,7 @@ class PasswordRecoveryForUsernameDTO implements PasswordRecoveryForUsernameDTOIn
      */
     public $username;
 
-    public function __construct(string $username)
+    public function __construct(?string $username)
     {
         $this->username = $username;
     }

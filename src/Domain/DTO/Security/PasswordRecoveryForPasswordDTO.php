@@ -10,7 +10,7 @@ class PasswordRecoveryForPasswordDTO implements PasswordRecoveryForPasswordDTOIn
     /**
      * @var string
      *
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="Le mot de passe doit être renseigné")
      * @Assert\Length(
      *     min="8",
      *     minMessage="Le mot de passe doit avoir au moins {{ limit }} caractères."
@@ -18,7 +18,7 @@ class PasswordRecoveryForPasswordDTO implements PasswordRecoveryForPasswordDTOIn
      */
     public $password;
 
-    public function __construct(string $password)
+    public function __construct(?string $password)
     {
         $this->password = $password;
     }

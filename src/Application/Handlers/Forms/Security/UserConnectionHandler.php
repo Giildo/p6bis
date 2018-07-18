@@ -14,6 +14,6 @@ class UserConnectionHandler implements UserConnectionHandlerInterface
      */
     public function handle(FormInterface $form): bool
     {
-        return $form->isSubmitted() && $form->isValid();
+        return ($form->isSubmitted() && $form->isValid());
     }
 }

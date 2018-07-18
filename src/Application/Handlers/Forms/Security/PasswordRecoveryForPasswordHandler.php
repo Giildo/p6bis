@@ -5,6 +5,7 @@ namespace App\Application\Handlers\Forms\Security;
 use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForPasswordHandlerInterface;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -45,6 +46,9 @@ class PasswordRecoveryForPasswordHandler implements PasswordRecoveryForPasswordH
             );
 
             if (is_null($user)) {
+                $form->addError(
+                    new FormError('Une erreur est survenue avec le lien renseigné, veuillez réessayer ou refaire une demande de récupération pour votre mot de passe.')
+                );
                 return false;
             }
 
