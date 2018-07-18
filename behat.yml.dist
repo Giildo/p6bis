@@ -2,11 +2,16 @@ default:
     suites:
         default:
             contexts:
-                - FeatureContext:
-                    kernel: '@kernel'
+                - DoctrineContext :
+                    entityManager : '@doctrine.orm.entity_manager'
+                    passwordEncoder : '@security.password_encoder'
 
     extensions:
         Behat\Symfony2Extension:
             kernel:
                 bootstrap: features/bootstrap/bootstrap.php
                 class: App\Kernel
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony2: ~
