@@ -71,8 +71,41 @@ class DoctrineContext extends MinkContext implements Context
         $this->iLoadFollowingFile('/user/01.specific_user.yml');
 
         $this->visit('/connexion');
-        $this->fillField('user_connection_username', 'JohnDoe');
-        $this->fillField('user_connection_password', '12345678');
+        $this->fillField('user_connection_username', $username);
+        $this->fillField('user_connection_password', $password);
         $this->pressButton('Valider');
     }
+
+    /**
+     * @Given I load following file :path with recovery token
+     */
+    public function iLoadFollowingFileWithRecoveryToken($path)
+    {
+        $this->iLoadFollowingFile($path);
+
+        $this->visit('/recuperation');
+        $this->fillField('password_recovery_for_username_username', 'JohnDoe');
+        $this->pressButton('Valider');
+    }
+
+    /**
+     * @Given I am on :uri with bad token and with prefix :prefix
+     */
+    public function iAmOnWithBadTokenAndWithPrefix($uri, $prefix)
+    {
+        $this->visit("{$uri}?{$prefix}=token");
+    }
+
+    /**
+     * @Given I am on :uri with token and with prefix :prefix
+     */
+    public function iAmOnWithTokenAndWithPrefix($uri, $prefix)
+    {
+        $repository = $this->entityManager->getRepository(User::class);
+        $user = $repository->loadUserByUsername('JohnDoe');
+        $token = $user->getToken();
+
+            $this->visit("{$uri}?{$prefix}={$token}");
+    }
+
 }

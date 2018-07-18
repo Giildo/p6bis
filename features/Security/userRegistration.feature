@@ -16,6 +16,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
     And I should see "Le nom doit être renseigné"
     And I should see "L'eMail doit être renseigné"
     And I should see "Le mot de passe doit être renseigné"
+    And I should be on "/enregistrement"
 
   Scenario: [Fail] The User submit the form with too short username, first name, last name and password.
     Given I am on "/enregistrement"
@@ -30,6 +31,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
     And I should see "Le prénom doit avoir au moins 2 caractères."
     And I should see "Le nom doit avoir au moins 2 caractères."
     And I should see "Le mot de passe doit avoir au moins 8 caractères."
+    And I should be on "/enregistrement"
 
   Scenario: [Fail] The User submit the form with too long username, first name, last name.
     Given I am on "/enregistrement"
@@ -41,6 +43,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
     Then I should see "Le nom d'utilisateur ne doit pas avoir plus de 50 caractères."
     And I should see "Le prénom ne doit pas avoir plus de 50 caractères."
     And I should see "Le nom ne doit pas avoir plus de 50 caractères."
+    And I should be on "/enregistrement"
 
   Scenario: [Fail] The user submit the form with bad value in "mail" field.
     Given I am on "/enregistrement"
@@ -49,6 +52,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
       | user_registration_mail_second | johndoe.fr |
     And I press "Valider"
     Then I should see "n'est pas une adresse mail valide."
+    And I should be on "/enregistrement"
 
   Scenario: [Success] The User is registered as successfully
     Given I am on "/enregistrement"
