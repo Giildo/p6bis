@@ -11,7 +11,7 @@ class UserConnectionDTO implements UserConnectionDTOInterface
      * @var string
      *
      * @Assert\Type("string")
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="Le nom d'utilisateur doit être renseigné")
      * @Assert\Length(
      *     min="5",
      *     minMessage="Le nom d'utilisateur doit avoir au moins {{ limit }} caractères.",
@@ -24,7 +24,7 @@ class UserConnectionDTO implements UserConnectionDTOInterface
     /**
      * @var string
      *
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="Le mot de passe doit être renseigné")
      * @Assert\Length(
      *     min="8",
      *     minMessage="Le mot de passe doit avoir au moins {{ limit }} caractères."
@@ -37,7 +37,7 @@ class UserConnectionDTO implements UserConnectionDTOInterface
      * @param string $username
      * @param string $password
      */
-    public function __construct(string $username, string $password)
+    public function __construct(?string $username, ?string $password)
     {
         $this->username = $username;
         $this->password = $password;
