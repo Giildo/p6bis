@@ -13,7 +13,7 @@ interface UserBuilderInterface
      *
      * @return UserBuilder
      */
-    public function createUserFromRegistration(
+    public function createUser(
         UserRegistrationDTO $dto
     ): UserBuilder;
 
