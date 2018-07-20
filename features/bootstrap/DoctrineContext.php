@@ -1,10 +1,14 @@
 <?php
 
+use App\Application\Helpers\SluggerHelper;
+use App\Domain\Model\Category;
+use App\Domain\Model\Trick;
 use App\Domain\Model\User;
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\MinkContext;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
+use Faker\Factory;
 use Nelmio\Alice\Loader\NativeLoader;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -105,7 +109,66 @@ class DoctrineContext extends MinkContext implements Context
         $user = $repository->loadUserByUsername('JohnDoe');
         $token = $user->getToken();
 
-            $this->visit("{$uri}?{$prefix}={$token}");
+        $this->visit("{$uri}?{$prefix}={$token}");
     }
 
+    /**
+     * @Given I load the tricks with category and user
+     */
+    public function iLoadTheTricksWithCategoryAndUser()
+    {
+        $faker = Factory::create('fr_FR');
+
+        $user = new User(
+            $faker->userName,
+            $faker->firstName,
+            $faker->lastName,
+            $faker->email,
+            $faker->password
+        );
+
+        $slugger = new SluggerHelper();
+
+        $category = new Category('Grabs', $slugger);
+
+        $trick = new Trick(
+            'Mute',
+            $faker->text,
+            $slugger,
+            $category,
+            $user
+        );
+
+        $trick->publish();
+
+        $this->entityManager->persist($trick);
+
+        for ($i = 0 ; $i < 8 ; $i++) {
+            $trick = new Trick(
+                $faker->unique()->word,
+                $faker->text,
+                $slugger,
+                $category,
+                $user
+            );
+
+            $trick->publish();
+
+            $this->entityManager->persist($trick);
+        }
+
+        $trick = new Trick(
+            'Truck',
+            $faker->text,
+            $slugger,
+            $category,
+            $user
+        );
+
+        $trick->publish();
+
+        $this->entityManager->persist($trick);
+
+        $this->entityManager->flush();
+    }
 }

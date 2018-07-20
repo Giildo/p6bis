@@ -2,6 +2,8 @@
 
 namespace App\UI\Actions\Trick;
 
+use App\Domain\Model\Trick;
+use App\Domain\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\UI\Responders\Interfaces\Trick\HomePageResponderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -42,6 +44,11 @@ class HomePageAction
      */
     public function homePage(Request $request): Response
     {
-        return $this->responder->homePageResponse();
+        /** @var TrickRepository $repository */
+        $repository = $this->entityManager->getRepository(Trick::class);
+
+        $tricks = $repository->loadAllTricksWithAuthorCategoryAndHeadPicture();
+
+        return $this->responder->homePageResponse($tricks);
     }
 }

@@ -25,7 +25,6 @@ class Category implements CategoryInterface
     /**
      * @var string
      *
-     * @ORM\Id()
      * @ORM\Column(type="string", length=50)
      */
     private $name;

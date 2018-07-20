@@ -12,4 +12,12 @@ class TrickRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Trick::class);
     }
+
+    public function loadAllTricksWithAuthorCategoryAndHeadPicture()
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.published = 1')
+            ->getQuery()
+            ->getResult();
+    }
 }

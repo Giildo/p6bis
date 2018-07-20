@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 interface HomePageResponderInterface
 {
     /**
+     * @param array $tricks
      * @return Response|RedirectResponse
      */
-    public function homePageResponse(): Response;
+    public function homePageResponse(?array $tricks = []): Response;
 }

@@ -8,6 +8,16 @@
 
 {% block body %}
     <h1>Bienvenue sur la page d'accueil</h1>
+
+    <ul>
+        {% if tricks is not empty %}
+            {% for trick in tricks %}
+                <li>{{ trick.name }}</li>
+            {% endfor %}
+        {% else %}
+            <h2>Désolé, aucune figure n'a été crée ou n'a été publiée.</h2>
+        {% endif %}
+    </ul>
 {% endblock %}
 
 {% block javascripts %}

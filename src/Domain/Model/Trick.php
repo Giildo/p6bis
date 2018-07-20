@@ -66,7 +66,7 @@ class Trick implements TrickInterface
      * @var CategoryInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Category", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, referencedColumnName="slug")
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="slug", name="category_slug")
      */
     private $category;
 
@@ -82,7 +82,7 @@ class Trick implements TrickInterface
      * @var PictureInterface
      *
      * @ORM\OneToOne(targetEntity="App\Domain\Model\Picture", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(referencedColumnName="name")
+     * @ORM\JoinColumn(referencedColumnName="name", name="head_picture_name")
      */
     private $headPicture;
 
@@ -189,5 +189,10 @@ class Trick implements TrickInterface
     public function createSlug(SluggerHelperInterface $slugger, string $name): void
     {
         $this->slug = $slugger->slugify($name);
+    }
+
+    public function publish(): void
+    {
+        $this->published = true;
     }
 }

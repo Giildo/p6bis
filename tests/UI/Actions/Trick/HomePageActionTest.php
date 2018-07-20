@@ -2,6 +2,7 @@
 
 namespace App\Tests\UI\Actions\Trick;
 
+use App\Domain\Repository\TrickRepository;
 use App\UI\Actions\Trick\HomePageAction;
 use App\UI\Presenters\Interfaces\Trick\HomePagePresenterInterface;
 use App\UI\Responders\Trick\HomePageResponder;
@@ -17,10 +18,14 @@ class HomePageActionTest extends TestCase
     public function setUp()
     {
         $presenter = $this->createMock(HomePagePresenterInterface::class);
-        $presenter->method('homePageResponse')->willReturn('Vue de la page');
+        $presenter->method('homePagePresentation')->willReturn('Vue de la page');
         $responder = new HomePageResponder($presenter);
 
+        $repository = $this->createMock(TrickRepository::class);
+        $repository->method('loadAllTricksWithAuthorCategoryAndHeadPicture')->willReturn([]);
+
         $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('getRepository')->willReturn($repository);
 
         $this->action = new HomePageAction($entityManager, $responder);
     }

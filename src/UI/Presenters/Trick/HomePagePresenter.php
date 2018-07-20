@@ -22,13 +22,16 @@ class HomePagePresenter implements HomePagePresenterInterface
     }
 
     /**
+     * @param array|null $tricks
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function homePagePresentation(): string
+    public function homePagePresentation(?array $tricks = []): string
     {
-        return $this->twig->render('Trick/home.html.twig');
+        return $this->twig->render('Trick/home.html.twig', [
+            'tricks' => $tricks,
+        ]);
     }
 }

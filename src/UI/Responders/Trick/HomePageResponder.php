@@ -24,15 +24,16 @@ class HomePageResponder implements HomePageResponderInterface
     }
 
     /**
+     * @param array|null $tricks
      * @return Response|RedirectResponse
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function homePageResponse(): Response
+    public function homePageResponse(?array $tricks = []): Response
     {
         return new Response(
-            $this->presenter->homePagePresentation()
+            $this->presenter->homePagePresentation($tricks)
         );
     }
 }

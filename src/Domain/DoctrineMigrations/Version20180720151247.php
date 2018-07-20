@@ -8,14 +8,14 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20180720140137 extends AbstractMigration
+final class Version20180720151247 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE p6bis_trick DROP INDEX IDX_73F32D454CA2C340, ADD UNIQUE INDEX UNIQ_73F32D454CA2C340 (head_picture_id)');
+        $this->addSql('CREATE TABLE p6bis_category (slug VARCHAR(50) NOT NULL, name VARCHAR(50) NOT NULL, PRIMARY KEY(slug)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
     }
 
     public function down(Schema $schema) : void
@@ -23,6 +23,6 @@ final class Version20180720140137 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE p6bis_trick DROP INDEX UNIQ_73F32D454CA2C340, ADD INDEX IDX_73F32D454CA2C340 (head_picture_id)');
+        $this->addSql('DROP TABLE p6bis_category');
     }
 }
