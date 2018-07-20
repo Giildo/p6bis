@@ -65,7 +65,7 @@ class Trick implements TrickInterface
     /**
      * @var CategoryInterface
      *
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Category")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Category", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false, referencedColumnName="slug")
      */
     private $category;
@@ -73,7 +73,7 @@ class Trick implements TrickInterface
     /**
      * @var UserInterface
      *
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\User")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\User", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
@@ -81,7 +81,7 @@ class Trick implements TrickInterface
     /**
      * @var PictureInterface
      *
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Picture")
+     * @ORM\OneToOne(targetEntity="App\Domain\Model\Picture", cascade={"persist", "remove"})
      * @ORM\JoinColumn(referencedColumnName="name")
      */
     private $headPicture;
