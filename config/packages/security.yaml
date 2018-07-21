@@ -22,6 +22,7 @@ security:
                     - App\Application\Authenticator\Security\UserConnectionTypeAuthenticator
             logout:
                 path: /deconnexion
+                target: /accueil
 
 
     role_hierarchy:
