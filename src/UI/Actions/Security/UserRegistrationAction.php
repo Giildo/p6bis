@@ -5,11 +5,11 @@ namespace App\UI\Actions\Security;
 use App\Application\Handlers\Interfaces\Forms\Security\UserRegistrationHandlerInterface;
 use App\UI\Forms\Security\UserRegistrationType;
 use App\UI\Responders\Interfaces\Security\UserRegistrationResponderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**

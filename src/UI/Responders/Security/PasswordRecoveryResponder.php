@@ -7,6 +7,7 @@ use App\UI\Responders\Interfaces\Security\PasswordRecoveryResponderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PasswordRecoveryResponder implements PasswordRecoveryResponderInterface
 {
@@ -14,14 +15,22 @@ class PasswordRecoveryResponder implements PasswordRecoveryResponderInterface
      * @var PasswordRecoveryPresenterInterface
      */
     private $presenter;
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
 
     /**
      * PasswordRecoveryResponder constructor.
      * @param PasswordRecoveryPresenterInterface $presenter
+     * @param UrlGeneratorInterface $urlGenerator
      */
-    public function __construct(PasswordRecoveryPresenterInterface $presenter)
-    {
+    public function __construct(
+        PasswordRecoveryPresenterInterface $presenter,
+        UrlGeneratorInterface $urlGenerator
+    ) {
         $this->presenter = $presenter;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -45,7 +54,7 @@ class PasswordRecoveryResponder implements PasswordRecoveryResponderInterface
         }
 
         return $redirection ?
-            new RedirectResponse('/') :
+            new RedirectResponse($this->urlGenerator->generate('home')) :
             new Response($this->presenter->passwordRecoveryPresentation($form, $typeName, $mailerSuccess));
     }
 }

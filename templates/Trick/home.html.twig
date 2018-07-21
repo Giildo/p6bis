@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue sur la page d'accueil</h1>
+
+    {% if tricks is not empty %}
+        <table>
+            <thead>
+            <tr>
+                <th>Nom de la figure</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for trick in tricks %}
+                <tr>
+                    <td>{{ trick.name }}</td>
+                    {% if app.user != null and (app.user.username == trick.author.username or is_granted('ROLE_ADMIN')) %}
+                        <td>
+                            <button>Modifier</button>
+                            <button>Supprimer</button>
+                        </td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>Désolé, aucune figure n'a été crée ou n'a été publiée.</h2>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

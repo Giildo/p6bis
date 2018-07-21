@@ -7,6 +7,7 @@ use App\UI\Responders\Interfaces\Security\UserRegistrationResponderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UserRegistrationResponder implements UserRegistrationResponderInterface
 {
@@ -14,14 +15,22 @@ class UserRegistrationResponder implements UserRegistrationResponderInterface
      * @var UserRegistrationPresenterInterface
      */
     private $presenter;
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
 
     /**
      * UserRegistrationResponder constructor.
      * @param UserRegistrationPresenterInterface $presenter
+     * @param UrlGeneratorInterface $urlGenerator
      */
-    public function __construct(UserRegistrationPresenterInterface $presenter)
-    {
+    public function __construct(
+        UserRegistrationPresenterInterface $presenter,
+        UrlGeneratorInterface $urlGenerator
+    ) {
         $this->presenter = $presenter;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -38,7 +47,7 @@ class UserRegistrationResponder implements UserRegistrationResponderInterface
         ?FormInterface $form = null
     ): Response {
         return $redirection ?
-            new RedirectResponse('/') :
+            new RedirectResponse($this->urlGenerator->generate('home')) :
             new Response($this->presenter->userRegistrationPresentation($form));
     }
 }
