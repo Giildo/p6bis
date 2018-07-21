@@ -4,7 +4,6 @@ namespace App\UI\Responders\Trick;
 
 use App\UI\Presenters\Interfaces\Trick\HomePagePresenterInterface;
 use App\UI\Responders\Interfaces\Trick\HomePageResponderInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomePageResponder implements HomePageResponderInterface
@@ -25,10 +24,7 @@ class HomePageResponder implements HomePageResponderInterface
 
     /**
      * @param array|null $tricks
-     * @return Response|RedirectResponse
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @return Response
      */
     public function homePageResponse(?array $tricks = []): Response
     {

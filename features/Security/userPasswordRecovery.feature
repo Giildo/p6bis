@@ -7,7 +7,7 @@ Feature: As an anonymous user, I need to be able to request to change my passwor
     Given I load following file "/user/01.specific_user.yml"
     And I am logged with username "JohnDoe" and with password "12345678"
     And I am on "/recuperation"
-    Then I should be on "/"
+    Then I should be on "/accueil"
 
   Scenario: [Fail] The User submit the form without data.
     Given I am on "/recuperation"
@@ -70,4 +70,4 @@ Feature: As an anonymous user, I need to be able to request to change my passwor
       | password_recovery_for_password_password_first  | 12345678 |
       | password_recovery_for_password_password_second | 12345678 |
     And I press "Valider"
-    And I should be on "/"
+    And I should be on "/accueil"

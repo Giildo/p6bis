@@ -7,7 +7,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
     Given I load following file "/user/01.specific_user.yml"
     And I am logged with username "JohnDoe" and with password "12345678"
     And I am on "/enregistrement"
-    Then I should be on "/"
+    Then I should be on "/accueil"
 
   Scenario: [Fail] The User submit the form without data.
     Given I am on "/enregistrement"
@@ -66,4 +66,4 @@ Feature: As an anonymous user, I need to be able to registration on application.
       | user_registration_password_first  | 12345678    |
       | user_registration_password_second | 12345678    |
     And I press "Valider"
-    Then I should be on "/"
+    Then I should be on "/accueil"

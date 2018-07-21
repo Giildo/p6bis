@@ -38,11 +38,9 @@ class HomePageAction
     /**
      * @Route(path="/accueil", name="home")
      *
-     * @param Request $request
-     *
-     * @return Response|RedirectResponse
+     * @return Response
      */
-    public function homePage(Request $request): Response
+    public function homePage(): Response
     {
         /** @var TrickRepository $repository */
         $repository = $this->entityManager->getRepository(Trick::class);
