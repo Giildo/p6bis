@@ -4,7 +4,8 @@
 Feature: As an anonymous user, I need to be able to request to change my password.
 
   Scenario: [Fail] The User is redirected if he is already logged in.
-    Given I am logged with username "JohnDoe" and with password "12345678"
+    Given I load following file "/user/01.specific_user.yml"
+    And I am logged with username "JohnDoe" and with password "12345678"
     And I am on "/recuperation"
     Then I should be on "/"
 

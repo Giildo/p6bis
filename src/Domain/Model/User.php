@@ -223,6 +223,24 @@ s     */
     }
 
     /**
+     * @param array $newRole
+     * @return void
+     */
+    public function changeRole(array $newRole): void
+    {
+        $this->roles = $newRole;
+    }
+
+    /**
+     * @param string $roleAdd
+     * @return void
+     */
+    public function addRole(string $roleAdd): void
+    {
+        $this->roles[] = $roleAdd;
+    }
+
+    /**
      * @param TokenGeneratorInterface $tokenGenerator
      * @return void
      */

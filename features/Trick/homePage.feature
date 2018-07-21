@@ -18,3 +18,17 @@ Feature: As an visitor, anonymous or connected, I need to be able to see the lis
     And I am on "/accueil"
     Then I should see "Mute"
     And I should see "Truck"
+
+  Scenario: [Success] The user is connected with user role, he can edit and delete their tricks.
+    Given I load the tricks with category and user
+    And I am logged with username "JohnDoe" and with password "12345678"
+    And I am on "/accueil"
+    Then I should see "Supprimer" "2" times
+    And I should see "Modifier" "2" times
+
+  Scenario: [Success] The user is connected with admin role, he can edit and delete all tricks.
+    Given I load the tricks with category and user
+    And I am logged with username "JaneDoe" and with password "12345678"
+    And I am on "/accueil"
+    Then I should see "Supprimer" "10" times
+    And I should see "Modifier" "10" times

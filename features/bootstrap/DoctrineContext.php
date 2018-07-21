@@ -72,8 +72,6 @@ class DoctrineContext extends MinkContext implements Context
      */
     public function iAmLoggedWithUsernameAndWithPassword($username, $password)
     {
-        $this->iLoadFollowingFile('/user/01.specific_user.yml');
-
         $this->visit('/connexion');
         $this->fillField('user_connection_username', $username);
         $this->fillField('user_connection_password', $password);
@@ -119,13 +117,26 @@ class DoctrineContext extends MinkContext implements Context
     {
         $faker = Factory::create('fr_FR');
 
-        $user = new User(
-            $faker->userName,
-            $faker->firstName,
-            $faker->lastName,
-            $faker->email,
-            $faker->password
+        $user1 = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john@doe.com',
+            '12345678'
         );
+
+        $user2 = new User(
+            'JaneDoe',
+            'Jane',
+            'Doe',
+            'jane@doe.com',
+            '12345678'
+        );
+
+        $user2->changeRole(['ROLE_ADMIN']);
+
+        $user1->changePassword($this->passwordEncoder->encodePassword($user1, $user1->getPassword()));
+        $user2->changePassword($this->passwordEncoder->encodePassword($user2, $user2->getPassword()));
 
         $slugger = new SluggerHelper();
 
@@ -136,7 +147,7 @@ class DoctrineContext extends MinkContext implements Context
             $faker->text,
             $slugger,
             $category,
-            $user
+            $user1
         );
 
         $trick->publish();
@@ -149,7 +160,7 @@ class DoctrineContext extends MinkContext implements Context
                 $faker->text,
                 $slugger,
                 $category,
-                $user
+                $user2
             );
 
             $trick->publish();
@@ -162,7 +173,7 @@ class DoctrineContext extends MinkContext implements Context
             $faker->text,
             $slugger,
             $category,
-            $user
+            $user1
         );
 
         $trick->publish();
@@ -171,4 +182,18 @@ class DoctrineContext extends MinkContext implements Context
 
         $this->entityManager->flush();
     }
+
+
+    /**
+     * @Then I should see :text :number times
+     */
+    public function iShouldSeeTimes($text, $number)
+    {
+        $this->assertSession()->elementsCount(
+            'named',
+            ['button', $text],
+            $number
+        );
+    }
+
 }
