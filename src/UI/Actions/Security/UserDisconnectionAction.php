@@ -3,7 +3,7 @@
 namespace App\UI\Actions\Security;
 
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(name="Authentication_")

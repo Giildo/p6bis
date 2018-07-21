@@ -37,6 +37,7 @@
             <exclude>
                 <file>./src/Kernel.php</file>
                 <directory>./src/Domain/DoctrineMigrations</directory>
+                <directory>./src/Domain/Fixtures</directory>
             </exclude>
         </whitelist>
     </filter>

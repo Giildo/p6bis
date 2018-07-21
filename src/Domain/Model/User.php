@@ -7,12 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * Class User
- *
- * @package App\Domain\Model
  *
  * @ORM\Table(name="p6bis_user")
  * @ORM\Entity(repositoryClass="App\Domain\Repository\UserRepository")
@@ -223,6 +220,24 @@ s     */
     public function changePassword(string $newPassword): void
     {
         $this->password = $newPassword;
+    }
+
+    /**
+     * @param array $newRole
+     * @return void
+     */
+    public function changeRole(array $newRole): void
+    {
+        $this->roles = $newRole;
+    }
+
+    /**
+     * @param string $roleAdd
+     * @return void
+     */
+    public function addRole(string $roleAdd): void
+    {
+        $this->roles[] = $roleAdd;
     }
 
     /**

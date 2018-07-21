@@ -23,7 +23,7 @@ class UserBuilder implements UserBuilderInterface
         $this->encoderFactory = $encoderFactory;
     }
 
-    public function createUserFromRegistration(
+    public function createUser(
         UserRegistrationDTO $dto
     ): self {
         $encoder = $this->encoderFactory->getEncoder(User::class);

@@ -47,7 +47,7 @@ class UserBuilderTest extends TestCase
             '12345678'
         );
 
-        $this->builder->createUserFromRegistration($userRegistrationDTO);
+        $this->builder->createUser($userRegistrationDTO);
 
         self::assertInstanceOf(UserInterface::class, $this->builder->getUser());
     }

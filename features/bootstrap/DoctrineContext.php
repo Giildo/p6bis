@@ -1,10 +1,14 @@
 <?php
 
+use App\Application\Helpers\SluggerHelper;
+use App\Domain\Model\Category;
+use App\Domain\Model\Trick;
 use App\Domain\Model\User;
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\MinkContext;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
+use Faker\Factory;
 use Nelmio\Alice\Loader\NativeLoader;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -68,8 +72,6 @@ class DoctrineContext extends MinkContext implements Context
      */
     public function iAmLoggedWithUsernameAndWithPassword($username, $password)
     {
-        $this->iLoadFollowingFile('/user/01.specific_user.yml');
-
         $this->visit('/connexion');
         $this->fillField('user_connection_username', $username);
         $this->fillField('user_connection_password', $password);
@@ -105,7 +107,93 @@ class DoctrineContext extends MinkContext implements Context
         $user = $repository->loadUserByUsername('JohnDoe');
         $token = $user->getToken();
 
-            $this->visit("{$uri}?{$prefix}={$token}");
+        $this->visit("{$uri}?{$prefix}={$token}");
+    }
+
+    /**
+     * @Given I load the tricks with category and user
+     */
+    public function iLoadTheTricksWithCategoryAndUser()
+    {
+        $faker = Factory::create('fr_FR');
+
+        $user1 = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john@doe.com',
+            '12345678'
+        );
+
+        $user2 = new User(
+            'JaneDoe',
+            'Jane',
+            'Doe',
+            'jane@doe.com',
+            '12345678'
+        );
+
+        $user2->changeRole(['ROLE_ADMIN']);
+
+        $user1->changePassword($this->passwordEncoder->encodePassword($user1, $user1->getPassword()));
+        $user2->changePassword($this->passwordEncoder->encodePassword($user2, $user2->getPassword()));
+
+        $slugger = new SluggerHelper();
+
+        $category = new Category('Grabs', $slugger);
+
+        $trick = new Trick(
+            'Mute',
+            $faker->text,
+            $slugger,
+            $category,
+            $user1
+        );
+
+        $trick->publish();
+
+        $this->entityManager->persist($trick);
+
+        for ($i = 0 ; $i < 8 ; $i++) {
+            $trick = new Trick(
+                $faker->unique()->word,
+                $faker->text,
+                $slugger,
+                $category,
+                $user2
+            );
+
+            $trick->publish();
+
+            $this->entityManager->persist($trick);
+        }
+
+        $trick = new Trick(
+            'Truck',
+            $faker->text,
+            $slugger,
+            $category,
+            $user1
+        );
+
+        $trick->publish();
+
+        $this->entityManager->persist($trick);
+
+        $this->entityManager->flush();
+    }
+
+
+    /**
+     * @Then I should see :text :number times
+     */
+    public function iShouldSeeTimes($text, $number)
+    {
+        $this->assertSession()->elementsCount(
+            'named',
+            ['button', $text],
+            $number
+        );
     }
 
 }

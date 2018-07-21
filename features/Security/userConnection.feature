@@ -4,9 +4,10 @@
 Feature: As an anonymous user, I need to be able to logged in on application.
 
   Scenario: [Fail] The User is redirected if he is already logged in.
-    Given I am logged with username "JohnDoe" and with password "12345678"
+    Given I load following file "/user/01.specific_user.yml"
+    And I am logged with username "JohnDoe" and with password "12345678"
     And I am on "/connexion"
-    Then I should be on "/"
+    Then I should be on "/accueil"
 
   Scenario: [Fail] The User submit the form without data.
     Given I am on "/connexion"
@@ -56,4 +57,4 @@ Feature: As an anonymous user, I need to be able to logged in on application.
       | user_connection_username | JohnDoe  |
       | user_connection_password | 12345678 |
     And I press "Valider"
-    Then I should be on "/"
+    Then I should be on "/accueil"
