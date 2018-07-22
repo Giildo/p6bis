@@ -4,16 +4,15 @@ namespace App\Tests\Domain\Repository;
 
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Model\Category;
-use App\Domain\Model\Interfaces\CategoryInterface;
-use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\VideoInterface;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
+use App\Domain\Model\Video;
 use Doctrine\ORM\Tools\SchemaTool;
 use Faker\Factory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class TrickRepositoryTest extends KernelTestCase
+class VideoRepositoryTest extends KernelTestCase
 {
     private $repository;
 
@@ -21,7 +20,7 @@ class TrickRepositoryTest extends KernelTestCase
     {
         $kernel = static::bootKernel();
         $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $this->repository = $entityManager->getRepository(Trick::class);
+        $this->repository = $entityManager->getRepository(Video::class);
 
         $schemaTool = new SchemaTool($entityManager);
         $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
@@ -49,40 +48,29 @@ class TrickRepositoryTest extends KernelTestCase
             $user
         );
 
+        $video1 = new Video(
+            '6z6KBAbM0MY',
+            $trick
+        );
+
+        $video2 = new Video(
+            'bfcxdox293s',
+            $trick
+        );
+
         $trick->publish();
 
-        $entityManager->persist($trick);
-
-        for ($i = 0 ; $i < 10 ; $i++) {
-            $trick = new Trick(
-                $faker->unique()->word,
-                $faker->text,
-                $slugger,
-                $category,
-                $user
-            );
-
-            $trick->publish();
-
-            $entityManager->persist($trick);
-        }
+        $entityManager->persist($video1);
+        $entityManager->persist($video2);
 
         $entityManager->flush();
     }
 
-    public function testLoadingOfTheTricks()
+    public function testTheLoadingOfPictures()
     {
-        $tricks = $this->repository->loadAllTricksWithAuthorCategoryAndHeadPicture();
+        $pictures = $this->repository->loadVideoByTrick('mute');
 
-        self::assertInstanceOf(TrickInterface::class, $tricks[0]);
-        self::assertInstanceOf(UserInterface::class, $tricks[0]->getAuthor());
-        self::assertInstanceOf(CategoryInterface::class, $tricks[0]->getCategory());
-    }
-
-    public function testLoadingOfOneTrick()
-    {
-        $trick = $this->repository->loadOneTrickWithCategoryAndAuthor('mute');
-
-        self::assertInstanceOf(TrickInterface::class, $trick);
+        self::assertInstanceOf(VideoInterface::class, $pictures[0]);
+        self::assertInstanceOf(VideoInterface::class, $pictures[1]);
     }
 }

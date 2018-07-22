@@ -44,22 +44,33 @@ class Picture implements PictureInterface
     private $headPicture;
 
     /**
+     * @var Trick
+     *
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="slug", name="trick_slug")
+     */
+    private $trick;
+
+    /**
      * PictureTest constructor.
      * @param string $name
      * @param string $description
      * @param string $extension
      * @param bool $headPicture
+     * @param Trick $trick
      */
     public function __construct(
         string $name,
         string $description,
         string $extension,
-        bool $headPicture
+        bool $headPicture,
+        Trick $trick
     ) {
         $this->name = $name;
         $this->description = $description;
         $this->extension = $extension;
         $this->headPicture = $headPicture;
+        $this->trick = $trick;
     }
 
     /**
@@ -92,5 +103,13 @@ class Picture implements PictureInterface
     public function isHeadPicture(): bool
     {
         return $this->headPicture;
+    }
+
+    /**
+     * @return Trick
+     */
+    public function getTrick(): Trick
+    {
+        return $this->trick;
     }
 }

@@ -4,7 +4,6 @@ namespace App\Domain\Model;
 
 use App\Application\Helpers\Interfaces\SluggerHelperInterface;
 use App\Domain\Model\Interfaces\CategoryInterface;
-use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -79,29 +78,19 @@ class Trick implements TrickInterface
     private $author;
 
     /**
-     * @var PictureInterface
-     *
-     * @ORM\OneToOne(targetEntity="App\Domain\Model\Picture", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(referencedColumnName="name", name="head_picture_name")
-     */
-    private $headPicture;
-
-    /**
      * Trick constructor.
      * @param string $name
      * @param string $description
      * @param SluggerHelperInterface $slugger
      * @param CategoryInterface $category
      * @param UserInterface $author
-     * @param PictureInterface|null $headPicture
      */
     public function __construct(
         string $name,
         string $description,
         SluggerHelperInterface $slugger,
         CategoryInterface $category,
-        UserInterface $author,
-        ?PictureInterface $headPicture = null
+        UserInterface $author
     ) {
         $this->name = $name;
         $this->description = $description;
@@ -109,7 +98,6 @@ class Trick implements TrickInterface
         $this->createdAt = new DateTime();
         $this->category = $category;
         $this->author = $author;
-        $this->headPicture = $headPicture;
 
         $this->createSlug($slugger, $this->name);
     }
@@ -176,14 +164,6 @@ class Trick implements TrickInterface
     public function getAuthor(): UserInterface
     {
         return $this->author;
-    }
-
-    /**
-     * @return PictureInterface|null
-     */
-    public function getHeadPicture(): ?PictureInterface
-    {
-        return $this->headPicture;
     }
 
     public function createSlug(SluggerHelperInterface $slugger, string $name): void

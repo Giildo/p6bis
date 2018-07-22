@@ -4,16 +4,15 @@ namespace App\Tests\Domain\Repository;
 
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Model\Category;
-use App\Domain\Model\Interfaces\CategoryInterface;
-use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\PictureInterface;
+use App\Domain\Model\Picture;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
 use Doctrine\ORM\Tools\SchemaTool;
 use Faker\Factory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class TrickRepositoryTest extends KernelTestCase
+class PictureRepositoryTest extends KernelTestCase
 {
     private $repository;
 
@@ -21,7 +20,7 @@ class TrickRepositoryTest extends KernelTestCase
     {
         $kernel = static::bootKernel();
         $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $this->repository = $entityManager->getRepository(Trick::class);
+        $this->repository = $entityManager->getRepository(Picture::class);
 
         $schemaTool = new SchemaTool($entityManager);
         $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
@@ -49,40 +48,35 @@ class TrickRepositoryTest extends KernelTestCase
             $user
         );
 
+        $picture1 = new Picture(
+            'mute001',
+            'Photo de la figure Mute',
+            'jpg',
+            true,
+            $trick
+        );
+
+        $picture2 = new Picture(
+            'mute002',
+            'Photo de la figure Mute',
+            'jpg',
+            false,
+            $trick
+        );
+
         $trick->publish();
 
-        $entityManager->persist($trick);
-
-        for ($i = 0 ; $i < 10 ; $i++) {
-            $trick = new Trick(
-                $faker->unique()->word,
-                $faker->text,
-                $slugger,
-                $category,
-                $user
-            );
-
-            $trick->publish();
-
-            $entityManager->persist($trick);
-        }
+        $entityManager->persist($picture1);
+        $entityManager->persist($picture2);
 
         $entityManager->flush();
     }
 
-    public function testLoadingOfTheTricks()
+    public function testTheLoadingOfPictures()
     {
-        $tricks = $this->repository->loadAllTricksWithAuthorCategoryAndHeadPicture();
+        $pictures = $this->repository->loadPictureByTrick('mute');
 
-        self::assertInstanceOf(TrickInterface::class, $tricks[0]);
-        self::assertInstanceOf(UserInterface::class, $tricks[0]->getAuthor());
-        self::assertInstanceOf(CategoryInterface::class, $tricks[0]->getCategory());
-    }
-
-    public function testLoadingOfOneTrick()
-    {
-        $trick = $this->repository->loadOneTrickWithCategoryAndAuthor('mute');
-
-        self::assertInstanceOf(TrickInterface::class, $trick);
+        self::assertInstanceOf(PictureInterface::class, $pictures[0]);
+        self::assertInstanceOf(PictureInterface::class, $pictures[1]);
     }
 }

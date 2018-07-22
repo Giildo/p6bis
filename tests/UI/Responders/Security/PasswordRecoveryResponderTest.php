@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PasswordRecoveryResponderTest extends TestCase
 {
@@ -19,7 +20,10 @@ class PasswordRecoveryResponderTest extends TestCase
         $presenter = $this->createMock(PasswordRecoveryPresenterInterface::class);
         $presenter->method('passwordRecoveryPresentation')->willReturn('Vue de retour');
 
-        $this->responder = new PasswordRecoveryResponder($presenter);
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method('generate')->willReturn('url');
+
+        $this->responder = new PasswordRecoveryResponder($presenter, $urlGenerator);
     }
 
     public function testConstructor()

@@ -33,20 +33,13 @@ class TrickTest extends TestCase
             'john@doe.com',
             '12345678'
         );
-        $this->picture = new Picture(
-            'mute20180720093701',
-            'Photo d\'un snowboarder qui fait une figure Mute',
-            'jpg',
-            '1'
-        );
 
         $this->trick = new Trick(
             "Essai d'une phrase complexe à accent !",
             'Description de la figure de snowboard.',
             $slugger,
             $this->category,
-            $this->author,
-            $this->picture
+            $this->author
         );
 
     }
@@ -81,8 +74,5 @@ class TrickTest extends TestCase
 
         self::assertEquals($this->author, $this->trick->getAuthor());
         self::assertInstanceOf(UserInterface::class, $this->trick->getAuthor());
-
-        self::assertEquals($this->picture, $this->trick->getHeadPicture());
-        self::assertInstanceOf(PictureInterface::class, $this->trick->getHeadPicture());
     }
 }
