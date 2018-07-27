@@ -71,11 +71,11 @@ class UserConnectionTypeAuthenticatorTest extends KernelTestCase
             UserConnectionHandlerInterface::class
         );
 
-        $presenter = $this->createMock(UserConnectionPresenter::class);
-        $userConnectionResponder = new UserConnectionResponder($presenter);
-
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $urlGenerator->method('generate')->willReturn('/connexion');
+
+        $presenter = $this->createMock(UserConnectionPresenter::class);
+        $userConnectionResponder = new UserConnectionResponder($presenter, $urlGenerator);
 
         $attributes = $this->createMock(ParameterBag::class);
         $this->request = new Request();

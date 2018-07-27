@@ -4,12 +4,10 @@ namespace App\Tests\Domain\Model;
 
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Model\Interfaces\CategoryInterface;
-use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
 use App\Domain\Model\Category;
-use App\Domain\Model\Picture;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -19,7 +17,6 @@ class TrickTest extends TestCase
     private $trick;
     private $category;
     private $author;
-    private $picture;
 
     public function setUp()
     {
@@ -33,20 +30,13 @@ class TrickTest extends TestCase
             'john@doe.com',
             '12345678'
         );
-        $this->picture = new Picture(
-            'mute20180720093701',
-            'Photo d\'un snowboarder qui fait une figure Mute',
-            'jpg',
-            '1'
-        );
 
         $this->trick = new Trick(
             "Essai d'une phrase complexe à accent !",
             'Description de la figure de snowboard.',
             $slugger,
             $this->category,
-            $this->author,
-            $this->picture
+            $this->author
         );
 
     }
@@ -81,8 +71,5 @@ class TrickTest extends TestCase
 
         self::assertEquals($this->author, $this->trick->getAuthor());
         self::assertInstanceOf(UserInterface::class, $this->trick->getAuthor());
-
-        self::assertEquals($this->picture, $this->trick->getHeadPicture());
-        self::assertInstanceOf(PictureInterface::class, $this->trick->getHeadPicture());
     }
 }

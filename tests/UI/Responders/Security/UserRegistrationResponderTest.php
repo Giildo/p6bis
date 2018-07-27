@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UserRegistrationResponderTest extends TestCase
 {
@@ -20,7 +22,10 @@ class UserRegistrationResponderTest extends TestCase
         $presenter->method('userRegistrationPresentation')
                   ->willReturn('Contenu de la vue');
 
-        $this->responder = new UserRegistrationResponder($presenter);
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method('generate')->willReturn('url');
+
+        $this->responder = new UserRegistrationResponder($presenter, $urlGenerator);
     }
 
     public function testConstructor()
