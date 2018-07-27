@@ -34,6 +34,10 @@ class TrickRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('trick')
             ->where('trick.slug = :slug')
+            /*->leftJoin('trick.pictures', 'pictures')
+            ->andWhere('pictures.trick = :slug')
+            ->leftJoin('trick.videos', 'videos')
+            ->andWhere('videos.trick = :slug')*/
             ->setParameter('slug', $trickSlug)
             ->getQuery()
             ->getOneOrNullResult();

@@ -4,12 +4,10 @@ namespace App\Tests\Domain\Model;
 
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Model\Interfaces\CategoryInterface;
-use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
 use App\Domain\Model\Category;
-use App\Domain\Model\Picture;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -19,7 +17,6 @@ class TrickTest extends TestCase
     private $trick;
     private $category;
     private $author;
-    private $picture;
 
     public function setUp()
     {

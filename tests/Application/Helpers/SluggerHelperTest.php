@@ -26,4 +26,10 @@ class SluggerHelperTest extends TestCase
         $this->slugger->setSpaceCharacter('_');
         self::assertEquals('_', $this->slugger->getSpaceCharacter());
     }
+
+    public function testSlugification()
+    {
+        $slug = $this->slugger->slugify("Phrase à accent et ponctuation !");
+        self::assertEquals('phrase-a-accent-et-ponctuation', $slug);
+    }
 }

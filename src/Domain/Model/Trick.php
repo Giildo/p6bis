@@ -7,6 +7,7 @@ use App\Domain\Model\Interfaces\CategoryInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -76,6 +77,20 @@ class Trick implements TrickInterface
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
+
+    /**
+     * @var PersistentCollection
+     *
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Picture", mappedBy="trick")
+     */
+    private $pictures;
+
+    /**
+     * @var PersistentCollection
+     *
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Video", mappedBy="trick")
+     */
+    private $videos;
 
     /**
      * Trick constructor.
@@ -164,6 +179,22 @@ class Trick implements TrickInterface
     public function getAuthor(): UserInterface
     {
         return $this->author;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getPictures(): ?array
+    {
+        return $this->pictures->toArray();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getVideos(): ?array
+    {
+        return $this->videos->toArray();
     }
 
     public function createSlug(SluggerHelperInterface $slugger, string $name): void

@@ -46,7 +46,7 @@ class Picture implements PictureInterface
     /**
      * @var Trick
      *
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"}, inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="slug", name="trick_slug")
      */
     private $trick;
