@@ -1,29 +1,38 @@
 <?php
 
-namespace App\Tests\Domain\Repository;
+namespace App\Tests\UI\Actions\Trick;
 
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Model\Category;
-use App\Domain\Model\Interfaces\CategoryInterface;
-use App\Domain\Model\Interfaces\TrickInterface;
-use App\Domain\Model\Picture;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
-use App\Domain\Model\Video;
+use App\UI\Actions\Trick\ShowTrickAction;
+use App\UI\Presenters\Interfaces\Trick\ShowTrickPresenterInterface;
+use App\UI\Responders\Trick\ShowTrickResponder;
 use Doctrine\ORM\Tools\SchemaTool;
 use Faker\Factory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class TrickRepositoryTest extends KernelTestCase
+class ShowTrickActionTest extends KernelTestCase
 {
-    private $repository;
+    private $action;
 
     public function setUp()
     {
-        $kernel = static::bootKernel();
+        $kernel = self::bootKernel();
+
+        $presenter = $this->createMock(ShowTrickPresenterInterface::class);
+        $presenter->method('showTrickPresentation')->willReturn('Vue de la page');
+
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method('generate')->willReturn('url');
+
+        $responder = new ShowTrickResponder($presenter, $urlGenerator);
+
         $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $this->repository = $entityManager->getRepository(Trick::class);
 
         $schemaTool = new SchemaTool($entityManager);
         $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
@@ -53,22 +62,7 @@ class TrickRepositoryTest extends KernelTestCase
 
         $trick->publish();
 
-        $picture = new Picture(
-            'mute001',
-            'Photo de la figure Mute',
-            'jpg',
-            false,
-            $trick
-        );
-
-        $video = new Video(
-            'Ehhdj55mdS',
-            $trick
-        );
-
         $entityManager->persist($trick);
-        $entityManager->persist($picture);
-        $entityManager->persist($video);
 
         for ($i = 0 ; $i < 10 ; $i++) {
             $trick = new Trick(
@@ -85,21 +79,25 @@ class TrickRepositoryTest extends KernelTestCase
         }
 
         $entityManager->flush();
+
+        $this->action = new ShowTrickAction($entityManager, $responder);
     }
 
-    public function testLoadingOfTheTricks()
+    public function testConstructor()
     {
-        $tricks = $this->repository->loadAllTricksWithAuthorCategoryAndHeadPicture();
-
-        self::assertInstanceOf(TrickInterface::class, $tricks[0]);
-        self::assertInstanceOf(UserInterface::class, $tricks[0]->getAuthor());
-        self::assertInstanceOf(CategoryInterface::class, $tricks[0]->getCategory());
+        self::assertInstanceOf(ShowTrickAction::class, $this->action);
     }
 
-    public function testLoadingOfOneTrick()
+    public function testRedirectResponseIfSlugForEntityIsWrong()
     {
-        $trick = $this->repository->loadOneTrickWithCategoryAndAuthor('mute');
+        self::assertInstanceOf(RedirectResponse::class, $this->action->showTrick('badSlug'));
+    }
 
-        self::assertInstanceOf(TrickInterface::class, $trick);
+    public function testResponseIfSlugForEntityIsGood()
+    {
+        $response = $this->action->showTrick('mute');
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertNotInstanceOf(RedirectResponse::class, $response);
     }
 }

@@ -4,10 +4,10 @@ namespace App\Domain\Model;
 
 use App\Application\Helpers\Interfaces\SluggerHelperInterface;
 use App\Domain\Model\Interfaces\CategoryInterface;
-use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -79,12 +79,18 @@ class Trick implements TrickInterface
     private $author;
 
     /**
-     * @var PictureInterface
+     * @var PersistentCollection
      *
-     * @ORM\OneToOne(targetEntity="App\Domain\Model\Picture", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(referencedColumnName="name", name="head_picture_name")
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Picture", mappedBy="trick")
      */
-    private $headPicture;
+    private $pictures;
+
+    /**
+     * @var PersistentCollection
+     *
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Video", mappedBy="trick")
+     */
+    private $videos;
 
     /**
      * Trick constructor.
@@ -93,15 +99,13 @@ class Trick implements TrickInterface
      * @param SluggerHelperInterface $slugger
      * @param CategoryInterface $category
      * @param UserInterface $author
-     * @param PictureInterface|null $headPicture
      */
     public function __construct(
         string $name,
         string $description,
         SluggerHelperInterface $slugger,
         CategoryInterface $category,
-        UserInterface $author,
-        ?PictureInterface $headPicture = null
+        UserInterface $author
     ) {
         $this->name = $name;
         $this->description = $description;
@@ -109,7 +113,6 @@ class Trick implements TrickInterface
         $this->createdAt = new DateTime();
         $this->category = $category;
         $this->author = $author;
-        $this->headPicture = $headPicture;
 
         $this->createSlug($slugger, $this->name);
     }
@@ -179,11 +182,19 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return PictureInterface|null
+     * @return array|null
      */
-    public function getHeadPicture(): ?PictureInterface
+    public function getPictures(): ?array
     {
-        return $this->headPicture;
+        return $this->pictures->toArray();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getVideos(): ?array
+    {
+        return $this->videos->toArray();
     }
 
     public function createSlug(SluggerHelperInterface $slugger, string $name): void

@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class UserConnectionResponderTest extends TestCase
@@ -21,7 +22,10 @@ class UserConnectionResponderTest extends TestCase
         $presenter->method('userConnectionPresentation')
             ->willReturn('Contenu de la vue');
 
-        $this->responder = new UserConnectionResponder($presenter);
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method('generate')->willReturn('url');
+
+        $this->responder = new UserConnectionResponder($presenter, $urlGenerator);
     }
 
     public function testConstructor()

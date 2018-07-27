@@ -106,4 +106,17 @@ class UserTest extends KernelTestCase
 
         self::assertEquals('87654321', $this->user->getPassword());
     }
+
+    public function testRolesChangements()
+    {
+        self::assertEquals(['ROLE_USER'], $this->user->getRoles());
+
+        $this->user->changeRole(['ROLE_ADMIN']);
+
+        self::assertEquals(['ROLE_ADMIN'], $this->user->getRoles());
+
+        $this->user->addRole('ROLE_USER');
+
+        self::assertEquals(['ROLE_ADMIN', 'ROLE_USER'], $this->user->getRoles());
+    }
 }

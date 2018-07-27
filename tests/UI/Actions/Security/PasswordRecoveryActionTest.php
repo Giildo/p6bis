@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
 
@@ -48,9 +49,12 @@ class PasswordRecoveryActionTest extends TestCase
         $this->forUsernameHandler = $this->createMock(PasswordRecoveryForUsernameHandlerInterface::class);
         $this->forPasswordHandler = $this->createMock(PasswordRecoveryForPasswordHandlerInterface::class);
 
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method('generate')->willReturn('url');
+
         $presenter = $this->createMock(PasswordRecoveryPresenterInterface::class);
         $presenter->method('passwordRecoveryPresentation')->willReturn('Vue de la page');
-        $responder = new PasswordRecoveryResponder($presenter);
+        $responder = new PasswordRecoveryResponder($presenter, $urlGenerator);
 
         $this->mailer = $this->createMock(PasswordRecoveryMailerInterface::class);
 

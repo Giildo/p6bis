@@ -25,7 +25,7 @@ class HomePageResponderTest extends TestCase
         self::assertInstanceOf(HomePageResponderInterface::class, $this->responder);
     }
 
-    public function testIfTheReturnOfPresentationIsAString()
+    public function testIfTheReturnIsAResponse()
     {
         self::assertInstanceOf(Response::class, $this->responder->homePageResponse());
     }

@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class UserRegistrationActionTest extends TestCase
@@ -35,8 +36,11 @@ class UserRegistrationActionTest extends TestCase
 
         $this->handler = $this->createMock(UserRegistrationHandlerInterface::class);
 
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method('generate')->willReturn('url');
+
         $presenter = $this->createMock(UserRegistrationPresenterInterface::class);
-        $responder = new UserRegistrationResponder($presenter);
+        $responder = new UserRegistrationResponder($presenter, $urlGenerator);
 
         $this->request = $this->createMock(Request::class);
 

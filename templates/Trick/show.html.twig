@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block body %}
+    <h1>Page de présentation de la figure {{ trick.name }}</h1>
+
+    {% if trick.pictures is not empty %}
+        {% for picture in trick.pictures %}
+            <h5>{{ picture.name }}</h5>
+        {% endfor %}
+    {% endif %}
+
+    {% if trick.videos is not empty %}
+        {% for video in trick.videos %}
+            <h5>{{ video.name }}</h5>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

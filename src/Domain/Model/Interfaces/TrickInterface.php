@@ -56,10 +56,5 @@ interface TrickInterface
      */
     public function getAuthor(): UserInterface;
 
-    /**
-     * @return PictureInterface|null
-     */
-    public function getHeadPicture(): ?PictureInterface;
-
     public function createSlug(SluggerHelperInterface $slugger, string $name): void;
 }
