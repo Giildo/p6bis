@@ -71,10 +71,6 @@ class PasswordRecoveryPasswordAction
      */
     public function passwordRecovery(Request $request, FlashBagInterface $flashBag): Response
     {
-        if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-            return $this->responder->passwordRecoveryResponse();
-        }
-
         $form = $this->formFactory->create(PasswordRecoveryForPasswordType::class)
                                   ->handleRequest($request);
 

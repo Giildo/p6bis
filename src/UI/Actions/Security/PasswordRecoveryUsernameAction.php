@@ -87,10 +87,6 @@ class PasswordRecoveryUsernameAction
      */
     public function passwordRecovery(Request $request): Response
     {
-        if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-            return $this->responder->passwordRecoveryResponse();
-        }
-
         $form = $this->formFactory->create(PasswordRecoveryForUsernameType::class)
             ->handleRequest($request);
 
