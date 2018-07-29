@@ -3,14 +3,10 @@
 namespace App\Tests\UI\Actions\Security;
 
 use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForPasswordHandlerInterface;
-use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForUsernameHandlerInterface;
-use App\Application\Mailers\Interfaces\Security\PasswordRecoveryMailerInterface;
-use App\Domain\Model\User;
-use App\UI\Actions\Security\PasswordRecoveryAction;
+use App\UI\Actions\Security\PasswordRecoveryPasswordAction;
 use App\UI\Presenters\Interfaces\Security\PasswordRecoveryPresenterInterface;
 use App\UI\Responders\Security\PasswordRecoveryResponder;
 use PHPUnit\Framework\TestCase;
-use Swift_Mailer;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,9 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Twig\Environment;
 
-class PasswordRecoveryActionTest extends TestCase
+class PasswordRecoveryPasswordActionTest extends TestCase
 {
     private $authorizationChecker;
 
@@ -33,10 +28,6 @@ class PasswordRecoveryActionTest extends TestCase
 
     private $forPasswordHandler;
 
-    private $forUsernameHandler;
-
-    private $mailer;
-
     public function setUp()
     {
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
@@ -46,7 +37,6 @@ class PasswordRecoveryActionTest extends TestCase
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $formFactory->method('create')->willReturn($form);
 
-        $this->forUsernameHandler = $this->createMock(PasswordRecoveryForUsernameHandlerInterface::class);
         $this->forPasswordHandler = $this->createMock(PasswordRecoveryForPasswordHandlerInterface::class);
 
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
@@ -56,24 +46,20 @@ class PasswordRecoveryActionTest extends TestCase
         $presenter->method('passwordRecoveryPresentation')->willReturn('Vue de la page');
         $responder = new PasswordRecoveryResponder($presenter, $urlGenerator);
 
-        $this->mailer = $this->createMock(PasswordRecoveryMailerInterface::class);
-
         $this->request = new Request();
         $this->flashBag = new FlashBag();
 
-        $this->action = new PasswordRecoveryAction(
+        $this->action = new PasswordRecoveryPasswordAction(
             $this->authorizationChecker,
             $formFactory,
-            $this->forUsernameHandler,
             $this->forPasswordHandler,
-            $responder,
-            $this->mailer
+            $responder
         );
     }
 
     public function testConstructor()
     {
-        self::assertInstanceOf(PasswordRecoveryAction::class, $this->action);
+        self::assertInstanceOf(PasswordRecoveryPasswordAction::class, $this->action);
     }
 
     public function testRedirectResponseIfUserIsConnected()
@@ -85,67 +71,9 @@ class PasswordRecoveryActionTest extends TestCase
         self::assertInstanceOf(RedirectResponse::class, $response);
     }
 
-    public function testResponseIfHandleReturnNull()
+    public function testRedirectResponseIfHandlerReturnTrue()
     {
         $this->authorizationChecker->method('isGranted')->willReturn(false);
-
-        $this->forUsernameHandler->method('handle')->willReturn(null);
-
-        $response = $this->action->passwordRecovery($this->request, $this->flashBag);
-
-        self::assertNotInstanceOf(RedirectResponse::class, $response);
-        self::assertInstanceOf(Response::class, $response);
-    }
-
-    public function testResponseIfHandleReturnUserAndMailerReturnFalse()
-    {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'giildo.jm@gmail.com',
-            '12345678'
-        );
-
-        $this->forUsernameHandler->method('handle')->willReturn($user);
-
-        $this->mailer->method('message')->willReturn(false);
-
-        $response = $this->action->passwordRecovery($this->request, $this->flashBag);
-
-        self::assertNotInstanceOf(RedirectResponse::class, $response);
-        self::assertInstanceOf(Response::class, $response);
-    }
-
-    public function testResponseIfHandleReturnUserAndMailerReturnTrue()
-    {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'giildo.jm@gmail.com',
-            '12345678'
-        );
-
-        $this->forUsernameHandler->method('handle')->willReturn($user);
-
-        $this->mailer->method('message')->willReturn(true);
-
-        $response = $this->action->passwordRecovery($this->request, $this->flashBag);
-
-        self::assertNotInstanceOf(RedirectResponse::class, $response);
-        self::assertInstanceOf(Response::class, $response);
-    }
-
-    public function testRedirectResponseIfTokenIsIntoURIAndHandlerReturnTrue()
-    {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
-        $this->request->query->set('ut', '8_Me185sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
 
         $this->forPasswordHandler->method('handle')->willReturn(true);
 
@@ -154,11 +82,9 @@ class PasswordRecoveryActionTest extends TestCase
         self::assertInstanceOf(RedirectResponse::class, $response);
     }
 
-    public function testRedirectResponseIfTokenIsIntoURIButHandlerReturnFalse()
+    public function testRedirectResponseIfHandlerReturnFalse()
     {
         $this->authorizationChecker->method('isGranted')->willReturn(false);
-
-        $this->request->query->set('ut', '8_Me185sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
 
         $this->forPasswordHandler->method('handle')->willReturn(false);
 

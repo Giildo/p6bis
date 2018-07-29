@@ -5,6 +5,7 @@ namespace App\Application\Handlers\Forms\Security;
 use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForPasswordHandlerInterface;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
+use DateTime;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,13 +42,25 @@ class PasswordRecoveryForPasswordHandler implements PasswordRecoveryForPasswordH
     public function handle(FormInterface $form, Request $request): bool
     {
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->repository->loadUserByToken(
-                $request->query->get('ut')
-            );
+            if (is_null($token = $request->query->get('ut'))) {
+                $form->addError(
+                    new FormError('Une erreur est survenue avec le lien renseigné, veuillez réessayer ou refaire une demande de récupération pour votre mot de passe.')
+                );
+                return false;
+            }
+
+            $user = $this->repository->loadUserByToken($token);
 
             if (is_null($user)) {
                 $form->addError(
                     new FormError('Une erreur est survenue avec le lien renseigné, veuillez réessayer ou refaire une demande de récupération pour votre mot de passe.')
+                );
+                return false;
+            }
+
+            if ($user->getTokenDate() < new DateTime()) {
+                $form->addError(
+                    new FormError('Vous avez dépassé le délai pour la récupération du mot de passe. Merci de réitérer votre demande.')
                 );
                 return false;
             }
