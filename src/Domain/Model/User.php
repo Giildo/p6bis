@@ -2,6 +2,7 @@
 
 namespace App\Domain\Model;
 
+use DateInterval;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
@@ -243,11 +244,14 @@ s     */
     /**
      * @param TokenGeneratorInterface $tokenGenerator
      * @return void
+     * @throws \Exception
      */
     public function createToken(TokenGeneratorInterface $tokenGenerator): void
     {
         $this->token = $tokenGenerator->generateToken();
-        $this->tokenDate = new DateTime();
+        $this->tokenDate = (new DateTime())->add(
+            new DateInterval('PT1H')
+        );
     }
 
     /**

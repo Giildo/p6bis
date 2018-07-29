@@ -7,6 +7,8 @@ use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForPasswo
 use App\Domain\DTO\Security\PasswordRecoveryForPasswordDTO;
 use App\Domain\Model\User;
 use App\Tests\fixtures\LoadFixtures;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormInterface;
@@ -85,6 +87,16 @@ class PasswordRecoveryForPasswordHandlerTest extends KernelTestCase
         self::assertFalse($response);
     }
 
+    public function testFalseIfTokenIsNull()
+    {
+        $this->form->method('isSubmitted')->willReturn(true);
+        $this->form->method('isValid')->willReturn(true);
+
+        $response = $this->handler->handle($this->form, $this->request);
+
+        self::assertFalse($response);
+    }
+
     public function testFalseReturnIfBadToken()
     {
         $this->form->method('isSubmitted')->willReturn(true);
@@ -95,6 +107,11 @@ class PasswordRecoveryForPasswordHandlerTest extends KernelTestCase
         $response = $this->handler->handle($this->form, $this->request);
 
         self::assertFalse($response);
+    }
+
+    public function testFalseReturnIfDateTokenHasPassed()
+    {
+        // TODO : create the test
     }
 
     public function testTrueReturnIfGoodTokenAndTokenIsDeleted()
