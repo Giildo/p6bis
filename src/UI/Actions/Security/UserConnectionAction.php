@@ -59,10 +59,6 @@ class UserConnectionAction
      */
     public function connection(Request $request, AuthenticationUtils $utils): Response
     {
-        if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-            return $this->responder->userConnectionResponse();
-        }
-
         $errors = $utils->getLastAuthenticationError();
 
         $lastUserConnected = $utils->getLastUsername();

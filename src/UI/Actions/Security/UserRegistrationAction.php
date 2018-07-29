@@ -67,10 +67,6 @@ class UserRegistrationAction
      */
     public function registration(Request $request)
     {
-        if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-            return $this->responder->userRegistrationResponse();
-        }
-
         $form = $this->formFactory->create(UserRegistrationType::class)
                                   ->handleRequest($request);
 
