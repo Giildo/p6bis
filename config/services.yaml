@@ -28,6 +28,6 @@ services:
         tags: ['controller.service_arguments']
 
     # Listener
-    App\Application\Listener\Security\AuthenticatorCheckerListener:
+    App\Application\Listener\Security\NoAuthenticationCheckerListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request }

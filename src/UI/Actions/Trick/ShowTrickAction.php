@@ -2,9 +2,7 @@
 
 namespace App\UI\Actions\Trick;
 
-use App\Domain\Model\Picture;
 use App\Domain\Model\Trick;
-use App\Domain\Model\Video;
 use App\UI\Responders\Interfaces\Trick\ShowTrickResponderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;

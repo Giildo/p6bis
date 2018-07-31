@@ -33,13 +33,24 @@ class TrickRepository extends ServiceEntityRepository
     public function loadOneTrickWithCategoryAndAuthor(string $trickSlug)
     {
         return $this->createQueryBuilder('trick')
-            ->where('trick.slug = :slug')
-            /*->leftJoin('trick.pictures', 'pictures')
-            ->andWhere('pictures.trick = :slug')
-            ->leftJoin('trick.videos', 'videos')
-            ->andWhere('videos.trick = :slug')*/
+            ->innerJoin('trick.videos', 'videos')
+            ->innerJoin('trick.pictures', 'pictures')
+            ->where('pictures.trick = :slug')
+            ->andWhere('videos.trick = :slug')
+            ->andWhere('trick.slug = :slug')
             ->setParameter('slug', $trickSlug)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @param Trick $trick
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function saveTrick(Trick $trick)
+    {
+        $this->getEntityManager()->persist($trick);
+        $this->getEntityManager()->flush();
     }
 }
