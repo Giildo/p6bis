@@ -3,9 +3,12 @@
 namespace App\Application\Handlers\Forms\Trick;
 
 use App\Application\Handlers\Interfaces\Forms\Trick\NewTrickHandlerInterface;
+use App\Application\Helpers\Interfaces\PictureSaveHelperInterface;
+use App\Domain\Builders\Interfaces\PictureBuilderInterface;
 use App\Domain\Builders\Interfaces\TrickBuilderInterface;
+use App\Domain\Builders\Interfaces\VideoBuilderInterface;
 use App\Domain\Model\Trick;
-use App\Domain\Repository\TrickRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
 class NewTrickHandler implements NewTrickHandlerInterface
@@ -13,39 +16,89 @@ class NewTrickHandler implements NewTrickHandlerInterface
     /**
      * @var TrickBuilderInterface
      */
-    private $builder;
+    private $trickBuilder;
     /**
-     * @var TrickRepository
+     * @var PictureBuilderInterface
      */
-    private $repository;
+    private $pictureBuilder;
+    /**
+     * @var VideoBuilderInterface
+     */
+    private $videoBuilder;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+    /**
+     * @var PictureSaveHelperInterface
+     */
+    private $saveHelper;
 
     /**
      * NewTrickHandler constructor.
-     * @param TrickBuilderInterface $builder
-     * @param TrickRepository $repository
+     * @param TrickBuilderInterface $trickBuilder
+     * @param PictureBuilderInterface $pictureBuilder
+     * @param VideoBuilderInterface $videoBuilder
+     * @param EntityManagerInterface $entityManager
+     * @param PictureSaveHelperInterface $saveHelper
      */
     public function __construct(
-        TrickBuilderInterface $builder,
-        TrickRepository $repository
+        TrickBuilderInterface $trickBuilder,
+        PictureBuilderInterface $pictureBuilder,
+        VideoBuilderInterface $videoBuilder,
+        EntityManagerInterface $entityManager,
+        PictureSaveHelperInterface $saveHelper
     ) {
-        $this->builder = $builder;
-        $this->repository = $repository;
+        $this->trickBuilder = $trickBuilder;
+        $this->pictureBuilder = $pictureBuilder;
+        $this->videoBuilder = $videoBuilder;
+        $this->entityManager = $entityManager;
+        $this->saveHelper = $saveHelper;
     }
 
     /**
      * @param FormInterface $form
      * @return Trick|null
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function handle(FormInterface $form): ?Trick
     {
         if ($form->isSubmitted() && $form->isValid()) {
             $datas = $form->getData();
 
-            $trick = $this->builder->build($datas);
+            $trick = $this->trickBuilder->build($datas);
 
-            $this->repository->saveTrick($trick);
+            if (is_null($trick)) {
+                return null;
+            }
+
+            $this->entityManager->persist($trick);
+
+            if (!empty($datas->videos)) {
+                foreach ($datas->videos as $video) {
+                    $newVideo = $this->videoBuilder->build($video, $trick);
+
+                    $this->entityManager->persist($newVideo);
+                }
+            }
+
+            $pictures = [];
+            if (!empty($datas->pictures)) {
+                $counter = 1;
+                foreach ($datas->pictures as $picture) {
+                    $newPicture = $this->pictureBuilder->build($picture, $trick, $counter);
+                    $pictures[] = [$picture->picture, $newPicture];
+
+                    $this->entityManager->persist($newPicture);
+
+                    $counter++;
+                }
+            }
+
+            $this->entityManager->flush();
+
+            if (!empty($pictures)) {
+                $this->saveHelper->save($pictures);
+            }
 
             return $trick;
         }

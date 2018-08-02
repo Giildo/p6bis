@@ -94,27 +94,26 @@ class Trick implements TrickInterface
 
     /**
      * Trick constructor.
+     * @param string $slug
      * @param string $name
      * @param string $description
-     * @param SluggerHelperInterface $slugger
      * @param CategoryInterface $category
      * @param UserInterface $author
      */
     public function __construct(
+        string $slug,
         string $name,
         string $description,
-        SluggerHelperInterface $slugger,
         CategoryInterface $category,
         UserInterface $author
     ) {
+        $this->slug = $slug;
         $this->name = $name;
         $this->description = $description;
         $this->published = false;
         $this->createdAt = new DateTime();
         $this->category = $category;
         $this->author = $author;
-
-        $this->createSlug($slugger, $this->name);
     }
 
     /**
@@ -195,11 +194,6 @@ class Trick implements TrickInterface
     public function getVideos(): ?array
     {
         return $this->videos->toArray();
-    }
-
-    public function createSlug(SluggerHelperInterface $slugger, string $name): void
-    {
-        $this->slug = $slugger->slugify($name);
     }
 
     public function publish(): void

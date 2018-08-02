@@ -55,6 +55,4 @@ interface TrickInterface
      * @return UserInterface
      */
     public function getAuthor(): UserInterface;
-
-    public function createSlug(SluggerHelperInterface $slugger, string $name): void;
 }

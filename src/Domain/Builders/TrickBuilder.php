@@ -39,9 +39,9 @@ class TrickBuilder implements TrickBuilderInterface
     public function build(NewTrickDTOInterface $datas): Trick
     {
         return new Trick(
+            $this->sluggerHelper->slugify($datas->name),
             $datas->name,
             $datas->description,
-            $this->sluggerHelper,
             $datas->category,
             $this->tokenStorage->getToken()->getUser()
         );

@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class NewTrickDTO implements NewTrickDTOInterface
 {
     /**
-     * @var string
+     * @var null|string
      *
      * @Assert\Type("string")
      * @Assert\NotNull(message="Le nom de la figure doit être renseigné.")
@@ -23,7 +23,7 @@ class NewTrickDTO implements NewTrickDTOInterface
     public $name;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @Assert\Type("string")
      * @Assert\NotNull(message="La description de la figure doit être renseignée.")
@@ -31,14 +31,14 @@ class NewTrickDTO implements NewTrickDTOInterface
     public $description;
 
     /**
-     * @var bool
+     * @var bool|null
      *
      * @Assert\Type("bool")
      */
     public $published;
 
     /**
-     * @var CategoryInterface
+     * @var CategoryInterface|null
      *
      * @Assert\Type("object")
      * @Assert\NotNull(message="La catégorie associée doit être renseignée.")
@@ -46,21 +46,41 @@ class NewTrickDTO implements NewTrickDTOInterface
     public $category;
 
     /**
+     * @var array|null
+     *
+     * @Assert\Type("array")
+     */
+    public $pictures;
+
+    /**
+     * @var array|null
+     *
+     * @Assert\Type("array")
+     */
+    public $videos;
+
+    /**
      * NewTrickDTO constructor.
-     * @param string $name
-     * @param string $description
-     * @param bool $published
-     * @param CategoryInterface $category
+     * @param null|string $name
+     * @param null|string $description
+     * @param bool|null $published
+     * @param CategoryInterface|null $category
+     * @param array|null $pictures
+     * @param array|null $videos
      */
     public function __construct(
-        string $name,
-        string $description,
-        bool $published,
-        CategoryInterface $category
+        ?string $name = '',
+        ?string $description = '',
+        ?bool $published = false,
+        ?CategoryInterface $category = null,
+        ?array $pictures = [],
+        ?array $videos = []
     ) {
         $this->name = $name;
         $this->description = $description;
         $this->published = $published;
         $this->category = $category;
+        $this->pictures = $pictures;
+        $this->videos = $videos;
     }
 }
