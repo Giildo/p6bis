@@ -17,12 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class PasswordRecoveryUsernameActionTest extends TestCase
 {
-    private $authorizationChecker;
-
     private $action;
 
     private $request;
@@ -37,8 +34,6 @@ class PasswordRecoveryUsernameActionTest extends TestCase
 
     public function setUp()
     {
-        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
-
         $form = $this->createMock(FormInterface::class);
         $form->method('handleRequest')->willReturnSelf();
         $formFactory = $this->createMock(FormFactoryInterface::class);
@@ -60,7 +55,6 @@ class PasswordRecoveryUsernameActionTest extends TestCase
         $this->flashBag = new FlashBag();
 
         $this->action = new PasswordRecoveryUsernameAction(
-            $this->authorizationChecker,
             $formFactory,
             $this->forUsernameHandler,
             $this->forPasswordHandler,
@@ -74,19 +68,8 @@ class PasswordRecoveryUsernameActionTest extends TestCase
         self::assertInstanceOf(PasswordRecoveryUsernameAction::class, $this->action);
     }
 
-    public function testRedirectResponseIfUserIsConnected()
-    {
-        $this->authorizationChecker->method('isGranted')->willReturn(true);
-
-        $response = $this->action->passwordRecovery($this->request, $this->flashBag);
-
-        self::assertInstanceOf(RedirectResponse::class, $response);
-    }
-
     public function testResponseIfHandleReturnNull()
     {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
         $this->forUsernameHandler->method('handle')->willReturn(null);
 
         $response = $this->action->passwordRecovery($this->request, $this->flashBag);
@@ -97,8 +80,6 @@ class PasswordRecoveryUsernameActionTest extends TestCase
 
     public function testResponseIfHandleReturnUserAndMailerReturnFalse()
     {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
         $user = new User(
             'JohnDoe',
             'John',
@@ -119,8 +100,6 @@ class PasswordRecoveryUsernameActionTest extends TestCase
 
     public function testResponseIfHandleReturnUserAndMailerReturnTrue()
     {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
         $user = new User(
             'JohnDoe',
             'John',

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Domain\Builder;
+namespace App\Tests\Domain\Builders;
 
 use App\Domain\Builders\Interfaces\UserBuilderInterface;
 use App\Domain\Builders\UserBuilder;

@@ -2,6 +2,7 @@
 
 namespace App\UI\Responders\Trick;
 
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\UI\Presenters\Interfaces\Trick\NewTrickPresenterInterface;
 use App\UI\Responders\Interfaces\Trick\NewTrickResponderInterface;
@@ -40,7 +41,7 @@ class NewTrickResponder implements NewTrickResponderInterface
      */
     public function response(
         bool $redirection,
-        ?Trick $trick = null,
+        ?TrickInterface $trick = null,
         ?FormInterface $form = null
     ): Response {
         return ($redirection) ?

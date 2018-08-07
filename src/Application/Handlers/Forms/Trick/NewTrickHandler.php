@@ -7,7 +7,7 @@ use App\Application\Helpers\Interfaces\PictureSaveHelperInterface;
 use App\Domain\Builders\Interfaces\PictureBuilderInterface;
 use App\Domain\Builders\Interfaces\TrickBuilderInterface;
 use App\Domain\Builders\Interfaces\VideoBuilderInterface;
-use App\Domain\Model\Trick;
+use App\Domain\Model\Interfaces\TrickInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -57,19 +57,15 @@ class NewTrickHandler implements NewTrickHandlerInterface
     }
 
     /**
-     * @param FormInterface $form
-     * @return Trick|null
+     * {@inheritdoc}
      */
-    public function handle(FormInterface $form): ?Trick
+    public function handle(FormInterface $form): ?TrickInterface
     {
         if ($form->isSubmitted() && $form->isValid()) {
             $datas = $form->getData();
 
-            $trick = $this->trickBuilder->build($datas);
-
-            if (is_null($trick)) {
-                return null;
-            }
+            $trick = $this->trickBuilder->build($datas)
+                                        ->getTrick();
 
             $this->entityManager->persist($trick);
 

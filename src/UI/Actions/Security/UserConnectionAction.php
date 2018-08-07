@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -20,10 +19,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class UserConnectionAction
 {
     /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-    /**
      * @var UserConnectionResponderInterface
      */
     private $responder;
@@ -34,17 +29,14 @@ class UserConnectionAction
 
     /**
      * UserConnectionAction constructor.
-     * @param AuthorizationCheckerInterface $authorizationChecker
      * @param UserConnectionResponderInterface $responder
      * @param FormFactoryInterface $formFactory
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
         UserConnectionResponderInterface $responder,
         FormFactoryInterface $formFactory
     )
     {
-        $this->authorizationChecker = $authorizationChecker;
         $this->responder = $responder;
         $this->formFactory = $formFactory;
     }

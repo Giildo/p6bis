@@ -49,8 +49,12 @@ class NoAuthenticationCheckerListener
                             $this->urlGenerator->generate('home')
                         )
                     );
+
+                    break;
                 }
             }
         }
+
+        return;
     }
 }

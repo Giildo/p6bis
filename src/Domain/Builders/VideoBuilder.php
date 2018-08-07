@@ -9,22 +9,34 @@ use App\Domain\Model\Video;
 
 class VideoBuilder implements VideoBuilderInterface
 {
+    /**
+     * @var Video
+     */
+    private $video;
 
     /**
-     * @param NewTrickVideoDTOInterface $dto
-     * @param Trick $trick
-     * @return Video
+     * {@inheritdoc}
      */
     public function build(
         NewTrickVideoDTOInterface $dto,
         Trick $trick
-    ): Video {
+    ): self {
         $name = [];
-        preg_match('/watch\?v\=([\w-]+)$/', $dto->url, $name);
+        preg_match('/watch\?v\=([\w\-]+)$/', $dto->url, $name);
 
-        return new Video(
+        $this->video = new Video(
             $name[1],
             $trick
         );
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVideo(): Video
+    {
+        return $this->video;
     }
 }

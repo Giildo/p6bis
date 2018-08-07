@@ -27,17 +27,15 @@ class TrickRepository extends ServiceEntityRepository
 
     /**
      * @param string $trickSlug
-     * @return Trick
+     * @return Trick|null
      * @throws NonUniqueResultException
      */
-    public function loadOneTrickWithCategoryAndAuthor(string $trickSlug)
+    public function loadOneTrickWithCategoryAndAuthor(string $trickSlug): ?Trick
     {
         return $this->createQueryBuilder('trick')
-            ->innerJoin('trick.videos', 'videos')
-            ->innerJoin('trick.pictures', 'pictures')
-            ->where('pictures.trick = :slug')
-            ->andWhere('videos.trick = :slug')
-            ->andWhere('trick.slug = :slug')
+            ->leftJoin('trick.videos', 'videos')
+            ->leftJoin('trick.pictures', 'pictures')
+            ->where('trick.slug = :slug')
             ->setParameter('slug', $trickSlug)
             ->getQuery()
             ->getOneOrNullResult();

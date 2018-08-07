@@ -11,10 +11,15 @@ interface VideoBuilderInterface
     /**
      * @param NewTrickVideoDTOInterface $dto
      * @param Trick $trick
-     * @return Video
+     * @return VideoBuilderInterface
      */
     public function build(
         NewTrickVideoDTOInterface $dto,
         Trick $trick
-    ): Video;
+    );
+
+    /**
+     * @return Video
+     */
+    public function getVideo(): Video;
 }

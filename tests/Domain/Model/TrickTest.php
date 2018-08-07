@@ -32,9 +32,9 @@ class TrickTest extends TestCase
         );
 
         $this->trick = new Trick(
-            "Essai d'une phrase complexe à accent !",
+            $slugger->slugify('Essai d\'une phrase complexe à accent !'),
+            'Essai d\'une phrase complexe à accent !',
             'Description de la figure de snowboard.',
-            $slugger,
             $this->category,
             $this->author
         );

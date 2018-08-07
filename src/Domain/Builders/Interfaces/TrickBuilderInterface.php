@@ -10,7 +10,12 @@ interface TrickBuilderInterface
 
     /**
      * @param NewTrickDTOInterface $datas
+     * @return TrickBuilderInterface
+     */
+    public function build(NewTrickDTOInterface $datas);
+
+    /**
      * @return Trick
      */
-    public function build(NewTrickDTOInterface $datas): Trick;
+    public function getTrick(): Trick;
 }

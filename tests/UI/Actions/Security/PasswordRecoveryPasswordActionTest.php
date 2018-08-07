@@ -14,12 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class PasswordRecoveryPasswordActionTest extends TestCase
 {
-    private $authorizationChecker;
-
     private $action;
 
     private $request;
@@ -30,8 +27,6 @@ class PasswordRecoveryPasswordActionTest extends TestCase
 
     public function setUp()
     {
-        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
-
         $form = $this->createMock(FormInterface::class);
         $form->method('handleRequest')->willReturnSelf();
         $formFactory = $this->createMock(FormFactoryInterface::class);
@@ -50,7 +45,6 @@ class PasswordRecoveryPasswordActionTest extends TestCase
         $this->flashBag = new FlashBag();
 
         $this->action = new PasswordRecoveryPasswordAction(
-            $this->authorizationChecker,
             $formFactory,
             $this->forPasswordHandler,
             $responder
@@ -62,19 +56,8 @@ class PasswordRecoveryPasswordActionTest extends TestCase
         self::assertInstanceOf(PasswordRecoveryPasswordAction::class, $this->action);
     }
 
-    public function testRedirectResponseIfUserIsConnected()
-    {
-        $this->authorizationChecker->method('isGranted')->willReturn(true);
-
-        $response = $this->action->passwordRecovery($this->request, $this->flashBag);
-
-        self::assertInstanceOf(RedirectResponse::class, $response);
-    }
-
     public function testRedirectResponseIfHandlerReturnTrue()
     {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
         $this->forPasswordHandler->method('handle')->willReturn(true);
 
         $response = $this->action->passwordRecovery($this->request, $this->flashBag);
@@ -84,8 +67,6 @@ class PasswordRecoveryPasswordActionTest extends TestCase
 
     public function testRedirectResponseIfHandlerReturnFalse()
     {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
         $this->forPasswordHandler->method('handle')->willReturn(false);
 
         $response = $this->action->passwordRecovery($this->request, $this->flashBag);

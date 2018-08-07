@@ -11,21 +11,36 @@ use DateTime;
 class PictureBuilder implements PictureBuilderInterface
 {
     /**
+     * @var Picture
+     */
+    private $picture;
+
+    /**
      * {@inheritdoc}
      */
     public function build(
         NewTrickPictureDTOInterface $dto,
         Trick $trick,
         int $counter
-    ): Picture {
-        $name = $trick->getName() . (new DateTime())->format('YmdHis') . '_' . $counter;
+    ): self {
+        $name = $trick->getSlug() . (new DateTime())->format('YmdHis') . '_' . $counter;
 
-        return new Picture(
+        $this->picture = new Picture(
             $name,
             $dto->description,
             $dto->picture->guessExtension(),
             false,
             $trick
         );
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPicture(): Picture
+    {
+        return $this->picture;
     }
 }

@@ -30,9 +30,9 @@ class PictureTest extends TestCase
         );
 
         $trick = new Trick(
+            $slugger->slugify('Mute'),
             'Mute',
             'Figure de snow',
-            $slugger,
             $category,
             $author
         );

@@ -18,6 +18,10 @@ class TrickBuilder implements TrickBuilderInterface
      * @var TokenStorageInterface
      */
     private $tokenStorage;
+    /**
+     * @var Trick
+     */
+    private $trick;
 
     /**
      * TrickBuilder constructor.
@@ -33,17 +37,26 @@ class TrickBuilder implements TrickBuilderInterface
     }
 
     /**
-     * @param NewTrickDTOInterface $datas
-     * @return Trick
+     * {@inheritdoc}
      */
-    public function build(NewTrickDTOInterface $datas): Trick
+    public function build(NewTrickDTOInterface $datas): self
     {
-        return new Trick(
+        $this->trick = new Trick(
             $this->sluggerHelper->slugify($datas->name),
             $datas->name,
             $datas->description,
             $datas->category,
             $this->tokenStorage->getToken()->getUser()
         );
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTrick(): Trick
+    {
+        return $this->trick;
     }
 }

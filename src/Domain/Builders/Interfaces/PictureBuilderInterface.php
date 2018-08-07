@@ -12,11 +12,16 @@ interface PictureBuilderInterface
      * @param NewTrickPictureDTOInterface $dto
      * @param Trick $trick
      * @param int $counter
-     * @return Picture
+     * @return PictureBuilderInterface
      */
     public function build(
         NewTrickPictureDTOInterface $dto,
         Trick $trick,
         int $counter
-    ): Picture;
+    );
+
+    /**
+     * @return Picture
+     */
+    public function getPicture(): Picture;
 }

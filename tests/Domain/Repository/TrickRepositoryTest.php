@@ -5,7 +5,9 @@ namespace App\Tests\Domain\Repository;
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Model\Category;
 use App\Domain\Model\Interfaces\CategoryInterface;
+use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\VideoInterface;
 use App\Domain\Model\Picture;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
@@ -44,14 +46,15 @@ class TrickRepositoryTest extends KernelTestCase
         $category = new Category('Grabs', $slugger);
 
         $trick = new Trick(
+            $slugger->slugify('Mute'),
             'Mute',
             'Figure de snowboard',
-            $slugger,
             $category,
             $user
         );
 
         $trick->publish();
+        $entityManager->persist($trick);
 
         $picture = new Picture(
             'mute001',
@@ -60,21 +63,21 @@ class TrickRepositoryTest extends KernelTestCase
             false,
             $trick
         );
+        $entityManager->persist($picture);
 
         $video = new Video(
             'Ehhdj55mdS',
             $trick
         );
 
-        $entityManager->persist($trick);
-        $entityManager->persist($picture);
         $entityManager->persist($video);
 
         for ($i = 0 ; $i < 10 ; $i++) {
+            $name = $faker->unique()->word;
             $trick = new Trick(
-                $faker->unique()->word,
+                $slugger->slugify($name),
+                $name,
                 $faker->text,
-                $slugger,
                 $category,
                 $user
             );
@@ -99,7 +102,11 @@ class TrickRepositoryTest extends KernelTestCase
     public function testLoadingOfOneTrick()
     {
         $trick = $this->repository->loadOneTrickWithCategoryAndAuthor('mute');
+        $pictures = $trick->getPictures();
+        $videos = $trick->getVideos();
 
         self::assertInstanceOf(TrickInterface::class, $trick);
+        self::assertInstanceOf(PictureInterface::class, $pictures[0]);
+        self::assertInstanceOf(VideoInterface::class, $videos[0]);
     }
 }
