@@ -47,7 +47,10 @@ class NewTrickHandlerTest extends KernelTestCase
 
         $slugger = new SluggerHelper();
 
-        $category = new Category('Grab', $slugger);
+        $category = new Category(
+            $slugger->slugify('Grabs'),
+            'Grabs'
+        );
 
         $user = new User(
             'JohnDoe',

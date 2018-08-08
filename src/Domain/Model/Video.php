@@ -35,8 +35,10 @@ class Video implements VideoInterface
      * @param string $name
      * @param Trick $trick
      */
-    public function __construct(string $name, Trick $trick)
-    {
+    public function __construct(
+        string $name,
+        Trick $trick
+    ) {
         $this->name = $name;
         $this->trick = $trick;
     }

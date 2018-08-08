@@ -23,8 +23,8 @@ class PictureBuilderTest extends TestCase
         $slugger = new SluggerHelper();
 
         $category = new Category(
-            'Grab',
-            $slugger
+            $slugger->slugify('Grabs'),
+            'Grabs'
         );
 
         $user = new User(

@@ -22,7 +22,11 @@ class TrickTest extends TestCase
     {
         $slugger = new SluggerHelper();
 
-        $this->category = new Category('Grab', $slugger);
+        $this->category = new Category(
+            $slugger->slugify('Grab'),
+            'Grab'
+        );
+
         $this->author = new User(
             'JohnDoe',
             'John',

@@ -20,8 +20,8 @@ class VideoBuilderTest extends TestCase
         $slugger = new SluggerHelper();
 
         $category = new Category(
-            'Grab',
-            $slugger
+            $slugger->slugify('Grab'),
+            'Grab'
         );
 
         $user = new User(

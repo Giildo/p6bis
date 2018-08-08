@@ -15,7 +15,10 @@ class CategoryTest extends TestCase
     {
         $slugger = new SluggerHelper('_');
 
-        $this->category = new Category('Nom de la catégorie.', $slugger);
+        $this->category = new Category(
+            $slugger->slugify('Grabs'),
+            'Grabs'
+        );
     }
 
     public function testConstructor()

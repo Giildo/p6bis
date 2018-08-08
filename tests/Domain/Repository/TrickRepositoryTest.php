@@ -43,7 +43,10 @@ class TrickRepositoryTest extends KernelTestCase
 
         $slugger = new SluggerHelper();
 
-        $category = new Category('Grabs', $slugger);
+        $category = new Category(
+            $slugger->slugify('Grabs'),
+            'Grabs'
+        );
 
         $trick = new Trick(
             $slugger->slugify('Mute'),

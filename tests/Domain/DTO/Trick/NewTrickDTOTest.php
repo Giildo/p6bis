@@ -15,8 +15,8 @@ class NewTrickDTOTest extends TestCase
         $slugger = new SluggerHelper();
 
         $category = new Category(
-            'Grab',
-            $slugger
+            $slugger->slugify('Grabs'),
+            'Grabs'
         );
 
         $dto = new NewTrickDTO(

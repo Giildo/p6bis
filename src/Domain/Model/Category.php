@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Domain\Model;
-use App\Application\Helpers\Interfaces\SluggerHelperInterface;
 use App\Domain\Model\Interfaces\CategoryInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,14 +30,15 @@ class Category implements CategoryInterface
 
     /**
      * Category constructor.
+     * @param string $slug
      * @param string $name
-     * @param SluggerHelperInterface $slugger
      */
-    public function __construct(string $name, SluggerHelperInterface $slugger)
-    {
+    public function __construct(
+        string $slug,
+        string $name
+    ) {
+        $this->slug = $slug;
         $this->name = $name;
-
-        $this->createSlug($slugger, $name);
     }
 
     /**
@@ -55,10 +55,5 @@ class Category implements CategoryInterface
     public function getSlug(): string
     {
         return $this->slug;
-    }
-
-    public function createSlug(SluggerHelperInterface $slugger, string $name): void
-    {
-        $this->slug = $slugger->slugify($name);
     }
 }

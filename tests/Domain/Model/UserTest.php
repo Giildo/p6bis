@@ -36,7 +36,7 @@ class UserTest extends KernelTestCase
         $schemaTool->dropSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
         $schemaTool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
 
-        $this->loadFixtures(__DIR__ . '/../../fixtures/user_registration/00.load.yml', $this->entityManager);
+        $this->loadFixtures(__DIR__ . '/../../fixtures/user/00.load.yml', $this->entityManager);
 
         $this->user = new User(
             'JohnDoe',

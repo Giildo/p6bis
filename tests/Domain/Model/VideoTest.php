@@ -19,7 +19,10 @@ class VideoTest extends TestCase
     {
         $slugger = new SluggerHelper();
 
-        $category = new Category('Grabs', $slugger);
+        $category = new Category(
+            $slugger->slugify('Grabs'),
+            'Grabs'
+        );
 
         $author = new User(
             'JohnDoe',
