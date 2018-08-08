@@ -27,6 +27,10 @@ class NewTrickDTO implements NewTrickDTOInterface
      *
      * @Assert\Type("string")
      * @Assert\NotNull(message="La description de la figure doit être renseignée.")
+     * @Assert\Length(
+     *     min="5",
+     *     minMessage="La description doit contenir au moins {{ limit }} caractères."
+     * )
      */
     public $description;
 
