@@ -35,6 +35,8 @@ class TrickRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('trick')
             ->leftJoin('trick.videos', 'videos')
             ->leftJoin('trick.pictures', 'pictures')
+            ->addSelect('videos')
+            ->addSelect('pictures')
             ->where('trick.slug = :slug')
             ->setParameter('slug', $trickSlug)
             ->getQuery()
