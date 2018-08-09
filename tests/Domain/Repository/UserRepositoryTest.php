@@ -28,7 +28,7 @@ class UserRepositoryTest extends KernelTestCase
         $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
         $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
 
-        $this->loadFixtures(__DIR__ . '/../../fixtures/user_registration/00.load.yml', $entityManager);
+        $this->loadFixtures(__DIR__ . '/../../fixtures/user/00.load.yml', $entityManager);
     }
 
     use LoadFixtures;

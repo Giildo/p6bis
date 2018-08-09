@@ -32,28 +32,21 @@ class UserRegistrationAction
      * @var UserRegistrationResponderInterface
      */
     private $responder;
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
 
     /**
      * UserRegistrationAction constructor.
      * @param FormFactoryInterface $formFactory
      * @param UserRegistrationHandlerInterface $handler
      * @param UserRegistrationResponderInterface $responder
-     * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         UserRegistrationHandlerInterface $handler,
-        UserRegistrationResponderInterface $responder,
-        AuthorizationCheckerInterface $authorizationChecker
+        UserRegistrationResponderInterface $responder
     ) {
         $this->formFactory = $formFactory;
         $this->handler = $handler;
         $this->responder = $responder;
-        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**

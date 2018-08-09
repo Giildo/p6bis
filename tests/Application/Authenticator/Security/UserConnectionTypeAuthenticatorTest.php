@@ -52,7 +52,7 @@ class UserConnectionTypeAuthenticatorTest extends KernelTestCase
         $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
         $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
 
-        $this->loadFixtures(__DIR__ . '/../../../fixtures/user_registration/02.specific_user.yml', $entityManager);
+        $this->loadFixtures(__DIR__ . '/../../../fixtures/user/02.specific_user.yml', $entityManager);
 
         $this->userDTO = new UserConnectionDTO('JohnDoe', '12345678');
         $formInterface = $this->createMock(FormInterface::class);

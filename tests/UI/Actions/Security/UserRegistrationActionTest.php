@@ -13,13 +13,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class UserRegistrationActionTest extends TestCase
 {
     private $userRegistrationAction;
-
-    private $authorizationChecker;
 
     private $handler;
 
@@ -27,8 +24,6 @@ class UserRegistrationActionTest extends TestCase
 
     protected function setUp()
     {
-        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
-
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $formInterface = $this->createMock(FormInterface::class);
         $formFactory->method('create')->willReturn($formInterface);
@@ -47,8 +42,7 @@ class UserRegistrationActionTest extends TestCase
         $this->userRegistrationAction = new UserRegistrationAction(
             $formFactory,
             $this->handler,
-            $responder,
-            $this->authorizationChecker
+            $responder
         );
     }
 
@@ -57,19 +51,8 @@ class UserRegistrationActionTest extends TestCase
         self::assertInstanceOf(UserRegistrationAction::class, $this->userRegistrationAction);
     }
 
-    public function testRedirectionIfUserIsConnected()
-    {
-        $this->authorizationChecker->method('isGranted')->willReturn(true);
-
-        $response = $this->userRegistrationAction->registration($this->request);
-
-        self::assertInstanceOf(RedirectResponse::class, $response);
-    }
-
     public function testRedirectionIfHandlerIsTrue()
     {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
         $this->handler->method('handle')->willReturn(true);
 
         $response = $this->userRegistrationAction->registration($this->request);
@@ -79,8 +62,6 @@ class UserRegistrationActionTest extends TestCase
 
     public function testNotRedirectionIfHandlerIsFalse()
     {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
         $this->handler->method('handle')->willReturn(false);
 
         $response = $this->userRegistrationAction->registration($this->request);

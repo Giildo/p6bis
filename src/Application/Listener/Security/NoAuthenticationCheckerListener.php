@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class AuthenticatorCheckerListener
+class NoAuthenticationCheckerListener
 {
     /**
      * @var UrlGeneratorInterface
@@ -49,8 +49,12 @@ class AuthenticatorCheckerListener
                             $this->urlGenerator->generate('home')
                         )
                     );
+
+                    break;
                 }
             }
         }
+
+        return;
     }
 }

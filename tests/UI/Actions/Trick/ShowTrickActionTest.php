@@ -50,12 +50,15 @@ class ShowTrickActionTest extends KernelTestCase
 
         $slugger = new SluggerHelper();
 
-        $category = new Category('Grabs', $slugger);
+        $category = new Category(
+            $slugger->slugify('Grabs'),
+            'Grabs'
+        );
 
         $trick = new Trick(
+            $slugger->slugify('Mute'),
             'Mute',
             'Figure de snowboard',
-            $slugger,
             $category,
             $user
         );
@@ -65,10 +68,11 @@ class ShowTrickActionTest extends KernelTestCase
         $entityManager->persist($trick);
 
         for ($i = 0 ; $i < 10 ; $i++) {
+            $name = $faker->unique()->word;
             $trick = new Trick(
-                $faker->unique()->word,
+                $slugger->slugify($name),
+                $name,
                 $faker->text,
-                $slugger,
                 $category,
                 $user
             );

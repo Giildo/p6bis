@@ -12,7 +12,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * @Route(name="Authentication_")
@@ -22,10 +21,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 class PasswordRecoveryUsernameAction
 {
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
     /**
      * @var FormFactoryInterface
      */
@@ -49,7 +44,6 @@ class PasswordRecoveryUsernameAction
 
     /**
      * PasswordRecoveryActionUsername constructor.
-     * @param AuthorizationCheckerInterface $authorizationChecker
      * @param FormFactoryInterface $formFactory
      * @param PasswordRecoveryForUsernameHandlerInterface $forUsernameHandler
      * @param PasswordRecoveryForPasswordHandlerInterface $forPasswordHandler
@@ -57,7 +51,6 @@ class PasswordRecoveryUsernameAction
      * @param PasswordRecoveryMailerInterface $recoveryMailer
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
         FormFactoryInterface $formFactory,
         PasswordRecoveryForUsernameHandlerInterface $forUsernameHandler,
         PasswordRecoveryForPasswordHandlerInterface $forPasswordHandler,
@@ -65,7 +58,6 @@ class PasswordRecoveryUsernameAction
         PasswordRecoveryMailerInterface $recoveryMailer
     )
     {
-        $this->authorizationChecker = $authorizationChecker;
         $this->formFactory = $formFactory;
         $this->forUsernameHandler = $forUsernameHandler;
         $this->forPasswordHandler = $forPasswordHandler;

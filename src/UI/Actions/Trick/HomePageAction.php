@@ -6,8 +6,6 @@ use App\Domain\Model\Trick;
 use App\Domain\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\UI\Responders\Interfaces\Trick\HomePageResponderInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

@@ -19,7 +19,10 @@ class PictureTest extends TestCase
     {
         $slugger = new SluggerHelper();
 
-        $category = new Category('Grabs', $slugger);
+        $category = new Category(
+            $slugger->slugify('Grabs'),
+            'Grabs'
+        );
 
         $author = new User(
             'JohnDoe',
@@ -30,9 +33,9 @@ class PictureTest extends TestCase
         );
 
         $trick = new Trick(
+            $slugger->slugify('Mute'),
             'Mute',
             'Figure de snow',
-            $slugger,
             $category,
             $author
         );

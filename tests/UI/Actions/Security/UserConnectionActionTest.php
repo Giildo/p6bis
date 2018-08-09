@@ -12,14 +12,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class UserConnectionActionTest extends TestCase
 {
     private $userRegistrationAction;
-
-    private $authorizationChecker;
 
     private $authenticationUtils;
 
@@ -27,8 +24,6 @@ class UserConnectionActionTest extends TestCase
 
     protected function setUp()
     {
-        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
-
         $this->authenticationUtils = $this->createMock(AuthenticationUtils::class);
         $this->authenticationUtils->method('getLastAuthenticationError')
                                   ->willReturn(null);
@@ -49,7 +44,6 @@ class UserConnectionActionTest extends TestCase
         $this->request = $this->createMock(Request::class);
 
         $this->userRegistrationAction = new UserConnectionAction(
-            $this->authorizationChecker,
             $responder,
             $formFactory
         );
@@ -60,19 +54,8 @@ class UserConnectionActionTest extends TestCase
         self::assertInstanceOf(UserConnectionAction::class, $this->userRegistrationAction);
     }
 
-    public function testRedirectionIfUserIsConnected()
-    {
-        $this->authorizationChecker->method('isGranted')->willReturn(true);
-
-        $response = $this->userRegistrationAction->connection($this->request, $this->authenticationUtils);
-
-        self::assertInstanceOf(RedirectResponse::class, $response);
-    }
-
     public function testNoRedirectionIfUserIsntConnected()
     {
-        $this->authorizationChecker->method('isGranted')->willReturn(false);
-
         $response = $this->userRegistrationAction->connection($this->request, $this->authenticationUtils);
 
         self::assertInstanceOf(Response::class, $response);
