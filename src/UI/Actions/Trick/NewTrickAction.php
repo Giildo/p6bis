@@ -6,6 +6,7 @@ use App\Application\Handlers\Interfaces\Forms\Trick\NewTrickHandlerInterface;
 use App\UI\Forms\Trick\NewTrickType;
 use App\UI\Responders\Interfaces\Trick\NewTrickResponderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

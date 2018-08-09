@@ -6,10 +6,12 @@ use App\Application\Handlers\Forms\Security\PasswordRecoveryForPasswordHandler;
 use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForPasswordHandlerInterface;
 use App\Domain\DTO\Security\PasswordRecoveryForPasswordDTO;
 use App\Domain\Model\User;
+use App\Domain\Repository\UserRepository;
 use App\Tests\fixtures\LoadFixtures;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\Tools\SchemaTool;
+use PDO;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,6 +61,7 @@ class PasswordRecoveryForPasswordHandlerTest extends KernelTestCase
         $user = $this->repository->loadUserByUsername('JohnDoe');
         $user->createToken($tokenGenerator);
         $this->repository->saveUser($user);
+        $entityManager->detach($user);
     }
 
     use LoadFixtures;
@@ -109,11 +112,6 @@ class PasswordRecoveryForPasswordHandlerTest extends KernelTestCase
         self::assertFalse($response);
     }
 
-    public function testFalseReturnIfDateTokenHasPassed()
-    {
-        // TODO : create the test
-    }
-
     public function testTrueReturnIfGoodTokenAndTokenIsDeleted()
     {
         $this->form->method('isSubmitted')->willReturn(true);
@@ -131,5 +129,26 @@ class PasswordRecoveryForPasswordHandlerTest extends KernelTestCase
         $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
 
         self::assertNull($userLoaded->getToken());
+    }
+
+    public function testFalseReturnIfDateTokenHasPassed()
+    {
+        $this->form->method('isSubmitted')->willReturn(true);
+        $this->form->method('isValid')->willReturn(true);
+
+        $this->request->query->set('ut', '8_Me185sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
+
+        $date = (new DateTime())->sub(
+            new DateInterval('PT1H')
+        );
+        $dbPath = __DIR__ . '/../../../../../var/data.db';
+        $pdo = new PDO("sqlite:{$dbPath}");
+        $prepare = $pdo->prepare("UPDATE p6bis_user SET token_date=:date");
+        $prepare->bindValue(':date', $date->format('Y-m-d H:i:s'));
+        $prepare->execute();
+
+        $response = $this->handler->handle($this->form, $this->request);
+
+        self::assertFalse($response);
     }
 }

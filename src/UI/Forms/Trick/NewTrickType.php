@@ -5,6 +5,7 @@ namespace App\UI\Forms\Trick;
 use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
 use App\Domain\DTO\Trick\NewTrickDTO;
 use App\Domain\Model\Category;
+use App\Domain\Model\Interfaces\CategoryInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

@@ -3,26 +3,22 @@
 namespace App\Tests\UI\Forms\Trick;
 
 use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
-use App\Domain\Model\Interfaces\CategoryInterface;
+use App\Domain\Model\Category;
 use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\VideoInterface;
 use App\UI\Forms\Trick\NewTrickType;
-use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class NewTrickTypeTest extends TypeTestCase
+class NewTrickTypeTest extends KernelTestCase
 {
-    private $form;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->form = $this->factory->create(NewTrickType::class);
-    }
-
     public function testReturnOfTheFormType()
     {
-        $category = $this->createMock(CategoryInterface::class);
+        $kernel = self::bootKernel();
+
+        $factory = $kernel->getContainer()->get('form.factory');
+        $form = $factory->create(NewTrickType::class);
+
+        $category = new Category('grab', 'Grab');
 
         $pictures = [];
         $pictures[] = $this->createMock(PictureInterface::class);
@@ -39,9 +35,9 @@ class NewTrickTypeTest extends TypeTestCase
             'videos'      => $videos,
         ];
 
-        $this->form->submit($formData);
+        $form->submit($formData);
 
-        $dto = $this->form->getData();
+        $dto = $form->getData();
 
         self::assertInstanceOf(NewTrickDTOInterface::class, $dto);
     }
