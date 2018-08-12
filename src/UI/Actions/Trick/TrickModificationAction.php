@@ -3,13 +3,10 @@
 namespace App\UI\Actions\Trick;
 
 use App\Application\Handlers\Interfaces\Forms\Trick\TrickModificationHandlerInterface;
-use App\Domain\DTO\Trick\NewTrickPictureDTO;
-use App\Domain\DTO\Trick\NewTrickVideoDTO;
+use App\Application\Helpers\PictureAndVideoTokenManager;
 use App\Domain\DTO\Trick\TrickModificationDTO;
-use App\Domain\DTO\Trick\TrickModificationPictureDTO;
 use App\Domain\Model\Picture;
 use App\Domain\Model\Trick;
-use App\Domain\Model\Video;
 use App\Domain\Repository\TrickRepository;
 use App\UI\Forms\Trick\TrickModificationType;
 use App\UI\Responders\Interfaces\Trick\TrickModificationResponderInterface;
@@ -17,8 +14,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class TrickModificationAction
 {
@@ -42,34 +39,41 @@ class TrickModificationAction
 	 * @var TrickModificationHandlerInterface
 	 */
 	private $handler;
-	/**
-	 * @var TokenGeneratorInterface
-	 */
-	private $tokenGenerator;
+    /**
+     * @var PictureAndVideoTokenManager
+     */
+    private $tokenManager;
+    /**
+     * @var SessionInterface
+     */
+    private $session;
 
-	/**
-	 * TrickModificationAction constructor.
-	 *
-	 * @param FormFactoryInterface $formFactory
-	 * @param EntityManagerInterface $entityManager
-	 * @param TrickModificationResponderInterface $responder
-	 * @param TrickModificationHandlerInterface $handler
-	 * @param TokenGeneratorInterface $tokenGenerator
-	 */
+    /**
+     * TrickModificationAction constructor.
+     *
+     * @param FormFactoryInterface $formFactory
+     * @param EntityManagerInterface $entityManager
+     * @param TrickModificationResponderInterface $responder
+     * @param TrickModificationHandlerInterface $handler
+     * @param PictureAndVideoTokenManager $tokenManager
+     * @param SessionInterface $session
+     */
 	public function __construct(
 		FormFactoryInterface $formFactory,
 		EntityManagerInterface $entityManager,
 		TrickModificationResponderInterface $responder,
 		TrickModificationHandlerInterface $handler,
-		TokenGeneratorInterface $tokenGenerator
+        PictureAndVideoTokenManager $tokenManager,
+        SessionInterface $session
 	) {
 		$this->formFactory = $formFactory;
 		$this->repository = $entityManager->getRepository(Trick::class);
 		$this->responder = $responder;
 		$this->entityManager = $entityManager;
 		$this->handler = $handler;
-		$this->tokenGenerator = $tokenGenerator;
-	}
+        $this->tokenManager = $tokenManager;
+        $this->session = $session;
+    }
 
 	/**
 	 * @Route(
@@ -111,14 +115,9 @@ class TrickModificationAction
 			);
 		}
 
-		if (!empty($trick->getPictures())) {
-			/** @var Picture $picture */
-			foreach ($trick->getPictures() as $picture) {
-				$picture->createToken($this->tokenGenerator);
-			}
-		}
+		$tokens = $this->tokenManager->createTokens($trick->getPictures(), $trick->getVideos());
 
-		$this->entityManager->flush();
+		$this->session->set('tokens', $tokens);
 
 		return $this->responder->trickModificationResponse(false, '', [], $form, $trick);
 	}

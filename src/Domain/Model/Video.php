@@ -23,6 +23,11 @@ class Video implements VideoInterface
     private $name;
 
     /**
+     * @var string
+     */
+    private $deleteToken;
+
+    /**
      * @var Trick
      *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"}, inversedBy="videos")
@@ -44,7 +49,7 @@ class Video implements VideoInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -52,10 +57,34 @@ class Video implements VideoInterface
     }
 
     /**
-     * @return Trick
+     * {@inheritdoc}
+     */
+    public function getDeleteToken(): string
+    {
+        return $this->deleteToken;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getTrick(): Trick
     {
         return $this->trick;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createToken(string $token): void
+    {
+        $this->deleteToken = $token;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteToken(): void
+    {
+        $this->deleteToken = null;
     }
 }

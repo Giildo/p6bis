@@ -104,6 +104,8 @@ class TrickModificationHandler implements TrickModificationHandlerInterface {
 
 					$this->entityManager->persist($picture);
 					$newPictures[] = [$picture, $pictureDTO->picture];
+
+					$counter++;
 				}
 			}
 

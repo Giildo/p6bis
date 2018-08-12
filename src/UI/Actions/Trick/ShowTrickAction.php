@@ -36,6 +36,8 @@ class ShowTrickAction
     }
 
     /**
+     * @Route(path="/trick/{trickSlug}", name="trick_show", requirements={"trickSlug"="\w+"})
+     *
      * @param string $trickSlug
      *
      * @return RedirectResponse|Response
@@ -44,8 +46,6 @@ class ShowTrickAction
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
-     *
-     * @Route(path="/trick/{trickSlug}", name="trick_show", requirements={"trickSlug"="\w+"})
      */
     public function showTrick(string $trickSlug)
     {

@@ -39,8 +39,6 @@ class Picture implements PictureInterface
 
 	/**
 	 * @var string
-	 *
-	 * @ORM\Column(type="string", length=43, nullable=true)
 	 */
 	private $deleteToken;
 
@@ -145,9 +143,9 @@ class Picture implements PictureInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function createToken(TokenGeneratorInterface $tokenGenerator): void
+	public function createToken(string $token): void
 	{
-		$this->deleteToken = $tokenGenerator->generateToken();
+		$this->deleteToken = $token;
 	}
 
 	/**

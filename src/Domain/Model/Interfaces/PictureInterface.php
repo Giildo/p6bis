@@ -51,12 +51,12 @@ interface PictureInterface
 		bool $headPicture
 	);
 
-	/**
-	 * @param TokenGeneratorInterface $tokenGenerator
-	 *
-	 * @return void
-	 */
-	public function createToken(TokenGeneratorInterface $tokenGenerator): void;
+    /**
+     * @param string $token
+     *
+     * @return void
+     */
+	public function createToken(string $token): void;
 
 	/**
 	 * @return void
