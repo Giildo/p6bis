@@ -3,6 +3,7 @@
 namespace App\Domain\Model\Interfaces;
 
 use App\Application\Helpers\Interfaces\SluggerHelperInterface;
+use App\Domain\Model\Trick;
 use DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -55,4 +56,32 @@ interface TrickInterface
      * @return UserInterface
      */
     public function getAuthor(): UserInterface;
+
+	/**
+	 * @return array|null
+	 */
+	public function getPictures(): ?array;
+
+	/**
+	 * @return array|null
+	 */
+	public function getVideos(): ?array;
+
+	/**
+	 * @return void
+	 */
+	public function publish(): void;
+
+	/**
+	 * @param string $description
+	 * @param bool $published
+	 * @param CategoryInterface $category
+	 *
+	 * @return Trick
+	 */
+	public function update(
+		string $description,
+		bool $published,
+		CategoryInterface $category
+	);
 }

@@ -11,8 +11,8 @@ class PictureSaveHelper implements PictureSaveHelperInterface
      */
     public function save(array $picturesAndFiles): void {
         foreach ($picturesAndFiles as $pictureAndFile) {
-            $file = $pictureAndFile[0];
-            $picture = $pictureAndFile[1];
+            $picture = $pictureAndFile[0];
+            $file = $pictureAndFile[1];
 
             $fileName = $picture->getName() . '.' . $file->guessExtension();
 

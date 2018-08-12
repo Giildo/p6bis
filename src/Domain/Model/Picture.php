@@ -4,6 +4,7 @@ namespace App\Domain\Model;
 
 use App\Domain\Model\Interfaces\PictureInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 /**
  * Class Picture
@@ -35,6 +36,13 @@ class Picture implements PictureInterface
      * @ORM\Column(type="string", length=5)
      */
     private $extension;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(type="string", length=43, nullable=true)
+	 */
+	private $deleteToken;
 
     /**
      * @var bool
@@ -74,7 +82,7 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -82,7 +90,7 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getDescription(): string
     {
@@ -90,7 +98,7 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getExtension(): string
     {
@@ -98,7 +106,7 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isHeadPicture(): bool
     {
@@ -106,10 +114,47 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return Trick
+     * {@inheritdoc}
      */
     public function getTrick(): Trick
     {
         return $this->trick;
     }
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getDeleteToken(): string
+	{
+		return $this->deleteToken;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function update(
+		string $description,
+		bool $headPicture
+	): self {
+		$this->description = $description;
+		$this->headPicture = $headPicture;
+
+		return $this;
+    }
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function createToken(TokenGeneratorInterface $tokenGenerator): void
+	{
+		$this->deleteToken = $tokenGenerator->generateToken();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function deleteToken(): void
+	{
+		$this->deleteToken = null;
+	}
 }

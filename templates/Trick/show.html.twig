@@ -9,6 +9,8 @@
 {% block body %}
     <h1>Page de présentation de la figure {{ trick.name }}</h1>
 
+    <p>Description : {{ trick.description }}</p>
+
     {% if trick.pictures is not empty %}
         {% for picture in trick.pictures %}
             <h5>{{ picture.name }}</h5>
