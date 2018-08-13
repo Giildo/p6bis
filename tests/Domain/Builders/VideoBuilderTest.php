@@ -4,7 +4,7 @@ namespace App\Tests\Domain\Builders;
 
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Builders\VideoBuilder;
-use App\Domain\DTO\Trick\NewTrickVideoDTO;
+use App\Domain\DTO\Trick\NewTrickNewVideoDTO;
 use App\Domain\Model\Category;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
@@ -15,7 +15,7 @@ class VideoBuilderTest extends TestCase
 {
     public function testTheVideoBuildingWithDTO()
     {
-        $dto = new NewTrickVideoDTO('https://www.youtube.com/watch?v=ud_gsZqO_gk');
+        $dto = new NewTrickNewVideoDTO('https://www.youtube.com/watch?v=ud_gsZqO_gk');
 
         $slugger = new SluggerHelper();
 

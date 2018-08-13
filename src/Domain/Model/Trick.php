@@ -9,6 +9,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * Class Trick
@@ -117,7 +118,7 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSlug(): string
     {
@@ -125,7 +126,7 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -133,7 +134,7 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getDescription(): string
     {
@@ -141,7 +142,7 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isPublished(): bool
     {
@@ -149,7 +150,7 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return DateTime
+     * {@inheritdoc}
      */
     public function getCreatedAt(): DateTime
     {
@@ -157,7 +158,7 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return DateTime|null
+     * {@inheritdoc}
      */
     public function getUpdatedAt(): ?DateTime
     {
@@ -165,7 +166,7 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return CategoryInterface
+     * {@inheritdoc}
      */
     public function getCategory(): CategoryInterface
     {
@@ -173,7 +174,7 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return UserInterface
+     * {@inheritdoc}
      */
     public function getAuthor(): UserInterface
     {
@@ -181,7 +182,7 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return array|null
+     * {@inheritdoc}
      */
     public function getPictures(): ?array
     {
@@ -189,15 +190,35 @@ class Trick implements TrickInterface
     }
 
     /**
-     * @return array|null
+     * {@inheritdoc}
      */
     public function getVideos(): ?array
     {
         return $this->videos->toArray();
     }
 
-    public function publish(): void
+	/**
+	 * {@inheritdoc}
+	 */
+	public function publish(): void
     {
         $this->published = true;
+    }
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function update(
+		string $description,
+		bool $published,
+		CategoryInterface $category
+	): self {
+		$this->description = $description;
+		$this->published = $published;
+		$this->category = $category;
+
+		$this->updatedAt = new DateTime();
+
+		return $this;
     }
 }

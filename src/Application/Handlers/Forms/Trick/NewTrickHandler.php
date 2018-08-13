@@ -82,7 +82,7 @@ class NewTrickHandler implements NewTrickHandlerInterface
                 $counter = 1;
                 foreach ($datas->pictures as $picture) {
                     $newPicture = $this->pictureBuilder->build($picture, $trick, $counter);
-                    $pictures[] = [$picture->picture, $newPicture];
+                    $pictures[] = [$newPicture, $picture->picture];
 
                     $this->entityManager->persist($newPicture);
 

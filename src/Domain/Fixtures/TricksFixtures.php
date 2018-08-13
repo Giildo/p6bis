@@ -4,8 +4,10 @@ namespace App\Domain\Fixtures;
 
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Model\Category;
+use App\Domain\Model\Picture;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
+use App\Domain\Model\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker\Factory;
@@ -59,13 +61,14 @@ class TricksFixtures extends Fixture
 
         $user2->changeRole(['ROLE_ADMIN']);
 
-        $category = new Category('Rotations', $slugger);
+        $category = new Category($slugger->slugify('Rotations'), 'Rotations');
 
         for ($i = 0 ; $i < 15 ; $i++) {
+            $name = $faker->unique()->word;
             $trick = new Trick(
-                $faker->unique()->word,
+                $slugger->slugify($name),
+                $name,
                 $faker->text,
-                $slugger,
                 $category,
                 $user1
             );
@@ -76,10 +79,11 @@ class TricksFixtures extends Fixture
         }
 
         for ($i = 0 ; $i < 5 ; $i++) {
+        	$name = $faker->unique()->word;
             $trick = new Trick(
-                $faker->unique()->word,
+                $slugger->slugify($name),
+                $name,
                 $faker->text,
-                $slugger,
                 $category,
                 $user2
             );
@@ -88,6 +92,38 @@ class TricksFixtures extends Fixture
 
             $manager->persist($trick);
         }
+
+        $trick = new Trick(
+        	$slugger->slugify('Mute'),
+	        'Mute',
+	        'Description de la figure Mute',
+	        $category,
+	        $user1
+        );
+
+        $picture = new Picture(
+        	"{$trick->getSlug()}0012018",
+	        'Description de l\'image',
+	        'jpeg',
+	        false,
+	        $trick
+        );
+
+        $manager->persist($picture);
+
+	    $picture = new Picture(
+		    "{$trick->getSlug()}0022018",
+		    'Description de l\'image',
+		    'jpeg',
+		    false,
+		    $trick
+	    );
+
+	    $manager->persist($picture);
+
+	    $video = new Video('3TAUnYZpMbA', $trick);
+
+	    $manager->persist($video);
 
         $manager->flush();
     }

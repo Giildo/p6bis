@@ -23,11 +23,7 @@ class NewTrickPresenter implements NewTrickPresenterInterface
     }
 
     /**
-     * @param FormInterface $form
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function newTrickPresentation(FormInterface $form): string
     {

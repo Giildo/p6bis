@@ -2,6 +2,7 @@
 
 namespace App\Domain\Repository;
 
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -15,9 +16,9 @@ class TrickRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Trick[]
+     * @return TrickInterface[]
      */
-    public function loadAllTricksWithAuthorCategoryAndHeadPicture()
+    public function loadAllTricksWithAuthorCategoryAndHeadPicture(): array
     {
         return $this->createQueryBuilder('t')
             ->where('t.published = 1')
@@ -27,10 +28,10 @@ class TrickRepository extends ServiceEntityRepository
 
     /**
      * @param string $trickSlug
-     * @return Trick|null
+     * @return TrickInterface|null
      * @throws NonUniqueResultException
      */
-    public function loadOneTrickWithCategoryAndAuthor(string $trickSlug): ?Trick
+    public function loadOneTrickWithCategoryAndAuthor(string $trickSlug): ?TrickInterface
     {
         return $this->createQueryBuilder('trick')
             ->leftJoin('trick.videos', 'videos')

@@ -3,6 +3,8 @@
 namespace App\Domain\DTO\Trick;
 
 use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\TrickNewVideoDTOInterface;
 use App\Domain\Model\Interfaces\CategoryInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -50,27 +52,21 @@ class NewTrickDTO implements NewTrickDTOInterface
     public $category;
 
     /**
-     * @var array|null
+     * @var TrickNewPictureDTOInterface[]|null
      *
      * @Assert\Type("array")
      */
     public $pictures;
 
     /**
-     * @var array|null
+     * @var TrickNewVideoDTOInterface[]|null
      *
      * @Assert\Type("array")
      */
     public $videos;
 
     /**
-     * NewTrickDTO constructor.
-     * @param null|string $name
-     * @param null|string $description
-     * @param bool|null $published
-     * @param CategoryInterface|null $category
-     * @param array|null $pictures
-     * @param array|null $videos
+     * {@inheritdoc}
      */
     public function __construct(
         ?string $name = '',

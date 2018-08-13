@@ -71,4 +71,16 @@ class PictureTest extends TestCase
         self::assertEquals('Mute', $this->picture->getTrick()->getName());
         self::assertInstanceOf(TrickInterface::class, $this->picture->getTrick());
     }
+
+    public function testTheModificationOfThePicture()
+    {
+        $this->picture->update(
+            'Nouvelle description de la photo',
+            false
+        );
+
+        self::assertEquals('Nouvelle description de la photo', $this->picture->getDescription());
+
+        self::assertFalse($this->picture->isHeadPicture());
+    }
 }

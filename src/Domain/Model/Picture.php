@@ -3,6 +3,7 @@
 namespace App\Domain\Model;
 
 use App\Domain\Model\Interfaces\PictureInterface;
+use App\Domain\Model\Interfaces\TrickInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +37,11 @@ class Picture implements PictureInterface
      */
     private $extension;
 
+	/**
+	 * @var string
+	 */
+	private $deleteToken;
+
     /**
      * @var bool
      *
@@ -44,7 +50,7 @@ class Picture implements PictureInterface
     private $headPicture;
 
     /**
-     * @var Trick
+     * @var TrickInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"}, inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="slug", name="trick_slug")
@@ -57,14 +63,14 @@ class Picture implements PictureInterface
      * @param string $description
      * @param string $extension
      * @param bool $headPicture
-     * @param Trick $trick
+     * @param TrickInterface $trick
      */
     public function __construct(
         string $name,
         string $description,
         string $extension,
         bool $headPicture,
-        Trick $trick
+        TrickInterface $trick
     ) {
         $this->name = $name;
         $this->description = $description;
@@ -74,7 +80,7 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -82,7 +88,7 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getDescription(): string
     {
@@ -90,7 +96,7 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getExtension(): string
     {
@@ -98,7 +104,7 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isHeadPicture(): bool
     {
@@ -106,10 +112,39 @@ class Picture implements PictureInterface
     }
 
     /**
-     * @return Trick
+     * {@inheritdoc}
      */
-    public function getTrick(): Trick
+    public function getTrick(): TrickInterface
     {
         return $this->trick;
     }
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getDeleteToken(): string
+	{
+		return $this->deleteToken;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function update(
+		string $description,
+		bool $headPicture
+	): self {
+		$this->description = $description;
+		$this->headPicture = $headPicture;
+
+		return $this;
+    }
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function createToken(string $token): void
+	{
+		$this->deleteToken = $token;
+	}
 }

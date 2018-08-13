@@ -31,3 +31,7 @@ services:
     App\Application\Listener\Security\NoAuthenticationCheckerListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+
+    App\Application\Listener\Trick\ResetSessionTokensListener:
+        tags:
+        - { name: kernel.event_listener, event: kernel.request }

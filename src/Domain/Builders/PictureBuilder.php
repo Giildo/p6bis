@@ -3,9 +3,10 @@
 namespace App\Domain\Builders;
 
 use App\Domain\Builders\Interfaces\PictureBuilderInterface;
-use App\Domain\DTO\Interfaces\Trick\NewTrickPictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
+use App\Domain\Model\Interfaces\PictureInterface;
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Picture;
-use App\Domain\Model\Trick;
 use DateTime;
 
 class PictureBuilder implements PictureBuilderInterface
@@ -19,8 +20,8 @@ class PictureBuilder implements PictureBuilderInterface
      * {@inheritdoc}
      */
     public function build(
-        NewTrickPictureDTOInterface $dto,
-        Trick $trick,
+        TrickNewPictureDTOInterface $dto,
+        TrickInterface $trick,
         int $counter
     ): self {
         $name = $trick->getSlug() . (new DateTime())->format('YmdHis') . '_' . $counter;
@@ -39,7 +40,7 @@ class PictureBuilder implements PictureBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function getPicture(): Picture
+    public function getPicture(): PictureInterface
     {
         return $this->picture;
     }

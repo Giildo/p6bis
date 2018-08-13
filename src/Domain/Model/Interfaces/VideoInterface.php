@@ -19,7 +19,19 @@ interface VideoInterface
     public function getName(): string;
 
     /**
-     * @return Trick
+     * @return string
      */
-    public function getTrick(): Trick;
+    public function getDeleteToken(): string;
+
+    /**
+     * @return TrickInterface
+     */
+    public function getTrick(): TrickInterface;
+
+    /**
+     * @param string $token
+     *
+     * @return void
+     */
+    public function createToken(string $token): void;
 }
