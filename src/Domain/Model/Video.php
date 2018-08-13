@@ -2,6 +2,7 @@
 
 namespace App\Domain\Model;
 
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Interfaces\VideoInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,7 +29,7 @@ class Video implements VideoInterface
     private $deleteToken;
 
     /**
-     * @var Trick
+     * @var TrickInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"}, inversedBy="videos")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="slug", name="trick_slug")
@@ -38,11 +39,11 @@ class Video implements VideoInterface
     /**
      * Video constructor.
      * @param string $name
-     * @param Trick $trick
+     * @param TrickInterface $trick
      */
     public function __construct(
         string $name,
-        Trick $trick
+        TrickInterface $trick
     ) {
         $this->name = $name;
         $this->trick = $trick;
@@ -67,7 +68,7 @@ class Video implements VideoInterface
     /**
      * {@inheritdoc}
      */
-    public function getTrick(): Trick
+    public function getTrick(): TrickInterface
     {
         return $this->trick;
     }
@@ -78,13 +79,5 @@ class Video implements VideoInterface
     public function createToken(string $token): void
     {
         $this->deleteToken = $token;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteToken(): void
-    {
-        $this->deleteToken = null;
     }
 }

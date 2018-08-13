@@ -5,7 +5,6 @@ namespace App\UI\Forms\Trick;
 use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
 use App\Domain\DTO\Trick\NewTrickDTO;
 use App\Domain\Model\Category;
-use App\Domain\Model\Interfaces\CategoryInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -42,7 +41,7 @@ class NewTrickType extends AbstractType
             ])
             ->add('pictures', CollectionType::class, [
                 'label'         => 'Images',
-                'entry_type'    => NewTrickPictureType::class,
+                'entry_type'    => NewTrickNewPictureType::class,
                 'allow_add'     => true,
                 'entry_options' => [
                     'label' => false,
@@ -50,7 +49,7 @@ class NewTrickType extends AbstractType
             ])
             ->add('videos', CollectionType::class, [
                 'label'         => 'Videos',
-                'entry_type'    => NewTrickVideoType::class,
+                'entry_type'    => NewTrickNewVideoType::class,
                 'allow_add'     => true,
                 'entry_options' => [
                     'label' => false,

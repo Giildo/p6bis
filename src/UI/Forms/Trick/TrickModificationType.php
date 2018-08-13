@@ -35,7 +35,7 @@ class TrickModificationType extends AbstractType
 			])
 			->add('newPictures', CollectionType::class, [
 				'label'         => 'Nouvelles photos',
-				'entry_type'    => NewTrickPictureType::class,
+				'entry_type'    => TrickModificationNewPictureType::class,
 				'allow_add'     => true,
 				'entry_options' => [
 					'label' => false,
@@ -43,7 +43,7 @@ class TrickModificationType extends AbstractType
 			])
 			->add('newVideos', CollectionType::class, [
 				'label'         => 'Nouvelles videos',
-				'entry_type'    => NewTrickVideoType::class,
+				'entry_type'    => TrickModificationNewVideoType::class,
 				'allow_add'     => true,
 				'entry_options' => [
 					'label' => false,

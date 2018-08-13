@@ -6,128 +6,110 @@ use App\Application\Handlers\Interfaces\Forms\Trick\TrickModificationHandlerInte
 use App\Application\Helpers\Interfaces\PictureSaveHelperInterface;
 use App\Domain\Builders\Interfaces\PictureBuilderInterface;
 use App\Domain\Builders\Interfaces\VideoBuilderInterface;
+use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
 use App\Domain\DTO\Trick\TrickModificationDTO;
-use App\Domain\Model\Picture;
-use App\Domain\Model\Trick;
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Modifier\Interfaces\TrickModifierInterface;
-use App\Domain\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
-class TrickModificationHandler implements TrickModificationHandlerInterface {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
-	 * @var TrickRepository
-	 */
-	private $repository;
-	/**
-	 * @var TrickModifierInterface
-	 */
-	private $trickModifier;
-	/**
-	 * @var PictureBuilderInterface
-	 */
-	private $pictureBuilder;
-	/**
-	 * @var VideoBuilderInterface
-	 */
-	private $videoBuilder;
-	/**
-	 * @var PictureSaveHelperInterface
-	 */
-	private $pictureSave;
+class TrickModificationHandler implements TrickModificationHandlerInterface
+{
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+    /**
+     * @var TrickModifierInterface
+     */
+    private $trickModifier;
+    /**
+     * @var PictureBuilderInterface
+     */
+    private $pictureBuilder;
+    /**
+     * @var VideoBuilderInterface
+     */
+    private $videoBuilder;
+    /**
+     * @var PictureSaveHelperInterface
+     */
+    private $pictureSave;
 
-	/**
-	 * TrickModificationHandler constructor.
-	 *
-	 * @param EntityManagerInterface $entityManager
-	 * @param TrickModifierInterface $trickModifier
-	 * @param PictureBuilderInterface $pictureBuilder
-	 * @param VideoBuilderInterface $videoBuilder
-	 * @param PictureSaveHelperInterface $pictureSave
-	 */
-	public function __construct(
-		EntityManagerInterface $entityManager,
-		TrickModifierInterface $trickModifier,
-		PictureBuilderInterface $pictureBuilder,
-		VideoBuilderInterface $videoBuilder,
-		PictureSaveHelperInterface $pictureSave
-	) {
-		$this->entityManager = $entityManager;
-		$this->repository = $entityManager->getRepository(Trick::class);
-		$this->trickModifier = $trickModifier;
-		$this->pictureBuilder = $pictureBuilder;
-		$this->videoBuilder = $videoBuilder;
-		$this->pictureSave = $pictureSave;
-	}
+    /**
+     * TrickModificationHandler constructor.
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param TrickModifierInterface $trickModifier
+     * @param PictureBuilderInterface $pictureBuilder
+     * @param VideoBuilderInterface $videoBuilder
+     * @param PictureSaveHelperInterface $pictureSave
+     */
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TrickModifierInterface $trickModifier,
+        PictureBuilderInterface $pictureBuilder,
+        VideoBuilderInterface $videoBuilder,
+        PictureSaveHelperInterface $pictureSave
+    ) {
+        $this->entityManager = $entityManager;
+        $this->trickModifier = $trickModifier;
+        $this->pictureBuilder = $pictureBuilder;
+        $this->videoBuilder = $videoBuilder;
+        $this->pictureSave = $pictureSave;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function handle(
-		FormInterface $form,
-		string $trickSlug
-	): bool {
-		if ($form->isSubmitted() && $form->isValid()) {
-			$trick = $this->repository->loadOneTrickWithCategoryAndAuthor($trickSlug);
+    /**
+     * {@inheritdoc}
+     */
+    public function handle(
+        FormInterface $form,
+        TrickInterface $trick
+    ): bool {
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var TrickModificationDTO $dto */
+            $dto = $form->getData();
 
-			if (is_null($trick)) {
-				return false;
-			}
+            /** @var TrickInterface $trick */
+            $trick = $this->trickModifier->modify($trick, $dto)
+                                         ->getTrick();
+            $this->entityManager->persist($trick);
 
-			/** @var TrickModificationDTO $dto */
-			$dto = $form->getData();
+            /** @var TrickNewPictureDTOInterface[] $pictureDTOs */
+            $pictureDTOs = $dto->newPictures;
+            $newPictures = [];
+            if (!empty($pictureDTOs)) {
+                $counter = 1;
+                foreach ($pictureDTOs as $pictureDTO) {
+                    $picture = $this->pictureBuilder->build($pictureDTO, $trick, $counter)
+                                                    ->getPicture();
 
-			/** @var Trick $trick */
-			$trick = $this->trickModifier->modify($trick, $dto)
-										 ->getTrick();
-			$this->entityManager->persist($trick);
+                    $this->entityManager->persist($picture);
+                    $newPictures[] = [$picture, $pictureDTO->picture];
 
-			$oldPictures = $trick->getPictures();
-			if (!empty($oldPictures)) {
-				/** @var Picture $oldPicture */
-				foreach ( $oldPictures as $oldPicture ) {
-					$oldPicture->deleteToken();
-				}
-			}
+                    $counter++;
+                }
+            }
 
-			$pictureDTOs = $dto->newPictures;
-			$newPictures = [];
-			if (!empty($pictureDTOs)) {
-				$counter = 1;
-				foreach ($pictureDTOs as $pictureDTO) {
-					$picture = $this->pictureBuilder->build($pictureDTO, $trick, $counter)
-													->getPicture();
+            $videoDTOs = $dto->newVideos;
+            if (!empty($videoDTOs)) {
+                foreach ($videoDTOs as $videoDTO) {
+                    $video = $this->videoBuilder->build($videoDTO, $trick)
+                                                ->getVideo();
 
-					$this->entityManager->persist($picture);
-					$newPictures[] = [$picture, $pictureDTO->picture];
+                    $this->entityManager->persist($video);
+                }
+            }
 
-					$counter++;
-				}
-			}
+            $this->entityManager->flush();
 
-			$videoDTOs = $dto->newVideos;
-			if (!empty($videoDTOs)) {
-				foreach ($videoDTOs as $videoDTO) {
-					$video = $this->videoBuilder->build($videoDTO, $trick)
-					                                ->getVideo();
+            if (!empty($newPictures)) {
+                $this->pictureSave->save($newPictures);
+            }
 
-					$this->entityManager->persist($video);
-				}
-			}
+            return true;
+        }
 
-			$this->entityManager->flush();
-
-			if (!empty($newPictures)) {
-				$this->pictureSave->save($newPictures);
-			}
-
-			return true;
-		}
-
-		return false;
-	}
+        return false;
+    }
 }

@@ -2,16 +2,16 @@
 
 namespace App\Application\Handlers\Interfaces\Forms\Trick;
 
+use App\Domain\Model\Interfaces\TrickInterface;
 use Symfony\Component\Form\FormInterface;
 
-interface TrickModificationHandlerInterface {
-	/**
-	 * @param FormInterface $form
-	 * @param string $trickSlug
-	 *
-	 * @return bool
-	 *
-	 * @throws \Doctrine\ORM\NonUniqueResultException
-	 */
-	public function handle( FormInterface $form, string $trickSlug ): bool;
+interface TrickModificationHandlerInterface
+{
+    /**
+     * @param FormInterface $form
+     * @param TrickInterface $trick
+     *
+     * @return bool
+     */
+    public function handle(FormInterface $form, TrickInterface $trick): bool;
 }

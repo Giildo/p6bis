@@ -48,7 +48,7 @@ class TrickModificationDeleteVideoAction
     }
 
     /**
-     * @Route(path="/espace-utilisateur/trick/video-suppression", name="trick_modification_delete_video")
+     * @Route(path="/espace-utilisateur/trick/video-suppression", name="Trick_modification_delete_video")
      *
      * @param Request $request
      *

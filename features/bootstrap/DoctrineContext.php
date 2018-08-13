@@ -140,12 +140,13 @@ class DoctrineContext extends MinkContext implements Context
 
         $slugger = new SluggerHelper();
 
-        $category = new Category('Grabs', $slugger);
+        $category = new Category($slugger->slugify('Grabs'), 'Grabs');
+        $category = new Category($slugger->slugify('Rotations'), 'Rotations');
 
         $trick = new Trick(
+            $slugger->slugify('Mute'),
             'Mute',
             $faker->text,
-            $slugger,
             $category,
             $user1
         );
@@ -155,10 +156,11 @@ class DoctrineContext extends MinkContext implements Context
         $this->entityManager->persist($trick);
 
         for ($i = 0 ; $i < 8 ; $i++) {
+            $name = $faker->unique()->word;
             $trick = new Trick(
-                $faker->unique()->word,
+                $slugger->slugify($name),
+                $name,
                 $faker->text,
-                $slugger,
                 $category,
                 $user2
             );
@@ -169,9 +171,9 @@ class DoctrineContext extends MinkContext implements Context
         }
 
         $trick = new Trick(
+            $slugger->slugify('Truck'),
             'Truck',
             $faker->text,
-            $slugger,
             $category,
             $user1
         );

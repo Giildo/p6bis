@@ -6,7 +6,7 @@ use App\UI\Responders\Interfaces\Trick\TrickModificationDeleteVideoOrPictureResp
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class TrickModificationDeleteVideoOrPictureOrPictureResponder
+class TrickModificationDeleteVideoOrPictureResponder
     implements TrickModificationDeleteVideoOrPictureResponderInterface
 {
     /**
@@ -30,7 +30,7 @@ class TrickModificationDeleteVideoOrPictureOrPictureResponder
     {
         return new RedirectResponse(
             $this->urlGenerator->generate(
-                'trick_modification',
+                'Trick_modification',
                 ['trickSlug' => $trickSlug]
             )
         );

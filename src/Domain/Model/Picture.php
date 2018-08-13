@@ -3,8 +3,8 @@
 namespace App\Domain\Model;
 
 use App\Domain\Model\Interfaces\PictureInterface;
+use App\Domain\Model\Interfaces\TrickInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 /**
  * Class Picture
@@ -50,7 +50,7 @@ class Picture implements PictureInterface
     private $headPicture;
 
     /**
-     * @var Trick
+     * @var TrickInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"}, inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="slug", name="trick_slug")
@@ -63,14 +63,14 @@ class Picture implements PictureInterface
      * @param string $description
      * @param string $extension
      * @param bool $headPicture
-     * @param Trick $trick
+     * @param TrickInterface $trick
      */
     public function __construct(
         string $name,
         string $description,
         string $extension,
         bool $headPicture,
-        Trick $trick
+        TrickInterface $trick
     ) {
         $this->name = $name;
         $this->description = $description;
@@ -114,7 +114,7 @@ class Picture implements PictureInterface
     /**
      * {@inheritdoc}
      */
-    public function getTrick(): Trick
+    public function getTrick(): TrickInterface
     {
         return $this->trick;
     }
@@ -146,13 +146,5 @@ class Picture implements PictureInterface
 	public function createToken(string $token): void
 	{
 		$this->deleteToken = $token;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function deleteToken(): void
-	{
-		$this->deleteToken = null;
 	}
 }

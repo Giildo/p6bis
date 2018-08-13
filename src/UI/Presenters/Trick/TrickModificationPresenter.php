@@ -2,7 +2,7 @@
 
 namespace App\UI\Presenters\Trick;
 
-use App\Domain\Model\Trick;
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\UI\Presenters\Interfaces\Trick\TrickModificationPresenterInterface;
 use Symfony\Component\Form\FormInterface;
 use Twig\Environment;
@@ -27,7 +27,7 @@ class TrickModificationPresenter implements TrickModificationPresenterInterface 
 	 */
 	public function trickModificationPresentation(
 		FormInterface $form,
-		Trick $trick
+		TrickInterface $trick
 	): string {
 		return $this->twig->render('Trick/modification.html.twig', [
 			'form'  => $form->createView(),

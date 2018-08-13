@@ -8,6 +8,7 @@ interface NewTrickPresenterInterface
 {
     /**
      * @param FormInterface $form
+     *
      * @return string
      */
     public function newTrickPresentation(FormInterface $form): string;

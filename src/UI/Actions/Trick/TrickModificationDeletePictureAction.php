@@ -50,7 +50,7 @@ class TrickModificationDeletePictureAction
     }
 
 	/**
-	 * @Route(path="/espace-utilisateur/trick/image-suppression", name="trick_modification_delete_picture")
+	 * @Route(path="/espace-utilisateur/trick/image-suppression", name="Trick_modification_delete_picture")
 	 *
 	 * @param Request $request
 	 *

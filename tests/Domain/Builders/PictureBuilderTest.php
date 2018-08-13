@@ -4,7 +4,7 @@ namespace App\Tests\Domain\Builders;
 
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Builders\PictureBuilder;
-use App\Domain\DTO\Trick\NewTrickPictureDTO;
+use App\Domain\DTO\Trick\NewTrickNewPictureDTO;
 use App\Domain\Model\Category;
 use App\Domain\Model\Picture;
 use App\Domain\Model\Trick;
@@ -43,7 +43,7 @@ class PictureBuilderTest extends TestCase
             $user
         );
 
-        $dto = new NewTrickPictureDTO(
+        $dto = new NewTrickNewPictureDTO(
             'Description de l\'image',
             $uploadFile
         );

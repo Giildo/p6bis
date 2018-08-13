@@ -52,14 +52,4 @@ class PictureAndVideoTokenManager implements PictureAndVideoTokenManagerInterfac
 
         return $tokens;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteTokens(
-        array $pictures,
-        array $videos
-    ): void {
-        // TODO: Implement deleteTokens() method.
-    }
 }

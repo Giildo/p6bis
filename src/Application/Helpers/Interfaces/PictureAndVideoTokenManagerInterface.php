@@ -14,15 +14,4 @@ interface PictureAndVideoTokenManagerInterface
         array $pictures,
         array $videos
     ): array;
-
-    /**
-     * @param array $pictures
-     * @param array $videos
-     *
-     * @return void
-     */
-    public function deleteTokens(
-        array $pictures,
-        array $videos
-    ): void;
 }

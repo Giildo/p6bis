@@ -2,10 +2,13 @@
 
 namespace App\UI\Presenters\Interfaces\Trick;
 
+use App\Domain\Model\Interfaces\TrickInterface;
+
 interface HomePagePresenterInterface
 {
     /**
-     * @param array|null $tricks
+     * @param TrickInterface[]|null $tricks
+     *
      * @return string
      */
     public function homePagePresentation(?array $tricks = []): string;

@@ -3,9 +3,8 @@
 namespace App\UI\Actions\Trick;
 
 use App\Application\Handlers\Interfaces\Forms\Trick\TrickModificationHandlerInterface;
-use App\Application\Helpers\PictureAndVideoTokenManager;
+use App\Application\Helpers\Interfaces\PictureAndVideoTokenManagerInterface;
 use App\Domain\DTO\Trick\TrickModificationDTO;
-use App\Domain\Model\Picture;
 use App\Domain\Model\Trick;
 use App\Domain\Repository\TrickRepository;
 use App\UI\Forms\Trick\TrickModificationType;
@@ -32,15 +31,11 @@ class TrickModificationAction
 	 */
 	private $responder;
 	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
 	 * @var TrickModificationHandlerInterface
 	 */
 	private $handler;
     /**
-     * @var PictureAndVideoTokenManager
+     * @var PictureAndVideoTokenManagerInterface
      */
     private $tokenManager;
     /**
@@ -55,21 +50,20 @@ class TrickModificationAction
      * @param EntityManagerInterface $entityManager
      * @param TrickModificationResponderInterface $responder
      * @param TrickModificationHandlerInterface $handler
-     * @param PictureAndVideoTokenManager $tokenManager
+     * @param PictureAndVideoTokenManagerInterface $tokenManager
      * @param SessionInterface $session
      */
 	public function __construct(
-		FormFactoryInterface $formFactory,
-		EntityManagerInterface $entityManager,
-		TrickModificationResponderInterface $responder,
-		TrickModificationHandlerInterface $handler,
-        PictureAndVideoTokenManager $tokenManager,
+        FormFactoryInterface $formFactory,
+        EntityManagerInterface $entityManager,
+        TrickModificationResponderInterface $responder,
+        TrickModificationHandlerInterface $handler,
+        PictureAndVideoTokenManagerInterface $tokenManager,
         SessionInterface $session
 	) {
 		$this->formFactory = $formFactory;
 		$this->repository = $entityManager->getRepository(Trick::class);
 		$this->responder = $responder;
-		$this->entityManager = $entityManager;
 		$this->handler = $handler;
         $this->tokenManager = $tokenManager;
         $this->session = $session;
@@ -78,7 +72,7 @@ class TrickModificationAction
 	/**
 	 * @Route(
 	 *     path="/espace-utilisateur/trick/modification/{trickSlug}",
-	 *     name="trick_modification",
+	 *     name="Trick_modification",
 	 *     requirements={"trickSlug"="\w+"}
 	 * )
 	 *
@@ -107,7 +101,7 @@ class TrickModificationAction
 		$form = $this->formFactory->create(TrickModificationType::class, $dto)
 								  ->handleRequest($request);
 
-		if ($this->handler->handle($form, $trickSlug)) {
+		if ($this->handler->handle($form, $trick)) {
 			return $this->responder->trickModificationResponse(
 				true,
 				'trick_show',

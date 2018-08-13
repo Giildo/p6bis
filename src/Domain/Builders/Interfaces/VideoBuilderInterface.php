@@ -2,24 +2,24 @@
 
 namespace App\Domain\Builders\Interfaces;
 
-use App\Domain\DTO\Interfaces\Trick\NewTrickVideoDTOInterface;
-use App\Domain\Model\Trick;
-use App\Domain\Model\Video;
+use App\Domain\DTO\Interfaces\Trick\TrickNewVideoDTOInterface;
+use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\VideoInterface;
 
 interface VideoBuilderInterface
 {
     /**
-     * @param NewTrickVideoDTOInterface $dto
-     * @param Trick $trick
+     * @param TrickNewVideoDTOInterface $dto
+     * @param TrickInterface $trick
      * @return VideoBuilderInterface
      */
     public function build(
-        NewTrickVideoDTOInterface $dto,
-        Trick $trick
+        TrickNewVideoDTOInterface $dto,
+        TrickInterface $trick
     );
 
     /**
-     * @return Video
+     * @return VideoInterface
      */
-    public function getVideo(): Video;
+    public function getVideo(): VideoInterface;
 }

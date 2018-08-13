@@ -2,10 +2,10 @@
 
 namespace App\Domain\DTO\Trick;
 
-use App\Domain\DTO\Interfaces\Trick\NewTrickVideoDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\TrickNewVideoDTOInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class NewTrickVideoDTO implements NewTrickVideoDTOInterface
+class NewTrickNewVideoDTO implements TrickNewVideoDTOInterface
 {
     /**
      * @var string|null
@@ -16,8 +16,7 @@ class NewTrickVideoDTO implements NewTrickVideoDTOInterface
     public $url;
 
     /**
-     * NewTrickVideoDTO constructor.
-     * @param string|null $url
+     * {@inheritdoc}
      */
     public function __construct(?string $url = '')
     {

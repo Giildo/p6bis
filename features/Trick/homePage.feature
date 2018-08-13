@@ -2,7 +2,7 @@
 @trick_home_page
 
 Feature: As an visitor, anonymous or connected, I need to be able to see the list of the tricks.
-  If I'm connected with user role, I need to be able to modify or to delete my tricks.
+  If I'm connected with user role, I need to be able to modify or to delete my trick.
   If I'm connected with administrator role, I need to be able to modify or to delete all tricks.
 
   Scenario: [Success] No trick in the database.

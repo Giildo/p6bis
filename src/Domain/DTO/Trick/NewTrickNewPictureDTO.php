@@ -2,11 +2,11 @@
 
 namespace App\Domain\DTO\Trick;
 
-use App\Domain\DTO\Interfaces\Trick\NewTrickPictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class NewTrickPictureDTO implements NewTrickPictureDTOInterface
+class NewTrickNewPictureDTO implements TrickNewPictureDTOInterface
 {
     /**
      * @var null|string
@@ -23,9 +23,7 @@ class NewTrickPictureDTO implements NewTrickPictureDTOInterface
     public $picture;
 
     /**
-     * NewTrickPictureDTO constructor.
-     * @param null|string $description
-     * @param null|UploadedFile $picture
+     * {@inheritdoc}
      */
     public function __construct(
         ?string $description = '',

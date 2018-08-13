@@ -69,12 +69,7 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
     public $password;
 
     /**
-     * UserRegistrationDTO constructor.
-     * @param string $username
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $mail
-     * @param string $password
+     * {@inheritdoc}
      */
     public function __construct(
         ?string $username,

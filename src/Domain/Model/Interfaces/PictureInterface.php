@@ -36,9 +36,9 @@ interface PictureInterface
     public function isHeadPicture(): bool;
 
 	/**
-	 * @return Trick
+	 * @return TrickInterface
 	 */
-	public function getTrick(): Trick;
+	public function getTrick(): TrickInterface;
 
 	/**
 	 * @param string $description
@@ -57,11 +57,6 @@ interface PictureInterface
      * @return void
      */
 	public function createToken(string $token): void;
-
-	/**
-	 * @return void
-	 */
-	public function deleteToken(): void;
 
 	/**
 	 * @return string

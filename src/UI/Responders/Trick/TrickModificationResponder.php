@@ -2,6 +2,7 @@
 
 namespace App\UI\Responders\Trick;
 
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\UI\Presenters\Interfaces\Trick\TrickModificationPresenterInterface;
 use App\UI\Responders\Interfaces\Trick\TrickModificationResponderInterface;
@@ -39,10 +40,10 @@ class TrickModificationResponder implements TrickModificationResponderInterface 
 	 */
 	public function trickModificationResponse(
 		?bool $redirection = true,
-		?string $redirectionURL = '/',
+		?string $redirectionURL = 'home',
 		?array $parameters = [],
 		?FormInterface $form = null,
-		?Trick $trick = null
+		?TrickInterface $trick = null
 	): Response {
 		return ($redirection) ?
 			new RedirectResponse($this->urlGenerator->generate($redirectionURL, $parameters)) :

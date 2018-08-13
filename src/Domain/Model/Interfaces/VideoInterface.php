@@ -24,9 +24,9 @@ interface VideoInterface
     public function getDeleteToken(): string;
 
     /**
-     * @return Trick
+     * @return TrickInterface
      */
-    public function getTrick(): Trick;
+    public function getTrick(): TrickInterface;
 
     /**
      * @param string $token
@@ -34,9 +34,4 @@ interface VideoInterface
      * @return void
      */
     public function createToken(string $token): void;
-
-    /**
-     * @return void
-     */
-    public function deleteToken(): void;
 }

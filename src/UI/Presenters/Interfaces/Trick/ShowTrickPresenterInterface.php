@@ -2,18 +2,14 @@
 
 namespace App\UI\Presenters\Interfaces\Trick;
 
-use App\Domain\Model\Trick;
+use App\Domain\Model\Interfaces\TrickInterface;
 
 interface ShowTrickPresenterInterface
 {
     /**
-     * @param Trick $trick
+     * @param TrickInterface $trick
      *
      * @return string
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function showTrickPresentation(Trick $trick): string;
+    public function showTrickPresentation(TrickInterface $trick): string;
 }
