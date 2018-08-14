@@ -9,6 +9,12 @@
 {% block body %}
     <h1>Bienvenue sur la page d'accueil</h1>
 
+    <h5>
+        {% for message in app.flashes('messageFlash') %}
+            {{ message }}
+        {% endfor %}
+    </h5>
+
     {% if tricks is not empty %}
         <table>
             <thead>

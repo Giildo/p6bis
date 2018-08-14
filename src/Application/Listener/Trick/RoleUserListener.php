@@ -69,29 +69,21 @@ class RoleUserListener
                     $trick = $this->repository->loadOneTrickWithCategoryAndAuthor($trickSlug);
 
                     if (is_null($trick)) {
-                        $event->setResponse(
-                            new RedirectResponse(
-                                $this->urlGenerator->generate('Home')
-                            )
-                        );
+                        $event->setResponse(new RedirectResponse($this->urlGenerator->generate('Home')));
                         return;
                     }
 
                     $userConnected = $this->tokenStorage->getToken()->getUser();
 
-                    if ($this->checker->isGranted('ROLE_ADMIN')) {
-                        $request->getSession()->set('trick', $trick);
-                        return;
-                    } elseif ($this->checker->isGranted('ROLE_USER') && $trick->getAuthor() === $userConnected) {
+                    if (
+                        ($this->checker->isGranted('ROLE_USER') && $trick->getAuthor() === $userConnected) ||
+                        ($this->checker->isGranted('ROLE_ADMIN'))
+                    ) {
                         $request->getSession()->set('trick', $trick);
                         return;
                     }
 
-                    $event->setResponse(
-                        new RedirectResponse(
-                            $this->urlGenerator->generate('Home')
-                        )
-                    );
+                    $event->setResponse(new RedirectResponse($this->urlGenerator->generate('Home')));
                     return;
                 }
             }
