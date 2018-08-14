@@ -46,7 +46,7 @@ class NoAuthenticationCheckerListener
                 if ($this->authorizationChecker->isGranted('ROLE_USER')) {
                     $event->setResponse(
                         new RedirectResponse(
-                            $this->urlGenerator->generate('home')
+                            $this->urlGenerator->generate('Home')
                         )
                     );
 

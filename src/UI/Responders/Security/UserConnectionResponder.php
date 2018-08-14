@@ -48,7 +48,7 @@ class UserConnectionResponder implements UserConnectionResponderInterface
         ?string $lastUserConnected = ''
     ): Response {
         return $redirect ?
-            new RedirectResponse($this->urlGenerator->generate('home')) :
+            new RedirectResponse($this->urlGenerator->generate('Home')) :
             new Response($this->presenter->userConnectionPresentation(
                 $form,
                 $error,

@@ -34,7 +34,7 @@ class HomePageAction
     }
 
     /**
-     * @Route(path="/accueil", name="home")
+     * @Route(path="/accueil", name="Home")
      *
      * @return Response
      */
