@@ -43,7 +43,7 @@ class NewTrickAction
     }
 
     /**
-     * @Route(path="/espace-utilisateur/trick/nouvelle-figure", name="new_trick")
+     * @Route(path="/espace-utilisateur/trick/nouvelle-figure", name="New_trick")
      *
      * @param Request $request
      * @return Response

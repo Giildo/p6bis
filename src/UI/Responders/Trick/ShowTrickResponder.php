@@ -48,7 +48,7 @@ class ShowTrickResponder implements ShowTrickResponderInterface
         ?Trick $trick = null
     ) {
         return $redirect ?
-            new RedirectResponse($this->urlGenerator->generate('home')) :
+            new RedirectResponse($this->urlGenerator->generate('Home')) :
             new Response($this->presenter->showTrickPresentation($trick));
     }
 }

@@ -40,7 +40,7 @@ class TrickModificationResponder implements TrickModificationResponderInterface 
 	 */
 	public function trickModificationResponse(
 		?bool $redirection = true,
-		?string $redirectionURL = 'home',
+		?string $redirectionURL = 'Home',
 		?array $parameters = [],
 		?FormInterface $form = null,
 		?TrickInterface $trick = null

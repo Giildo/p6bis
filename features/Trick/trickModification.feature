@@ -2,6 +2,8 @@
 @trick_trick_modification
 
 Feature: As an visitor connected, I need to be able to update the details of a trick.
+  If I'm connected with user role, I need to be able to modify my trick.
+  If I'm connected with administrator role, I need to be able to modify all tricks.
 
   Scenario: [Fail] The user is redirected to the login page if he isn't connected.
     Given I am on "/espace-utilisateur/trick/modification/badSlug"
