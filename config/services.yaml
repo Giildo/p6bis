@@ -35,3 +35,7 @@ services:
     App\Application\Listener\Trick\ResetSessionTokensListener:
         tags:
         - { name: kernel.event_listener, event: kernel.request }
+
+    App\Application\Listener\Trick\RoleUserListener:
+        tags:
+        - { name: kernel.event_listener, event: kernel.request }

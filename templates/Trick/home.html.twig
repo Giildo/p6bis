@@ -20,7 +20,7 @@
             <tbody>
             {% for trick in tricks %}
                 <tr>
-                    <td><a href="{{ path('trick_show', {'trickSlug': trick.slug}) }}">{{ trick.name }}</a></td>
+                    <td><a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}">{{ trick.name }}</a></td>
                     {% if app.user != null and (app.user.username == trick.author.username or is_granted('ROLE_ADMIN')) %}
                         <td>
                             <button>Modifier</button>
