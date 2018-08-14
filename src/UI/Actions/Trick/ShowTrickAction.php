@@ -36,7 +36,7 @@ class ShowTrickAction
     }
 
     /**
-     * @Route(path="/trick/{trickSlug}", name="trick_show", requirements={"trickSlug"="\w+"})
+     * @Route(path="/trick/{trickSlug}", name="Trick_show", requirements={"trickSlug"="\w+"})
      *
      * @param string $trickSlug
      *

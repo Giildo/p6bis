@@ -54,7 +54,7 @@ class PasswordRecoveryResponder implements PasswordRecoveryResponderInterface
         }
 
         return $redirection ?
-            new RedirectResponse($this->urlGenerator->generate('home')) :
+            new RedirectResponse($this->urlGenerator->generate('Home')) :
             new Response($this->presenter->passwordRecoveryPresentation($form, $typeName, $mailerSuccess));
     }
 }
