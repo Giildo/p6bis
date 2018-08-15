@@ -58,14 +58,19 @@ interface TrickInterface
     public function getAuthor(): UserInterface;
 
 	/**
-	 * @return array|null
+	 * @return PictureInterface[]|null
 	 */
 	public function getPictures(): ?array;
 
 	/**
-	 * @return array|null
+	 * @return VideoInterface[]|null
 	 */
 	public function getVideos(): ?array;
+
+    /**
+     * @return CommentInterface[]|null
+     */
+    public function getComments(): ?array;
 
 	/**
 	 * @return void
