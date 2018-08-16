@@ -66,6 +66,8 @@ class TrickModificationAction
     {
         $trick = $request->getSession()->get('trick');
 
+        $request->getSession()->clear();
+
         $dto = new TrickModificationDTO(
             $trick->getDescription(),
             $trick->isPublished(),

@@ -7,6 +7,8 @@ use App\Domain\Model\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 class TrickRepository extends ServiceEntityRepository
 {
@@ -44,5 +46,35 @@ class TrickRepository extends ServiceEntityRepository
             ->setParameter('slug', $trickSlug)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @param TrickInterface $trick
+     *
+     * @return void
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function deleteTrick(TrickInterface $trick): void
+    {
+        $entityManager = $this->getEntityManager();
+
+        $pictures = $trick->getPictures();
+        if (!empty($pictures)) {
+            foreach ($pictures as $picture) {
+                $entityManager->remove($picture);
+            }
+        }
+
+        $videos = $trick->getVideos();
+        if (!empty($videos)) {
+            foreach ($videos as $video) {
+                $entityManager->remove($video);
+            }
+        }
+
+        $entityManager->remove($trick);
+        $entityManager->flush();
     }
 }
