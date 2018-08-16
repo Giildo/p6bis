@@ -2,8 +2,11 @@
 
 namespace App\UI\Actions\Trick;
 
+use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Repository\TrickRepository;
 use App\UI\Responders\Interfaces\Trick\TrickDeletionResponderInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -12,9 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrickDeletionAction
 {
     /**
-     * @var EntityManagerInterface
+     * @var TrickRepository
      */
-    private $entityManager;
+    private $trickRepository;
     /**
      * @var TrickDeletionResponderInterface
      */
@@ -26,16 +29,16 @@ class TrickDeletionAction
 
     /**
      * TrickDeletionAction constructor.
-     * @param EntityManagerInterface $entityManager
+     * @param TrickRepository $trickRepository
      * @param TrickDeletionResponderInterface $responder
      * @param FlashBagInterface $flashBag
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
+        TrickRepository $trickRepository,
         TrickDeletionResponderInterface $responder,
         FlashBagInterface $flashBag
     ) {
-        $this->entityManager = $entityManager;
+        $this->trickRepository = $trickRepository;
         $this->responder = $responder;
         $this->flashBag = $flashBag;
     }
@@ -50,13 +53,17 @@ class TrickDeletionAction
      * @param Request $request
      *
      * @return RedirectResponse
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function delete(Request $request): RedirectResponse
     {
-        $trick = $request->getSession()->get('trick');
+        $this->trickRepository->deleteTrick(
+            $request->getSession()->get('trick')
+        );
 
-        $this->entityManager->remove($trick);
-        $this->entityManager->flush();
+        $request->getSession()->clear();
 
         $this->flashBag->set('messageFlash', 'La figure a été supprimée avec succès.');
 
