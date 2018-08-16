@@ -2,11 +2,9 @@
 
 namespace App\Domain\Model\Interfaces;
 
-use App\Application\Helpers\Interfaces\SluggerHelperInterface;
 use App\Domain\Model\Trick;
 use DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 
 /**
  * Class Trick

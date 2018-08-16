@@ -9,6 +9,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\ORMException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserRepository extends ServiceEntityRepository implements UserLoaderInterface
 {
@@ -18,11 +19,14 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     }
 
     /**
-     * @param User $user
+     * @param UserInterface $user
+     *
+     * @return void
      *
      * @throws ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function saveUser(User $user)
+    public function saveUser(UserInterface $user): void
     {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
@@ -35,9 +39,9 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
      *
      * @param string $username The username
      *
-     * @return User|null
+     * @return UserInterface|null
      */
-    public function loadUserByUsername($username): ?User
+    public function loadUserByUsername($username): ?UserInterface
     {
         $queryBuilder = $this->createQueryBuilder('u')
             ->where('u.username = :username')
@@ -55,9 +59,9 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
 
     /**
      * @param string $token
-     * @return User|null
+     * @return UserInterface|null
      */
-    public function loadUserByToken(string $token): ?User
+    public function loadUserByToken(string $token): ?UserInterface
     {
         $queryBuilder = $this->createQueryBuilder('u')
             ->where('u.token = :token')

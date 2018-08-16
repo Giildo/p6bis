@@ -39,11 +39,13 @@ class ShowTrickResponder implements ShowTrickResponderInterface
      */
     public function showTrickResponse(
         ?bool $redirect = true,
+        ?string $path = 'Home',
+        ?array $parameters = [],
         ?Trick $trick = null,
         ?FormInterface $formComment = null
     ) {
         return $redirect ?
-            new RedirectResponse($this->urlGenerator->generate('Home')) :
+            new RedirectResponse($this->urlGenerator->generate($path, $parameters)) :
             new Response($this->presenter->showTrickPresentation($trick, $formComment));
     }
 }

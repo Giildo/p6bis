@@ -11,6 +11,8 @@ interface ShowTrickResponderInterface
 {
     /**
      * @param bool|null $redirect
+     * @param null|string $path
+     * @param array|null $parameters
      * @param Trick|null $trick
      * @param null|FormInterface $formComment
      *
@@ -18,6 +20,8 @@ interface ShowTrickResponderInterface
      */
     public function showTrickResponse(
         ?bool $redirect = true,
+        ?string $path = 'Home',
+        ?array $parameters = [],
         ?Trick $trick = null,
         ?FormInterface $formComment = null
     );

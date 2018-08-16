@@ -2,6 +2,7 @@
 
 namespace App\Domain\Repository;
 
+use App\Domain\Model\Interfaces\VideoInterface;
 use App\Domain\Model\Video;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -20,11 +21,11 @@ class VideoRepository extends ServiceEntityRepository
     /**
      * @param string $videoName
      *
-     * @return mixed
+     * @return VideoInterface|null
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function loadOneVideoWithName(string $videoName)
+    public function loadOneVideoWithName(string $videoName): ?VideoInterface
     {
         return $this->createQueryBuilder('v')
             ->where('v.name = :name')

@@ -3,10 +3,9 @@
 namespace App\UI\Actions\Trick;
 
 use App\Application\Handlers\Interfaces\Forms\Comment\AddCommentHandlerInterface;
-use App\Domain\Model\Trick;
+use App\Domain\Repository\TrickRepository;
 use App\UI\Forms\Comment\AddCommentType;
 use App\UI\Responders\Interfaces\Trick\ShowTrickResponderInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,15 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class ShowTrickAction
 {
     /**
-     * @var EntityManagerInterface
+     * @var TrickRepository
      */
-    private $entityManager;
-
+    private $trickRepository;
     /**
      * @var ShowTrickResponderInterface
      */
     private $responder;
-
     /**
      * @var FormFactoryInterface
      */
@@ -37,18 +34,18 @@ class ShowTrickAction
 
     /**
      * ShowTrickAction constructor.
-     * @param EntityManagerInterface $entityManager
+     * @param TrickRepository $trickRepository
      * @param ShowTrickResponderInterface $responder
      * @param FormFactoryInterface $formFactory
      * @param AddCommentHandlerInterface $handler
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
+        TrickRepository $trickRepository,
         ShowTrickResponderInterface $responder,
         FormFactoryInterface $formFactory,
         AddCommentHandlerInterface $handler
     ) {
-        $this->entityManager = $entityManager;
+        $this->trickRepository = $trickRepository;
         $this->responder = $responder;
         $this->formFactory = $formFactory;
         $this->handler = $handler;
@@ -66,8 +63,7 @@ class ShowTrickAction
      */
     public function showTrick(Request $request, string $trickSlug)
     {
-        $trick = $this->entityManager
-                      ->getRepository(Trick::class)
+        $trick = $this->trickRepository
                       ->loadOneTrickWithCategoryAndAuthor($trickSlug);
 
         if (is_null($trick)) {
@@ -77,10 +73,18 @@ class ShowTrickAction
         $formComment = $this->formFactory->create(AddCommentType::class)
                                   ->handleRequest($request);
 
-        $this->handler->handle($formComment, $trick);
+        if ($this->handler->handle($formComment, $trick)) {
+            return $this->responder->showTrickResponse(
+                true,
+                'Trick_show',
+                ['trickSlug' => $trickSlug]
+            );
+        }
 
         return $this->responder->showTrickResponse(
             false,
+            '',
+            [],
             $trick,
             $formComment
         );

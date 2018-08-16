@@ -15,6 +15,7 @@ class AddCommentDTO implements AddCommentDTOInterface
      *     min="5",
      *     minMessage="Les commentaires doivent avoir au moins {{ limit }} caractères."
      * )
+     * @Assert\NotNull(message="Un commentaire doit être renseigné.")
      */
     public $comment;
 
