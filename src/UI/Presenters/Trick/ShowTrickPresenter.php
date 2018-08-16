@@ -5,6 +5,7 @@ namespace App\UI\Presenters\Trick;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\UI\Presenters\Interfaces\Trick\ShowTrickPresenterInterface;
+use Symfony\Component\Form\FormInterface;
 use Twig\Environment;
 
 class ShowTrickPresenter implements ShowTrickPresenterInterface
@@ -26,8 +27,13 @@ class ShowTrickPresenter implements ShowTrickPresenterInterface
     /**
      * {@inheritdoc}
      */
-    public function showTrickPresentation(TrickInterface $trick): string
-    {
-        return $this->twig->render('Trick/show.html.twig', compact('trick'));
+    public function showTrickPresentation(
+        TrickInterface $trick,
+        FormInterface $formComment
+    ): string {
+        return $this->twig->render('Trick/show.html.twig', [
+            'trick' => $trick,
+            'formComment'  => $formComment->createView(),
+        ]);
     }
 }

@@ -8,3 +8,7 @@ Feature: As an visitor, anonymous or connected, I need to be able to see the det
     And I am on "/trick/badSlug"
     Then I should be on "/accueil"
 
+  Scenario: [Success] The trick is loaded
+    Given I load the tricks with category and user
+    And I am on "/trick/mute"
+    Then I should be on "/trick/mute"

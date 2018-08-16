@@ -11,6 +11,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -60,9 +61,12 @@ class TrickDeletionActionTest extends KernelTestCase
         $urlGenerator->method('generate')->willReturn('/url');
         $responder = new TrickDeletionResponder($urlGenerator);
 
+        $flashBag = new FlashBag();
+
         $action = new TrickDeletionAction(
             $entityManager,
-            $responder
+            $responder,
+            $flashBag
         );
 
         self::assertInstanceOf(TrickDeletionAction::class, $action);

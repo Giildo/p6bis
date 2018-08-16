@@ -6,35 +6,30 @@ use App\Domain\Model\Trick;
 use App\UI\Presenters\Interfaces\Trick\ShowTrickPresenterInterface;
 use App\UI\Presenters\Trick\ShowTrickPresenter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 class ShowTrickPresenterTest extends KernelTestCase
 {
-    private $presenter;
-
-    public function setUp()
+    public function testIfTheReturnOfPresentationIsAString()
     {
         $kernel = self::bootKernel();
 
         $twig = $kernel->getContainer()->get('twig');
 
-        $this->presenter = new ShowTrickPresenter($twig);
-    }
+        $presenter = new ShowTrickPresenter($twig);
 
-    public function testConstructor()
-    {
-        self::assertInstanceOf(ShowTrickPresenterInterface::class, $this->presenter);
-    }
+        self::assertInstanceOf(ShowTrickPresenterInterface::class, $presenter);
 
-    public function testIfTheReturnOfPresentationIsAString()
-    {
         $trick = $this->createMock(Trick::class);
-        $pictures = [];
-        $videos = [];
 
-        self::assertInternalType('string', $this->presenter->showTrickPresentation(
+        $formView = $this->createMock(FormView::class);
+        $form = $this->createMock(FormInterface::class);
+        $form->method('createView')->willReturn($formView);
+
+        self::assertInternalType('string', $presenter->showTrickPresentation(
             $trick,
-            $pictures,
-            $videos
+            $form
         ));
     }
 }

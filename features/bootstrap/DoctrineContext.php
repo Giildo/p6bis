@@ -140,14 +140,14 @@ class DoctrineContext extends MinkContext implements Context
 
         $slugger = new SluggerHelper();
 
-        $category = new Category($slugger->slugify('Grabs'), 'Grabs');
-        $category = new Category($slugger->slugify('Rotations'), 'Rotations');
+        $category1 = new Category($slugger->slugify('Grabs'), 'Grabs');
+        $category2 = new Category($slugger->slugify('Rotations'), 'Rotations');
 
         $trick = new Trick(
             $slugger->slugify('Mute'),
             'Mute',
             $faker->text,
-            $category,
+            $category1,
             $user1
         );
 
@@ -161,7 +161,7 @@ class DoctrineContext extends MinkContext implements Context
                 $slugger->slugify($name),
                 $name,
                 $faker->text,
-                $category,
+                $category2,
                 $user2
             );
 
@@ -174,7 +174,7 @@ class DoctrineContext extends MinkContext implements Context
             $slugger->slugify('Truck'),
             'Truck',
             $faker->text,
-            $category,
+            $category1,
             $user1
         );
 

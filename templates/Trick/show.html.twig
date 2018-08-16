@@ -22,6 +22,21 @@
             <h5>{{ video.name }}</h5>
         {% endfor %}
     {% endif %}
+
+    {% if app.user is not null %}
+        {{ form_start(formComment) }}
+        {{ form_widget(formComment) }}
+        <input type="submit" value="Valider" class="btn btn-success" />
+        {{ form_end(formComment) }}
+    {% endif %}
+
+    {% if trick.comments is not empty %}
+        <ul>
+            {% for comment in trick.comments %}
+                <li>{{ comment.author.username }} le {{ comment.createdAt | date('Y-m-d H:i:s') }} a dit : {{ comment.comment }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

@@ -94,6 +94,13 @@ class Trick implements TrickInterface
     private $videos;
 
     /**
+     * @var PersistentCollection
+     *
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Comment", mappedBy="trick")
+     */
+    private $comments;
+
+    /**
      * Trick constructor.
      * @param string $slug
      * @param string $name
@@ -195,6 +202,14 @@ class Trick implements TrickInterface
     public function getVideos(): ?array
     {
         return $this->videos->toArray();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getComments(): ?array
+    {
+        return $this->comments->toArray();
     }
 
 	/**

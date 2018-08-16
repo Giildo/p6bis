@@ -5,6 +5,7 @@ namespace App\UI\Responders\Trick;
 use App\Domain\Model\Trick;
 use App\UI\Presenters\Interfaces\Trick\ShowTrickPresenterInterface;
 use App\UI\Responders\Interfaces\Trick\ShowTrickResponderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -34,21 +35,17 @@ class ShowTrickResponder implements ShowTrickResponderInterface
     }
 
     /**
-     * @param bool|null $redirect
-     * @param Trick|null $trick
-     *
-     * @return RedirectResponse|Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function showTrickResponse(
         ?bool $redirect = true,
-        ?Trick $trick = null
+        ?string $path = 'Home',
+        ?array $parameters = [],
+        ?Trick $trick = null,
+        ?FormInterface $formComment = null
     ) {
         return $redirect ?
-            new RedirectResponse($this->urlGenerator->generate('Home')) :
-            new Response($this->presenter->showTrickPresentation($trick));
+            new RedirectResponse($this->urlGenerator->generate($path, $parameters)) :
+            new Response($this->presenter->showTrickPresentation($trick, $formComment));
     }
 }

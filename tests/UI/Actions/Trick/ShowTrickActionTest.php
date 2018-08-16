@@ -2,28 +2,50 @@
 
 namespace App\Tests\UI\Actions\Trick;
 
-use App\Application\Helpers\SluggerHelper;
+use App\Application\Handlers\Interfaces\Forms\Comment\AddCommentHandlerInterface;
 use App\Domain\Model\Category;
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
+use App\Domain\Repository\TrickRepository;
 use App\UI\Actions\Trick\ShowTrickAction;
 use App\UI\Presenters\Interfaces\Trick\ShowTrickPresenterInterface;
 use App\UI\Responders\Trick\ShowTrickResponder;
-use Doctrine\ORM\Tools\SchemaTool;
-use Faker\Factory;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ShowTrickActionTest extends KernelTestCase
+class ShowTrickActionTest extends TestCase
 {
     private $action;
 
+    /**
+     * @var MockObject
+     */
+    private $request;
+
+    /**
+     * @var MockObject
+     */
+    private $handler;
+
+    /**
+     * @var MockObject
+     */
+    private $trickRepository;
+
+    /**
+     * @var TrickInterface
+     */
+    private $trick;
+
     public function setUp()
     {
-        $kernel = self::bootKernel();
-
         $presenter = $this->createMock(ShowTrickPresenterInterface::class);
         $presenter->method('showTrickPresentation')->willReturn('Vue de la page');
 
@@ -32,74 +54,71 @@ class ShowTrickActionTest extends KernelTestCase
 
         $responder = new ShowTrickResponder($presenter, $urlGenerator);
 
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-
-        $schemaTool = new SchemaTool($entityManager);
-        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
-
-        $faker = Factory::create('fr_FR');
-
         $user = new User(
-            $faker->userName,
-            $faker->firstName,
-            $faker->lastName,
-            $faker->email,
-            $faker->password
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john@doe.fr',
+            '12345678'
         );
 
-        $slugger = new SluggerHelper();
-
         $category = new Category(
-            $slugger->slugify('Grabs'),
+            'gras',
             'Grabs'
         );
 
-        $trick = new Trick(
-            $slugger->slugify('Mute'),
+        $this->trick = new Trick(
+            'mute',
             'Mute',
             'Figure de snowboard',
             $category,
             $user
         );
 
-        $trick->publish();
+        $this->trickRepository = $this->createMock(TrickRepository::class);
 
-        $entityManager->persist($trick);
+        $form = $this->createMock(FormInterface::class);
+        $form->method('handleRequest')->willReturnSelf();
+        $formFactory = $this->createMock(FormFactoryInterface::class);
+        $formFactory->method('create')->willReturn($form);
 
-        for ($i = 0 ; $i < 10 ; $i++) {
-            $name = $faker->unique()->word;
-            $trick = new Trick(
-                $slugger->slugify($name),
-                $name,
-                $faker->text,
-                $category,
-                $user
-            );
+        $this->handler = $this->createMock(AddCommentHandlerInterface::class);
 
-            $trick->publish();
+        $this->action = new ShowTrickAction($this->trickRepository, $responder, $formFactory, $this->handler);
 
-            $entityManager->persist($trick);
-        }
-
-        $entityManager->flush();
-
-        $this->action = new ShowTrickAction($entityManager, $responder);
-    }
-
-    public function testConstructor()
-    {
-        self::assertInstanceOf(ShowTrickAction::class, $this->action);
+        $this->request = $this->createMock(Request::class);
     }
 
     public function testRedirectResponseIfSlugForEntityIsWrong()
     {
-        self::assertInstanceOf(RedirectResponse::class, $this->action->showTrick('badSlug'));
+        $this->trickRepository->method('loadOneTrickWithCategoryAndAuthor')
+                              ->willReturn(null);
+
+        $response = $this->action->showTrick($this->request, 'badSlug');
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+    }
+
+    public function testRedirectResponseIfCommentIsSubmitted()
+    {
+        $this->trickRepository->method('loadOneTrickWithCategoryAndAuthor')
+                              ->willReturn($this->trick);
+
+        $this->handler->method('handle')->willReturn(true);
+
+        $response = $this->action->showTrick($this->request, 'goodSlug');
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
     }
 
     public function testResponseIfSlugForEntityIsGood()
     {
-        $response = $this->action->showTrick('mute');
+        $this->trickRepository->method('loadOneTrickWithCategoryAndAuthor')
+                              ->willReturn($this->trick);
+
+        $this->handler->method('handle')->willReturn(false);
+
+        $response = $this->action->showTrick($this->request, 'goodSlug');
 
         self::assertInstanceOf(Response::class, $response);
         self::assertNotInstanceOf(RedirectResponse::class, $response);
