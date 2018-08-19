@@ -7,16 +7,18 @@ use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Picture;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
+use App\Domain\Repository\PictureRepository;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PictureRepositoryTest extends KernelTestCase
 {
-    public function testTheLoadingOfOnePictureWithHisName()
+    public function testTheLoadingOfOnePictureWithHisNameAndThePictureDeletion()
     {
         $kernel = self::bootKernel();
 
         $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        /** @var PictureRepository $repository */
         $repository = $entityManager->getRepository(Picture::class);
 
         $schemaTool = new SchemaTool($entityManager);
@@ -57,5 +59,11 @@ class PictureRepositoryTest extends KernelTestCase
         self::assertInstanceOf(PictureInterface::class, $pictureLoaded);
         self::assertEquals('Description de la photo', $pictureLoaded->getDescription());
         self::assertFalse($pictureLoaded->isHeadPicture());
+
+        $repository->deletePicture($picture);
+
+        $newPictureLoaded = $repository->loadOnePictureWithName('mute20180812125312_1');
+
+        self::assertNull($newPictureLoaded);
     }
 }
