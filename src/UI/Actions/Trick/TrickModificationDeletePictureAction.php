@@ -5,12 +5,10 @@ namespace App\UI\Actions\Trick;
 use App\Domain\Model\Picture;
 use App\Domain\Repository\PictureRepository;
 use App\UI\Responders\Interfaces\Trick\TrickModificationDeleteVideoOrPictureResponderInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TrickModificationDeletePictureAction
 {
@@ -19,13 +17,9 @@ class TrickModificationDeletePictureAction
      */
     private $responder;
 	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
-	/**
 	 * @var PictureRepository
 	 */
-	private $repository;
+	private $pictureRepository;
     /**
      * @var SessionInterface
      */
@@ -35,43 +29,44 @@ class TrickModificationDeletePictureAction
      * TrickModificationDeletePictureAction constructor.
      *
      * @param TrickModificationDeleteVideoOrPictureResponderInterface $responder
-     * @param EntityManagerInterface $entityManager
+     * @param PictureRepository $pictureRepository
      * @param SessionInterface $session
      */
 	public function __construct(
 	    TrickModificationDeleteVideoOrPictureResponderInterface $responder,
-		EntityManagerInterface $entityManager,
+        PictureRepository $pictureRepository,
         SessionInterface $session
 	) {
         $this->responder = $responder;
-		$this->entityManager = $entityManager;
-		$this->repository = $entityManager->getRepository(Picture::class);
+		$this->pictureRepository = $pictureRepository;
         $this->session = $session;
     }
 
-	/**
-	 * @Route(path="/espace-utilisateur/trick/image-suppression", name="Trick_modification_delete_picture")
-	 *
-	 * @param Request $request
-	 *
-	 * @return RedirectResponse
-	 * @throws \Doctrine\ORM\NonUniqueResultException
-	 */
+    /**
+     * @Route(path="/espace-utilisateur/trick/image-suppression", name="Trick_modification_delete_picture")
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
 	public function deletePicture(Request $request): RedirectResponse
 	{
 		$pictureName = $request->query->get('s');
 		$token = $request->query->get('t');
 
 		/** @var Picture $picture */
-		$picture = $this->repository->loadOnePictureWithName($pictureName);
+		$picture = $this->pictureRepository->loadOnePictureWithName($pictureName);
 		$trickSlug = $picture->getTrick()->getSlug();
 		$pictureExtension = $picture->getExtension();
 
 		$tokens = $this->session->get('tokens');
 
 		if ($token === $tokens[$picture->getName()]) {
-			$this->entityManager->remove($picture);
-			$this->entityManager->flush();
+			$this->pictureRepository->deletePicture($picture);
 		}
 
 		unlink(__DIR__ . "/../../../../public/pic/tricks/{$pictureName}.{$pictureExtension}");

@@ -24,10 +24,7 @@ class HomePageActionTest extends TestCase
         $repository = $this->createMock(TrickRepository::class);
         $repository->method('loadAllTricksWithAuthorCategoryAndHeadPicture')->willReturn([]);
 
-        $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager->method('getRepository')->willReturn($repository);
-
-        $this->action = new HomePageAction($entityManager, $responder);
+        $this->action = new HomePageAction($repository, $responder);
     }
 
     public function testConstructor()

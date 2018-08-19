@@ -43,7 +43,6 @@ class RoleUserListenerTest extends TestCase
     protected function setUp()
     {
         $this->repository = $this->createMock(TrickRepository::class);
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->urlGenerator->method('generate')->willReturn('/goodUrl');
@@ -78,7 +77,7 @@ class RoleUserListenerTest extends TestCase
     public function testConstructor()
     {
         $listener = new RoleUserListener(
-            $this->entityManager,
+            $this->repository,
             $this->urlGenerator,
             $this->tokenStorage,
             $this->checker
@@ -93,7 +92,7 @@ class RoleUserListenerTest extends TestCase
         $this->event->method('getRequest')->willReturn($this->request);
 
         $listener = new RoleUserListener(
-            $this->entityManager,
+            $this->repository,
             $this->urlGenerator,
             $this->tokenStorage,
             $this->checker
@@ -111,7 +110,7 @@ class RoleUserListenerTest extends TestCase
         $this->event->method('getRequest')->willReturn($this->request);
 
         $listener = new RoleUserListener(
-            $this->entityManager,
+            $this->repository,
             $this->urlGenerator,
             $this->tokenStorage,
             $this->checker
@@ -130,10 +129,9 @@ class RoleUserListenerTest extends TestCase
 
         $this->repository->method('loadOneTrickWithCategoryAndAuthor')
                          ->willReturn(null);
-        $this->entityManager->method('getRepository')->willReturn($this->repository);
 
         $listener = new RoleUserListener(
-            $this->entityManager,
+            $this->repository,
             $this->urlGenerator,
             $this->tokenStorage,
             $this->checker
@@ -167,10 +165,9 @@ class RoleUserListenerTest extends TestCase
 
         $this->repository->method('loadOneTrickWithCategoryAndAuthor')
                          ->willReturn($trick);
-        $this->entityManager->method('getRepository')->willReturn($this->repository);
 
         $listener = new RoleUserListener(
-            $this->entityManager,
+            $this->repository,
             $this->urlGenerator,
             $this->tokenStorage,
             $this->checker
@@ -206,10 +203,9 @@ class RoleUserListenerTest extends TestCase
 
         $this->repository->method('loadOneTrickWithCategoryAndAuthor')
             ->willReturn($trick);
-        $this->entityManager->method('getRepository')->willReturn($this->repository);
 
         $listener = new RoleUserListener(
-            $this->entityManager,
+            $this->repository,
             $this->urlGenerator,
             $this->tokenStorage,
             $this->checker
@@ -241,10 +237,9 @@ class RoleUserListenerTest extends TestCase
 
         $this->repository->method('loadOneTrickWithCategoryAndAuthor')
             ->willReturn($trick);
-        $this->entityManager->method('getRepository')->willReturn($this->repository);
 
         $listener = new RoleUserListener(
-            $this->entityManager,
+            $this->repository,
             $this->urlGenerator,
             $this->tokenStorage,
             $this->checker

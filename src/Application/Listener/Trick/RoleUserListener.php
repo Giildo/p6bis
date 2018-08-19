@@ -2,9 +2,7 @@
 
 namespace App\Application\Listener\Trick;
 
-use App\Domain\Model\Trick;
 use App\Domain\Repository\TrickRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -16,7 +14,7 @@ class RoleUserListener
     /**
      * @var TrickRepository
      */
-    private $repository;
+    private $trickRepository;
     /**
      * @var UrlGeneratorInterface
      */
@@ -32,18 +30,18 @@ class RoleUserListener
 
     /**
      * RoleUserListener constructor.
-     * @param EntityManagerInterface $entityManager
+     * @param TrickRepository $trickRepository
      * @param UrlGeneratorInterface $urlGenerator
      * @param TokenStorageInterface $tokenStorage
      * @param AuthorizationCheckerInterface $checker
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
+        TrickRepository $trickRepository,
         UrlGeneratorInterface $urlGenerator,
         TokenStorageInterface $tokenStorage,
         AuthorizationCheckerInterface $checker
     ) {
-        $this->repository = $entityManager->getRepository(Trick::class);
+        $this->trickRepository = $trickRepository;
         $this->urlGenerator = $urlGenerator;
         $this->tokenStorage = $tokenStorage;
         $this->checker = $checker;
@@ -66,7 +64,7 @@ class RoleUserListener
 
             foreach ($secureURIs as $uri) {
                 if (preg_match("#{$uri}#", $request->getUri())) {
-                    $trick = $this->repository->loadOneTrickWithCategoryAndAuthor($trickSlug);
+                    $trick = $this->trickRepository->loadOneTrickWithCategoryAndAuthor($trickSlug);
 
                     if (is_null($trick)) {
                         $event->setResponse(new RedirectResponse($this->urlGenerator->generate('Home')));

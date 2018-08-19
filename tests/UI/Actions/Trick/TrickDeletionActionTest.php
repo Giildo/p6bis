@@ -64,7 +64,7 @@ class TrickDeletionActionTest extends KernelTestCase
         $flashBag = new FlashBag();
 
         $action = new TrickDeletionAction(
-            $entityManager,
+            $entityManager->getRepository(Trick::class),
             $responder,
             $flashBag
         );

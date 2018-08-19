@@ -6,7 +6,6 @@ use App\Application\Handlers\Interfaces\Forms\Comment\AddCommentHandlerInterface
 use App\Domain\Builders\Interfaces\CommentBuilderInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Repository\CommentRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
 class AddCommentHandler implements AddCommentHandlerInterface
@@ -18,19 +17,19 @@ class AddCommentHandler implements AddCommentHandlerInterface
     /**
      * @var CommentRepository
      */
-    private $repository;
+    private $commentRepository;
 
     /**
      * AddCommentHandler constructor.
-     * @param CommentRepository $repository
+     * @param CommentRepository $commentRepository
      * @param CommentBuilderInterface $builder
      */
     public function __construct(
-        CommentRepository $repository,
+        CommentRepository $commentRepository,
         CommentBuilderInterface $builder
     ) {
         $this->builder = $builder;
-        $this->repository = $repository;
+        $this->commentRepository = $commentRepository;
     }
 
     /**
@@ -46,7 +45,7 @@ class AddCommentHandler implements AddCommentHandlerInterface
             $comment = $this->builder->build($dto, $trick)
                                      ->getComment();
 
-            $this->repository->saveComment($comment);
+            $this->commentRepository->saveComment($comment);
 
             return true;
         }

@@ -4,6 +4,7 @@ namespace App\Tests\UI\Actions\Trick;
 
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Interfaces\VideoInterface;
+use App\Domain\Model\Video;
 use App\Domain\Repository\VideoRepository;
 use App\UI\Actions\Trick\TrickModificationDeleteVideoAction;
 use App\UI\Responders\Trick\TrickModificationDeleteVideoOrPictureResponder;
@@ -42,7 +43,7 @@ class TrickModificationDeleteVideoActionTest extends TestCase
 
         $action = new TrickModificationDeleteVideoAction(
             $responder,
-            $entityManager,
+            $entityManager->getRepository(Video::class),
             $session
         );
 
