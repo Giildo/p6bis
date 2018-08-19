@@ -5,6 +5,7 @@ namespace App\Domain\Builders;
 use App\Domain\Builders\Interfaces\CommentBuilderInterface;
 use App\Domain\DTO\Interfaces\Comment\AddCommentDTOInterface;
 use App\Domain\Model\Comment;
+use App\Domain\Model\Interfaces\CommentInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -12,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class CommentBuilder implements CommentBuilderInterface
 {
     /**
-     * @var Comment
+     * @var CommentInterface
      */
     private $comment;
     /**
@@ -51,7 +52,7 @@ class CommentBuilder implements CommentBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function getComment(): Comment
+    public function getComment(): CommentInterface
     {
         return $this->comment;
     }

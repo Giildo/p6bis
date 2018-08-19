@@ -4,7 +4,7 @@ namespace App\Domain\Builders\Interfaces;
 
 use App\Domain\Builders\CommentBuilder;
 use App\Domain\DTO\Interfaces\Comment\AddCommentDTOInterface;
-use App\Domain\Model\Comment;
+use App\Domain\Model\Interfaces\CommentInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 
 interface CommentBuilderInterface
@@ -18,7 +18,7 @@ interface CommentBuilderInterface
     public function build(AddCommentDTOInterface $DTO, TrickInterface $trick);
 
     /**
-     * @return Comment
+     * @return CommentInterface
      */
-    public function getComment(): Comment;
+    public function getComment(): CommentInterface;
 }

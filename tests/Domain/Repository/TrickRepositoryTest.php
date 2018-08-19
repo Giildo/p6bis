@@ -102,7 +102,7 @@ class TrickRepositoryTest extends KernelTestCase
         self::assertInstanceOf(CategoryInterface::class, $tricks[0]->getCategory());
     }
 
-    public function testLoadingOfOneTrick()
+    public function testLoadingOfOneTrickAndTheTrickDeletion()
     {
         $trick = $this->repository->loadOneTrickWithCategoryAndAuthor('mute');
         $pictures = $trick->getPictures();
@@ -111,5 +111,11 @@ class TrickRepositoryTest extends KernelTestCase
         self::assertInstanceOf(TrickInterface::class, $trick);
         self::assertInstanceOf(PictureInterface::class, $pictures[0]);
         self::assertInstanceOf(VideoInterface::class, $videos[0]);
+
+        $this->repository->deleteTrick($trick);
+
+        $trickLoaded = $this->repository->loadOneTrickWithCategoryAndAuthor('mute');
+
+        self::assertNull($trickLoaded);
     }
 }
