@@ -27,17 +27,16 @@ class PasswordRecoveryForPasswordHandler implements PasswordRecoveryForPasswordH
      * @param UserRepository $repository
      * @param EncoderFactoryInterface $encoderFactory
      */
-    public function __construct(UserRepository $repository, EncoderFactoryInterface $encoderFactory)
-    {
+    public function __construct(
+        UserRepository $repository,
+        EncoderFactoryInterface $encoderFactory
+    ) {
         $this->repository = $repository;
         $this->encoderFactory = $encoderFactory;
     }
 
     /**
-     * @param FormInterface $form
-     * @param Request $request
-     * @return bool
-     * @throws \Doctrine\ORM\ORMException
+     * {@inheritdoc}
      */
     public function handle(FormInterface $form, Request $request): bool
     {

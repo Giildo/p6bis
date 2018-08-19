@@ -2,10 +2,8 @@
 
 namespace App\UI\Actions\Trick;
 
-use App\Domain\Model\Video;
 use App\Domain\Repository\VideoRepository;
 use App\UI\Responders\Interfaces\Trick\TrickModificationDeleteVideoOrPictureResponderInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,13 +16,9 @@ class TrickModificationDeleteVideoAction
      */
     private $responder;
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-    /**
      * @var VideoRepository
      */
-    private $repository;
+    private $videoRepository;
     /**
      * @var SessionInterface
      */
@@ -33,17 +27,16 @@ class TrickModificationDeleteVideoAction
     /**
      * TrickModificationDeleteVideoAction constructor.
      * @param TrickModificationDeleteVideoOrPictureResponderInterface $responder
-     * @param EntityManagerInterface $entityManager
+     * @param VideoRepository $videoRepository
      * @param SessionInterface $session
      */
     public function __construct(
         TrickModificationDeleteVideoOrPictureResponderInterface $responder,
-        EntityManagerInterface $entityManager,
+        VideoRepository $videoRepository,
         SessionInterface $session
     ) {
         $this->responder = $responder;
-        $this->entityManager = $entityManager;
-        $this->repository = $entityManager->getRepository(Video::class);
+        $this->videoRepository = $videoRepository;
         $this->session = $session;
     }
 
@@ -55,20 +48,21 @@ class TrickModificationDeleteVideoAction
      * @return RedirectResponse
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteVideo(Request $request): RedirectResponse
     {
         $videoName = $request->query->get('s');
         $token = $request->query->get('t');
 
-        $video = $this->repository->loadOneVideoWithName($videoName);
+        $video = $this->videoRepository->loadOneVideoWithName($videoName);
         $trickSlug = $video->getTrick()->getSlug();
 
         $tokens = $this->session->get('tokens');
 
         if ($token === $tokens[$videoName]) {
-            $this->entityManager->remove($video);
-            $this->entityManager->flush();
+            $this->videoRepository->deleteVideo($video);
         }
 
         return $this->responder->response($trickSlug);

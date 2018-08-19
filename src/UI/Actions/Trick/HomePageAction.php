@@ -2,9 +2,7 @@
 
 namespace App\UI\Actions\Trick;
 
-use App\Domain\Model\Trick;
 use App\Domain\Repository\TrickRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use App\UI\Responders\Interfaces\Trick\HomePageResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,9 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomePageAction
 {
     /**
-     * @var EntityManagerInterface
+     * @var TrickRepository
      */
-    private $entityManager;
+    private $trickRepository;
     /**
      * @var HomePageResponderInterface
      */
@@ -22,14 +20,14 @@ class HomePageAction
 
     /**
      * HomePageAction constructor.
-     * @param EntityManagerInterface $entityManager
+     * @param TrickRepository $trickRepository
      * @param HomePageResponderInterface $responder
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
+        TrickRepository $trickRepository,
         HomePageResponderInterface $responder
     ) {
-        $this->entityManager = $entityManager;
+        $this->trickRepository = $trickRepository;
         $this->responder = $responder;
     }
 
@@ -40,10 +38,7 @@ class HomePageAction
      */
     public function homePage(): Response
     {
-        /** @var TrickRepository $repository */
-        $repository = $this->entityManager->getRepository(Trick::class);
-
-        $tricks = $repository->loadAllTricksWithAuthorCategoryAndHeadPicture();
+        $tricks = $this->trickRepository->loadAllTricksWithAuthorCategoryAndHeadPicture();
 
         return $this->responder->homePageResponse($tricks);
     }

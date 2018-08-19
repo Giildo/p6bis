@@ -30,7 +30,9 @@ class TrickRepository extends ServiceEntityRepository
 
     /**
      * @param string $trickSlug
+     *
      * @return TrickInterface|null
+     *
      * @throws NonUniqueResultException
      */
     public function loadOneTrickWithCategoryAndAuthor(string $trickSlug): ?TrickInterface

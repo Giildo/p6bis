@@ -4,6 +4,7 @@ namespace App\Tests\UI\Actions\Trick;
 
 use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Picture;
 use App\Domain\Repository\PictureRepository;
 use App\UI\Actions\Trick\TrickModificationDeletePictureAction;
 use App\UI\Responders\Trick\TrickModificationDeleteVideoOrPictureResponder;
@@ -45,7 +46,7 @@ class TrickModificationDeletePictureActionTest extends TestCase
 
         $action = new TrickModificationDeletePictureAction(
             $responder,
-            $entityManager,
+            $entityManager->getRepository(Picture::class),
             $session
         );
 
