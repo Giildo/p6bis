@@ -59,8 +59,16 @@ class CommentRepositoryTest extends KernelTestCase
 
         $repository->saveComment($comment);
 
-        $comment = $repository->loadOneCommentWithHerId($comment->getId());
+        $idComment = $comment->getId();
+
+        $comment = $repository->loadOneCommentWithHerId($idComment);
 
         self::assertInstanceOf(CommentInterface::class, $comment);
+
+        $repository->deleteComment($comment);
+
+        $comment = $comment = $repository->loadOneCommentWithHerId($idComment);
+
+        self::assertNull($comment);
     }
 }

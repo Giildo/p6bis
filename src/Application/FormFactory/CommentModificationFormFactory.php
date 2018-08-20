@@ -4,6 +4,7 @@ namespace App\Application\FormFactory;
 
 use App\Application\FormFactory\Interfaces\CommentModificationFormFactoryInterface;
 use App\Domain\DTO\Comment\CommentModificationDTO;
+use App\UI\Forms\Comment\AddCommentType;
 use App\UI\Forms\Comment\CommentModificationType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -44,7 +45,7 @@ class CommentModificationFormFactory implements CommentModificationFormFactoryIn
             }
         }
 
-        return $this->formFactory->create(CommentModificationType::class)
+        return $this->formFactory->create(AddCommentType::class)
                                  ->handleRequest($request);
     }
 }

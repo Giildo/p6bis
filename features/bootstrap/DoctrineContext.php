@@ -221,4 +221,26 @@ class DoctrineContext extends MinkContext implements Context
         $this->visit("{$uri}?action=modifier&id={$comment->getId()}");
     }
 
+    /**
+     * @Given I am on the deletion page
+     */
+    public function iAmOnTheDeletionPage()
+    {
+        $user = $this->entityManager->getRepository(User::class)->loadUserByUsername('JohnDoe');
+        $trick = $this->entityManager->getRepository(Trick::class)->loadOneTrickWithCategoryAndAuthor(
+            'mute'
+        );
+
+        $comment = new Comment(
+            'Commentaire simulé.',
+            $trick,
+            $user
+        );
+
+        $this->entityManager->persist($comment);
+        $this->entityManager->flush();
+
+        $this->visit("/trick/mute/suppression-commentaire/{$comment->getId()}");
+    }
+
 }
