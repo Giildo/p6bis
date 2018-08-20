@@ -47,7 +47,7 @@ class UserRegistrationResponder implements UserRegistrationResponderInterface
         ?FormInterface $form = null
     ): Response {
         return $redirection ?
-            new RedirectResponse($this->urlGenerator->generate('Home')) :
+            new RedirectResponse($this->urlGenerator->generate('Authentication_user_connection')) :
             new Response($this->presenter->userRegistrationPresentation($form));
     }
 }
