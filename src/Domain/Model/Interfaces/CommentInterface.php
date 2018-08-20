@@ -3,6 +3,7 @@
 namespace App\Domain\Model\Interfaces;
 
 
+use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
 use DateTime;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,4 +46,11 @@ interface CommentInterface
      * @return UserInterface
      */
     public function getAuthor(): UserInterface;
+
+    /**
+     * @param CommentDTOInterface $commentDTO
+     *
+     * @return void
+     */
+    public function updateComment(CommentDTOInterface $commentDTO): void;
 }

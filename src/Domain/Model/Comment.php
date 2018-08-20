@@ -2,6 +2,7 @@
 
 namespace App\Domain\Model;
 
+use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
 use App\Domain\Model\Interfaces\CommentInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use DateTime;
@@ -83,7 +84,7 @@ class Comment implements CommentInterface
     }
 
     /**
-     * @return UuidInterface
+     * {@inheritdoc}
      */
     public function getId(): UuidInterface
     {
@@ -91,7 +92,7 @@ class Comment implements CommentInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getComment(): string
     {
@@ -99,7 +100,7 @@ class Comment implements CommentInterface
     }
 
     /**
-     * @return DateTime
+     * {@inheritdoc}
      */
     public function getCreatedAt(): DateTime
     {
@@ -107,7 +108,7 @@ class Comment implements CommentInterface
     }
 
     /**
-     * @return DateTime
+     * {@inheritdoc}
      */
     public function getUpdatedAt(): DateTime
     {
@@ -115,7 +116,7 @@ class Comment implements CommentInterface
     }
 
     /**
-     * @return TrickInterface
+     * {@inheritdoc}
      */
     public function getTrick(): TrickInterface
     {
@@ -123,10 +124,19 @@ class Comment implements CommentInterface
     }
 
     /**
-     * @return UserInterface
+     * {@inheritdoc}
      */
     public function getAuthor(): UserInterface
     {
         return $this->author;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateComment(CommentDTOInterface $commentDTO): void
+    {
+        $this->comment = $commentDTO->comment;
+        $this->updatedAt = new DateTime();
     }
 }

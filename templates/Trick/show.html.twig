@@ -26,16 +26,33 @@
     {% if app.user is not null %}
         {{ form_start(formComment) }}
         {{ form_widget(formComment) }}
-        <input type="submit" value="Valider" class="btn btn-success" />
+        <input type="submit" value="Valider" class="btn btn-success"/>
         {{ form_end(formComment) }}
     {% endif %}
 
     {% if trick.comments is not empty %}
-        <ul>
+        <table>
+            <thead>
+            <tr>
+                <th>Commentaire</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
             {% for comment in trick.comments %}
-                <li>{{ comment.author.username }} le {{ comment.createdAt | date('Y-m-d H:i:s') }} a dit : {{ comment.comment }}</li>
+                <tr>
+                    <td>{{ comment.author.username }} le {{ comment.createdAt | date('Y-m-d H:i:s') }} a dit
+                        : {{ comment.comment }}</td>
+                    <td>
+                        {% if app.user is not null and (is_granted('ROLE_ADMIN') or app.user == comment.author) %}
+                            <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}?action=modifier&id={{ comment.id }}"
+                               class="btn btn-success">Modifier</a>
+                        {% endif %}
+                    </td>
+                </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
     {% endif %}
 {% endblock %}
 

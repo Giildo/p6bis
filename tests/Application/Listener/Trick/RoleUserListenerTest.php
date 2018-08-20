@@ -24,8 +24,6 @@ class RoleUserListenerTest extends TestCase
 {
     private $repository;
 
-    private $entityManager;
-
     private $urlGenerator;
 
     private $tokenStorage;

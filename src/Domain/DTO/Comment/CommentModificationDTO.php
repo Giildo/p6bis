@@ -5,7 +5,7 @@ namespace App\Domain\DTO\Comment;
 use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class AddCommentDTO implements CommentDTOInterface
+class CommentModificationDTO implements CommentDTOInterface
 {
     /**
      * @var string

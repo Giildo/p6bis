@@ -2,6 +2,8 @@
 
 namespace App\Tests\UI\Actions\Trick;
 
+use App\Application\FormFactory\CommentModificationFormFactory;
+use App\Application\FormFactory\Interfaces\CommentModificationFormFactoryInterface;
 use App\Application\Handlers\Interfaces\Forms\Comment\AddCommentHandlerInterface;
 use App\Domain\Model\Category;
 use App\Domain\Model\Interfaces\TrickInterface;
@@ -79,7 +81,7 @@ class ShowTrickActionTest extends TestCase
 
         $form = $this->createMock(FormInterface::class);
         $form->method('handleRequest')->willReturnSelf();
-        $formFactory = $this->createMock(FormFactoryInterface::class);
+        $formFactory = $this->createMock(CommentModificationFormFactoryInterface::class);
         $formFactory->method('create')->willReturn($form);
 
         $this->handler = $this->createMock(AddCommentHandlerInterface::class);
