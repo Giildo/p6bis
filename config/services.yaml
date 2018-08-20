@@ -43,3 +43,7 @@ services:
     App\Application\Listener\Comment\RoleUserListener:
         tags:
         - { name: kernel.event_listener, event: kernel.request }
+
+    App\Application\Listener\Core\FlashMessageListener:
+        tags:
+        - { name: kernel.event_listener, event: app.event.flash_message, method: addFlashMessage }

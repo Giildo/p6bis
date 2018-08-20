@@ -35,6 +35,11 @@
                         <a class="nav-link a_scrollspy" href="/deconnexion">Déconnexion</a>
                     {% endif %}
                 </li>
+                {% if app.user is null %}
+                    <li>
+                        <a class="nav-link a_scrollspy" href="/enregistrement">Enregistrement</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
