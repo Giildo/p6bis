@@ -63,10 +63,36 @@ class RoleUserListener
             );
 
             if (preg_match("#{$uri}#", $request->getUri())) {
+                $comment = null;
+
                 if (!is_null($request->query->get('action')) &&
                     !is_null($request->query->get('id'))
                 ) {
                     $comment = $this->commentRepository->loadOneCommentWithHerId($request->query->get('id'));
+
+                    if (is_null($comment)) {
+                        $event->setResponse(new RedirectResponse($uri));
+                        return;
+                    }
+
+                    if ($this->authorizationChecker->isGranted('ROLE_ADMIN') ||
+                        (
+                            $comment->getAuthor() === $this->tokenStorage->getToken()->getUser() &&
+                            $this->authorizationChecker->isGranted('ROLE_USER')
+                        )
+                    ) {
+                        $request->getSession()->set('comment', $comment);
+                        return;
+                    }
+
+                    $event->setResponse(new RedirectResponse($uri));
+                    return;
+                }
+
+                if (!is_null($request->attributes->get('id'))) {
+                    $comment = $this->commentRepository->loadOneCommentWithHerId(
+                        $request->attributes->get('id')
+                    );
 
                     if (is_null($comment)) {
                         $event->setResponse(new RedirectResponse($uri));

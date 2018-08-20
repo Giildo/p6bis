@@ -227,11 +227,78 @@ class RoleUserListenerTest extends TestCase
         self::assertNull($session->get('comment'));
     }
 
-    public function testReturnNullAndTheCommentIsInTheSessionIfTheUserHasTheRights()
+    public function testReturnNullIfTheCommentIsInTheSessionIfTheUserHasTheRightsToModifyComment()
     {
         $this->request->attributes->method('get')->willReturn('trickSlug');
         $this->request->method('getUri')->willReturn('/goodUrl');
         $this->request->query->method('get')->willReturn('GETData');
+
+        $this->commentRepository->method('loadOneCommentWithHerId')->willReturn(
+            $this->comment
+        );
+
+        $this->authorizationChecker->method('isGranted')->willReturn(true);
+        $this->token->method('getUser')->willReturn($this->badUser);
+
+        $this->event->method('getRequest')->willReturn($this->request);
+
+        $response = $this->listener->onKernelRequest($this->event);
+
+        self::assertNull($response);
+
+        $session = $this->request->getSession();
+
+        self::assertInstanceOf(CommentInterface::class, $session->get('comment'));
+    }
+
+    public function testReturnNullIfTheIdInTheUriIsWrong()
+    {
+        $this->request->attributes->method('get')->willReturn('trickSlug');
+        $this->request->method('getUri')->willReturn('/goodUrl');
+        $this->request->query->method('get')->willReturn(null);
+
+        $this->commentRepository->method('loadOneCommentWithHerId')->willReturn(null);
+
+        $this->event->method('getRequest')->willReturn($this->request);
+
+        $response = $this->listener->onKernelRequest($this->event);
+
+        self::assertNull($response);
+
+        $session = $this->request->getSession();
+
+        self::assertNull($session->get('comment'));
+    }
+
+    public function testReturnNullIfTheUserDoesNotHaveTheRightsToDeleteTheComment()
+    {
+        $this->request->attributes->method('get')->willReturn('id');
+        $this->request->method('getUri')->willReturn('/goodUrl');
+        $this->request->query->method('get')->willReturn(null);
+
+        $this->commentRepository->method('loadOneCommentWithHerId')->willReturn(
+            $this->comment
+        );
+
+        $this->authorizationChecker->method('isGranted')->willReturn(false);
+        $this->token->method('getUser')->willReturn($this->badUser);
+
+        $this->event->method('getRequest')->willReturn($this->request);
+
+        $response = $this->listener->onKernelRequest($this->event);
+
+        self::assertNull($response);
+
+        $session = $this->request->getSession();
+
+        self::assertNull($session->get('comment'));
+    }
+
+    public function testReturnNullIfTheCommentIsInTheSessionIfTheUserHasTheRightsToDeleteComment()
+    {
+        $this->request->attributes->method('get')->willReturn('trickSlug');
+        $this->request->method('getUri')->willReturn('/goodUrl');
+        $this->request->query->method('get')->willReturn(null);
 
         $this->commentRepository->method('loadOneCommentWithHerId')->willReturn(
             $this->comment
