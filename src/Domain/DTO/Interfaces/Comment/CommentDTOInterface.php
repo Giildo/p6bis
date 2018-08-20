@@ -2,7 +2,7 @@
 
 namespace App\Domain\DTO\Interfaces\Comment;
 
-interface AddCommentDTOInterface
+interface CommentDTOInterface
 {
     /**
      * AddCommentDTO constructor.

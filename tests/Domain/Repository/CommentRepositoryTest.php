@@ -59,13 +59,8 @@ class CommentRepositoryTest extends KernelTestCase
 
         $repository->saveComment($comment);
 
-        /** @var TrickRepository $trickRepository */
-        $trickRepository = $entityManager->getRepository(Trick::class);
+        $comment = $repository->loadOneCommentWithHerId($comment->getId());
 
-        $trick = $trickRepository->loadOneTrickWithCategoryAndAuthor('mute');
-
-        $comments = $trick->getComments();
-
-        self::assertInstanceOf(CommentInterface::class, $comments[0]);
+        self::assertInstanceOf(CommentInterface::class, $comment);
     }
 }

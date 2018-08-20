@@ -2,12 +2,11 @@
 
 namespace App\UI\Actions\Trick;
 
+use App\Application\FormFactory\Interfaces\CommentModificationFormFactoryInterface;
 use App\Application\Handlers\Interfaces\Forms\Comment\AddCommentHandlerInterface;
 use App\Domain\Repository\TrickRepository;
-use App\UI\Forms\Comment\AddCommentType;
 use App\UI\Responders\Interfaces\Trick\ShowTrickResponderInterface;
 use Doctrine\ORM\NonUniqueResultException;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +23,7 @@ class ShowTrickAction
      */
     private $responder;
     /**
-     * @var FormFactoryInterface
+     * @var CommentModificationFormFactoryInterface
      */
     private $formFactory;
     /**
@@ -36,13 +35,13 @@ class ShowTrickAction
      * ShowTrickAction constructor.
      * @param TrickRepository $trickRepository
      * @param ShowTrickResponderInterface $responder
-     * @param FormFactoryInterface $formFactory
+     * @param CommentModificationFormFactoryInterface $formFactory
      * @param AddCommentHandlerInterface $handler
      */
     public function __construct(
         TrickRepository $trickRepository,
         ShowTrickResponderInterface $responder,
-        FormFactoryInterface $formFactory,
+        CommentModificationFormFactoryInterface $formFactory,
         AddCommentHandlerInterface $handler
     ) {
         $this->trickRepository = $trickRepository;
@@ -70,10 +69,9 @@ class ShowTrickAction
             return $this->responder->showTrickResponse();
         }
 
-        $formComment = $this->formFactory->create(AddCommentType::class)
-                                  ->handleRequest($request);
+        $formComment = $this->formFactory->create($request);
 
-        if ($this->handler->handle($formComment, $trick)) {
+        if ($this->handler->handle($formComment, $trick, $request)) {
             return $this->responder->showTrickResponse(
                 true,
                 'Trick_show',

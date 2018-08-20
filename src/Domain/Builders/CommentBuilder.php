@@ -3,7 +3,7 @@
 namespace App\Domain\Builders;
 
 use App\Domain\Builders\Interfaces\CommentBuilderInterface;
-use App\Domain\DTO\Interfaces\Comment\AddCommentDTOInterface;
+use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
 use App\Domain\Model\Comment;
 use App\Domain\Model\Interfaces\CommentInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
@@ -34,7 +34,7 @@ class CommentBuilder implements CommentBuilderInterface
      * {@inheritdoc}
      */
     public function build(
-        AddCommentDTOInterface $DTO,
+        CommentDTOInterface $DTO,
         TrickInterface $trick
     ): self {
         /** @var UserInterface $author */

@@ -2,22 +2,17 @@
 
 namespace App\UI\Forms\Comment;
 
-use App\Domain\DTO\Comment\AddCommentDTO;
+use App\Domain\DTO\Comment\CommentModificationDTO;
 use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AddCommentType extends AbstractType
+class CommentModificationType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function getParent()
     {
-        $builder->add('comment', TextareaType::class, [
-            'required' => false,
-            'label'    => 'Votre commentaire',
-        ]);
+        return AddCommentType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -25,11 +20,10 @@ class AddCommentType extends AbstractType
         $resolver->setDefaults([
             'data_class' => CommentDTOInterface::class,
             'empty_data' => function (FormInterface $form) {
-                return new AddCommentDTO(
+                return new CommentModificationDTO(
                     $form->get('comment')->getData()
                 );
             },
         ]);
     }
-
 }

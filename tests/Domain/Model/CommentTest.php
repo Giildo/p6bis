@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Model;
 
+use App\Domain\DTO\Comment\CommentModificationDTO;
 use App\Domain\Model\Category;
 use App\Domain\Model\Comment;
 use App\Domain\Model\Interfaces\CommentInterface;
@@ -81,5 +82,14 @@ class CommentTest extends KernelTestCase
         self::assertInstanceOf(DateTime::class, $this->comment->getCreatedAt());
         self::assertInstanceOf(TrickInterface::class, $this->comment->getTrick());
         self::assertInstanceOf(UserInterface::class, $this->comment->getAuthor());
+    }
+
+    public function testTheUpdate()
+    {
+        $dto = new CommentModificationDTO('Commentaire simulté et modifié.');
+
+        $this->comment->updateComment($dto);
+
+        self::assertInstanceOf(DateTime::class, $this->comment->getUpdatedAt());
     }
 }

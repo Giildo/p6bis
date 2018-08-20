@@ -6,6 +6,7 @@ use App\Domain\Model\Comment;
 use App\Domain\Model\Interfaces\CommentInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 
@@ -34,4 +35,19 @@ class CommentRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @param string $id
+     *
+     * @return CommentInterface|null
+     *
+     * @throws NonUniqueResultException
+     */
+    public function loadOneCommentWithHerId(string $id): ?CommentInterface
+    {
+        return $this->createQueryBuilder('comment')
+            ->where('comment.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
