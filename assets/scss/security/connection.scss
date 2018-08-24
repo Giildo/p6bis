@@ -1,0 +1,16 @@
+@import "../style/variables";
+@import "formFrame";
+
+section {
+  position: relative;
+
+  .header-connection {
+    padding: 0;
+  }
+
+  section {
+    background-color: $bgColor;
+    position: absolute;
+    top: 0;
+  }
+}

@@ -1,0 +1,93 @@
+@import "style/variables";
+@import "style/alerts";
+
+/* GENERAL */
+
+body {
+  padding-top: $navHeight;
+  margin: 0;
+  background: url("/pic/general/header.jpg") top left fixed;
+}
+
+p, a, h1, h2, h3, h4, h5 {
+  font-family: $baseFont;
+}
+
+h1, h2, h3, h4, h5 {
+  text-align: center;
+}
+
+a {
+  color: $linkColor;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn {
+  text-decoration: none;
+  color: black;
+  border-radius: 10px;
+  background-color: #00ff00;
+  padding: 8px;
+  -webkit-transition: background-color 0.1s;
+  -moz-transition: background-color 0.1s;
+  -o-transition: background-color 0.1s;
+  transition: background-color 0.1s;
+
+  &:hover {
+    background-color: greenyellow;
+  }
+}
+
+/* NavBar */
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: $navHeight;
+  width: 100%;
+  background-color: $navBGColor;
+  display: flex;
+  z-index: 500;
+
+  .nav-link {
+    line-height: $navElementsHeight;
+    padding: $navElementsMargin $navElementsMarginSides;
+    vertical-align: middle;
+    color: $navLinkColor;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      color: $navLinkColorHover;
+      border-bottom: $navLinkBorderSize solid $navLinkColorHover;
+    }
+  }
+
+  #logo {
+    width: $navElementsHeight;
+    padding: $navElementsMargin;
+    background-color: $navBGColor + 50;
+  }
+}
+
+/* Footer */
+
+#footer {
+  background-color: $navBGColor;
+  width: 100%;
+  margin-top: 50px;
+
+  p {
+    margin: 0;
+    padding: 50px 0;
+  }
+}
+
+.footer-bottom {
+  position: absolute;
+  bottom: 0;
+}

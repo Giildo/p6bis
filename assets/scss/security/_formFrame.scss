@@ -1,0 +1,51 @@
+@import "../style/variables";
+
+#group-button-form {
+  border: $frameBorder;
+  background-color: $frameBGColor;
+  width: $frameWidth;
+  margin: $frameMargin;
+
+  #group-button {
+    display: flex;
+
+    .button-security {
+      background-color: $buttonFrameBGColor;
+      border: none;
+      border-bottom: $frameBorder;
+      outline: none;
+      padding: $buttonFramePadding;
+      width: 50%;
+      transition: 0.3s;
+      font-size: $buttonFrameFontSize;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+
+      &:first-child {
+        border-right: $frameBorder;
+      }
+
+      a {
+        text-decoration: none;
+        color: $buttonFrameFontColor;
+      }
+    }
+
+    .active {
+      border-bottom: none;
+      font-weight: bold;
+      color: $buttonFrameFontColorActive;
+      background-color: $frameBGColor;
+    }
+  }
+
+  h1 {
+    margin: 20px 0;
+    font-size: 1.8em;
+  }
+
+  p {
+    padding: $sectionFormPadding;
+  }
+}

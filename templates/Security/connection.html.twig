@@ -3,33 +3,24 @@
 {% block title %}Page de connexion{% endblock %}
 
 {% block stylesheets %}
-
+    <link rel="stylesheet" href="/build/css/security/connection.css">
 {% endblock %}
 
 {% block body %}
-    <h1>Page de connexion</h1>
-
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
+    <div id="group-button-form">
+        <div id="group-button">
+            <button class="button-security active">Connexion</button>
+            <button class="button-security"><a href="/enregistrement">Enregistrement</a></button>
         </div>
-    {% endfor %}
 
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
+        <h1>Connexion à votre compte utilisateur</h1>
+        <p>Vous connecter vous permet d'accéder à votre profil utilisateur et à la gestion des tricks.</p>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {% form_theme form 'Form/security_user_connection.html.twig' %}
+        {{ form(form) }}
 
-        <input type="submit" value="Valider" />
-    {{ form_end(form) }}
+        <p><a href="/recuperation">Mot de passe oublié ?</a></p>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

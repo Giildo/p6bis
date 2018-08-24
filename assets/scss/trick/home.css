@@ -1,0 +1,35 @@
+/* CORE */
+/* GLOBAL */
+/* HOME */
+/* CONNECTION */
+h1 {
+  font-size: 4em; }
+  h1 span {
+    font-weight: bold;
+    position: relative;
+    top: -15px;
+    right: -15px;
+    text-shadow: -15px 15px 15px #4b4b4b; }
+
+#section-home {
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+  padding: 0 50px; }
+  #section-home article {
+    flex-basis: 25%;
+    margin: 10px 0; }
+    #section-home article div {
+      margin: 10px;
+      padding: 5px;
+      height: 100%;
+      border: 1px solid black;
+      border-radius: 10px;
+      position: relative;
+      background-color: #fff; }
+      #section-home article div footer {
+        position: absolute;
+        bottom: 0;
+        right: 25px; }
+
+/*# sourceMappingURL=home.css.map */

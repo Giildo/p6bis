@@ -1,0 +1,88 @@
+/* CORE */
+/* GLOBAL */
+/* HOME */
+/* CONNECTION */
+/* CORE */
+/* GLOBAL */
+/* HOME */
+/* CONNECTION */
+.alert, .alert-danger, .alert-success {
+  padding: 20px 25px;
+  color: white;
+  text-align: left; }
+
+.alert-danger {
+  background: #f04546; }
+
+.alert-success {
+  background: #15c26b; }
+
+/* GENERAL */
+body {
+  padding-top: 60px;
+  margin: 0;
+  background: url("/pic/general/header.jpg") top left fixed; }
+
+p, a, h1, h2, h3, h4, h5 {
+  font-family: "Roboto", sans-serif; }
+
+h1, h2, h3, h4, h5 {
+  text-align: center; }
+
+a {
+  color: #1e1e1e; }
+  a:hover {
+    text-decoration: none; }
+
+.btn {
+  text-decoration: none;
+  color: black;
+  border-radius: 10px;
+  background-color: #00ff00;
+  padding: 8px;
+  -webkit-transition: background-color 0.1s;
+  -moz-transition: background-color 0.1s;
+  -o-transition: background-color 0.1s;
+  transition: background-color 0.1s; }
+  .btn:hover {
+    background-color: greenyellow; }
+
+/* NavBar */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  background-color: #404852;
+  display: flex;
+  z-index: 500; }
+  nav .nav-link {
+    line-height: 50px;
+    padding: 5px 15px;
+    vertical-align: middle;
+    color: white;
+    font-weight: bold;
+    text-decoration: none; }
+    nav .nav-link:hover {
+      color: #e6e6e6;
+      border-bottom: 3px solid #e6e6e6; }
+  nav #logo {
+    width: 50px;
+    padding: 5px;
+    background-color: #727a84; }
+
+/* Footer */
+#footer {
+  background-color: #404852;
+  width: 100%;
+  margin-top: 50px; }
+  #footer p {
+    margin: 0;
+    padding: 50px 0; }
+
+.footer-bottom {
+  position: absolute;
+  bottom: 0; }
+
+/*# sourceMappingURL=global.css.map */

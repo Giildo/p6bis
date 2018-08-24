@@ -17,9 +17,19 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
-    .addEntry('app', './assets/js/app.js')
-    //.addEntry('page1', './assets/js/page1.js')
-    //.addEntry('page2', './assets/js/page2.js')
+    .addEntry('js/collectionPicture', './assets/js/collectionPicture.js')
+    .addEntry('js/collectionVideo', './assets/js/collectionVideo.js')
+    .addEntry('js/scrollspy', './assets/js/scrollspy.js')
+    .addEntry('js/footerPosition', './assets/js/footerPosition.js')
+
+
+    .addStyleEntry('css/global', './assets/scss/global.scss')
+    .addStyleEntry('css/form', './assets/scss/form.scss')
+
+    .addStyleEntry('css/trick/home', './assets/scss/trick/home.scss')
+
+    .addStyleEntry('css/security/connection', './assets/scss/security/connection.scss')
+    .addStyleEntry('css/security/registration', './assets/scss/security/registration.scss')
 
     /*
      * FEATURE CONFIG
@@ -35,7 +45,7 @@ Encore
     .enableVersioning(Encore.isProduction())
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()

@@ -1,0 +1,81 @@
+@import "color";
+
+/* CORE */
+//========================================================
+  //Text
+  $baseFont: 'Roboto', sans-serif;
+  $linkColor: #1e1e1e;
+  $linkColorHover: #454545;
+
+  //FlashMessage
+  $errorMessage: $red;
+  $successMessage: $green;
+
+  //Form frame
+  $frameBorder: 1px solid #ccc;
+  $frameBGColor: #f1f1f1;
+  $frameWidth: 35%;
+  $frameMargin: 50px auto;
+
+    //Button form frame
+    $buttonFrameBGColor: #dfdfdf;
+    $buttonFramePadding: 14px 16px;
+    $buttonFrameFontSize: 17px;
+    $buttonFrameFontColor: #7d7d7d;
+    $buttonFrameFontColorActive: #000000;
+
+      //Section form
+      $sectionFormMargin: 0 auto 20px auto;
+      $sectionFormPadding: 10px 30px;
+
+        //Form
+        $formMargin: 5px 0;
+        $formPadding: 6px 12px;
+        $formFontSize: 1rem;
+        $formLineHeight: 1.5;
+
+          //Fields
+          $fieldTransition: .15s ease-in-out;
+          $fieldFontColor: #495057;
+          $fieldBGColor: #fff;
+          $fieldBorder: 1px solid #ced4da;
+          $fieldBorderRadius: 5px;
+          $fieldBorderFocus: 1px solid #1e1e1e;
+          $fieldBoxShadowFocus: 0 0 10px #1e1e1e;
+          $fieldBGColorFocus: #efefef;
+
+/* GLOBAL */
+//========================================================
+
+  //Navbar
+  $navBGColor: #404852;
+  $navHeight: 60px;
+
+    //Navabar/Elements
+    $navElementsHeight: $navHeight - 10px;
+    $navElementsMargin: ($navHeight - $navElementsHeight) / 2;
+    $navElementsMarginSides: $navElementsMargin * 3;
+    $navLinkColor: white;
+    $navLinkColorHover: #e6e6e6;
+    $navLinkBorderSize: 3px;
+
+/* HOME */
+//========================================================
+
+  //Header
+  $H1Size: 4em;
+  $textShiftH1: 15px;
+  $colorShadowH1: #4b4b4b;
+
+  //Trick
+  $widthFlexCard: 25%;
+  $marginSize: 10px;
+  $paddingSize: 5px;
+  $borderCard: 1px solid black;
+  $borderRadiusCard: 10px;
+
+/* CONNECTION */
+//========================================================
+
+  //Global
+  $bgColor: #c2c2c2;

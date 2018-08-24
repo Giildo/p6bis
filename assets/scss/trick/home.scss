@@ -1,0 +1,41 @@
+@import "../style/variables";
+
+h1 {
+  font-size: $H1Size;
+
+  span {
+    font-weight: bold;
+    position: relative;
+    top: $textShiftH1 * -1;
+    right: $textShiftH1 * -1;
+    text-shadow: $textShiftH1 * -1 $textShiftH1 $textShiftH1 $colorShadowH1;
+  }
+}
+
+#section-home {
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+  padding: 0 50px;
+
+  article {
+    flex-basis: $widthFlexCard;
+    margin: $marginSize 0;
+
+    div {
+      margin: $marginSize;
+      padding: $paddingSize;
+      height: 100%;
+      border: $borderCard;
+      border-radius: $borderRadiusCard;
+      position: relative;
+      background-color: #fff;
+
+      footer {
+        position: absolute;
+        bottom: 0;
+        right: 25px;
+      }
+    }
+  }
+}

@@ -17,14 +17,21 @@ class UserConnectionType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label'    => 'Nom d\'utilisateur',
-                'required' => false,
+                'required'       => false,
+                'error_bubbling' => true,
+                'attr'           => [
+                    'placeholder' => 'Nom d\'utilisateur',
+                    'class'       => 'form-control',
+                ],
             ])
             ->add('password', PasswordType::class, [
-                'label'    => 'Mot de passe',
-                'required' => false,
-            ])
-        ;
+                'required'       => false,
+                'error_bubbling' => true,
+                'attr'           => [
+                    'placeholder' => 'Mot de passe',
+                    'class'       => 'form-control',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -39,6 +46,4 @@ class UserConnectionType extends AbstractType
             },
         ]);
     }
-
-
 }

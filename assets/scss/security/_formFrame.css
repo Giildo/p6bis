@@ -1,0 +1,29 @@
+#group-button {
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  width: 50%;
+  margin: 50px auto; }
+  #group-button .button-security {
+    background-color: #dfdfdf;
+    float: left;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    width: 50%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #7d7d7d; }
+    #group-button .button-security:first-child {
+      border-right: 1px solid #ccc; }
+  #group-button .active {
+    border-bottom: none;
+    font-weight: bold;
+    color: #000;
+    background-color: #f1f1f1; }
+
+/*# sourceMappingURL=_formFrame.css.mapp */

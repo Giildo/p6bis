@@ -3,11 +3,14 @@
 namespace App\Application\Authenticator\Security;
 
 use App\Application\Authenticator\Interfaces\Security\UserConnectionTypeAuthenticatorInterface;
+use App\Application\Events\Core\FlashMessageEvent;
 use App\Application\Handlers\Interfaces\Forms\Security\UserConnectionHandlerInterface;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
 use App\UI\Forms\Security\UserConnectionType;
 use App\UI\Responders\Interfaces\Security\UserConnectionResponderInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +48,10 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator imp
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     /**
      * UserConnectionTypeAuthenticator constructor.
@@ -54,6 +61,7 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator imp
      * @param UserConnectionHandlerInterface $handler
      * @param UserConnectionResponderInterface $responder
      * @param UrlGeneratorInterface $urlGenerator
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -61,15 +69,16 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator imp
         EncoderFactoryInterface $encoderFactory,
         UserConnectionHandlerInterface $handler,
         UserConnectionResponderInterface $responder,
-        UrlGeneratorInterface $urlGenerator
-    )
-    {
+        UrlGeneratorInterface $urlGenerator,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->formFactory = $formFactory;
         $this->repository = $repository;
         $this->encoderFactory = $encoderFactory;
         $this->handler = $handler;
         $this->responder = $responder;
         $this->urlGenerator = $urlGenerator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -131,7 +140,7 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator imp
             return $form->getData();
         }
 
-        return [];
+        return $form->getErrors(true, true);
     }
 
     /**
@@ -149,8 +158,40 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator imp
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
+        if ($credentials instanceof FormErrorIterator) {
+            foreach ($credentials as $credential) {
+                $flashMessage = new FlashMessageEvent(
+                    false,
+                    $credential->getMessage()
+                );
+
+                $this->eventDispatcher->dispatch(
+                    FlashMessageEvent::FLASH_MESSAGE,
+                    $flashMessage
+                );
+            }
+
+            return null;
+        }
+
         if (!empty($credentials)) {
-            return $this->repository->loadUserByUsername($credentials->username);
+            $user = $this->repository->loadUserByUsername($credentials->username);
+
+            if (is_null($user)) {
+                $flashMessage = new FlashMessageEvent(
+                    false,
+                    'Le nom d\'utilisateur n\'existe pas.'
+                );
+
+                $this->eventDispatcher->dispatch(
+                    FlashMessageEvent::FLASH_MESSAGE,
+                    $flashMessage
+                );
+
+                return null;
+            }
+
+            return $user;
         }
 
         return null;
@@ -177,11 +218,25 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator imp
         if (!empty($credentials)) {
             $encoder = $this->encoderFactory->getEncoder(User::class);
 
-            return $encoder->isPasswordValid(
+            $passwordValid = $encoder->isPasswordValid(
                 $user->getPassword(),
                 $credentials->password,
                 ''
             );
+
+            if (!$passwordValid) {
+                $flashMessage = new FlashMessageEvent(
+                    false,
+                    'Le mot de passe est invalide.'
+                );
+
+                $this->eventDispatcher->dispatch(
+                    FlashMessageEvent::FLASH_MESSAGE,
+                    $flashMessage
+                );
+            }
+
+            return $passwordValid;
         }
 
         return false;

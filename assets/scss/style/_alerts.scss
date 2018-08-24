@@ -1,0 +1,17 @@
+@import "variables";
+
+.alert {
+  padding: 20px 25px;
+  color: white;
+  text-align: left;
+}
+
+.alert-danger {
+  @extend .alert;
+  background: $errorMessage;
+}
+
+.alert-success {
+  @extend .alert;
+  background: $successMessage;
+}

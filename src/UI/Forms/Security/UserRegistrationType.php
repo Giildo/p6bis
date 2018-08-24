@@ -6,6 +6,7 @@ use App\Domain\DTO\Interfaces\Security\UserRegistrationDTOInterface;
 use App\Domain\DTO\Security\UserRegistrationDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,28 +20,62 @@ class UserRegistrationType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'required' => false,
-                'label'    => 'Nom d\'utilisateur',
+                'required'       => false,
+                'error_bubbling' => true,
+                'attr'           => [
+                    'placeholder' => 'Nom d\'utilisateur*',
+                    'class'       => 'form-control',
+                ],
             ])
             ->add('firstName', TextType::class, [
-                'required' => false,
-                'label'    => 'Prénom',
+                'required'       => false,
+                'error_bubbling' => true,
+                'attr'           => [
+                    'placeholder' => 'Prénom*',
+                    'class'       => 'form-control',
+                ],
             ])
             ->add('lastName', TextType::class, [
-                'required' => false,
-                'label'    => 'Nom',
+                'required'       => false,
+                'error_bubbling' => true,
+                'attr'           => [
+                    'placeholder' => 'Nom*',
+                    'class'       => 'form-control',
+                ],
             ])
             ->add('mail', RepeatedType::class, [
                 'type'           => EmailType::class,
                 'required'       => false,
-                'first_options'  => ['label' => 'Adresse mail'],
-                'second_options' => ['label' => 'Vérifiez votre adresse mail'],
+                'first_options'  => [
+                    'attr' => [
+                        'placeholder' => 'Adresse mail*',
+                        'class'       => 'form-control',
+                        ],
+                    ],
+                'second_options' => [
+                    'attr' => [
+                        'placeholder' => 'Confirmer l\'adresse mail*',
+                        'class'       => 'form-control',
+                        ],
+                    ],
+                'error_bubbling' => true,
             ])
             ->add('password', RepeatedType::class, [
                 'type'           => PasswordType::class,
                 'required'       => false,
-                'first_options'  => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Vérifiez votre mot de passe'],
+                'first_options'  => [
+                    'attr' => [
+                        'placeholder' => 'Mot de passe*',
+                        'class'       => 'form-control',
+                        ],
+                    ],
+                'second_options' => [
+                    'attr' => [
+                        'placeholder' => 'Confirmer le mot de passe*',
+                        'class'       => 'form-control',
+                        ],
+                    ],
+                'error_bubbling' => true,
             ]);
     }
 
