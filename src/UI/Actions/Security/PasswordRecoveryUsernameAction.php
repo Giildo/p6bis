@@ -88,7 +88,7 @@ class PasswordRecoveryUsernameAction
             return $this->responder->passwordRecoveryResponse(false, $form, 'forUsername');
         }
 
-        if ($this->recoveryMailer->message($user->getMail())) {
+        if ($this->recoveryMailer->message($user)) {
             return $this->responder->passwordRecoveryResponse(false, null, '');
         }
 

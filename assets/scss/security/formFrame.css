@@ -2,10 +2,6 @@
 /* GLOBAL */
 /* HOME */
 /* CONNECTION */
-/* CORE */
-/* GLOBAL */
-/* HOME */
-/* CONNECTION */
 #group-button-form {
   border: 1px solid #ccc;
   background-color: #f1f1f1;
@@ -41,13 +37,4 @@
   #group-button-form p {
     padding: 10px 30px; }
 
-section {
-  position: relative; }
-  section .header-connection {
-    padding: 0; }
-  section section {
-    background-color: #c2c2c2;
-    position: absolute;
-    top: 0; }
-
-/*# sourceMappingURL=connection.css.map */
+/*# sourceMappingURL=formFrame.css.map */

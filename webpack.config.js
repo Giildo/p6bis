@@ -28,8 +28,7 @@ Encore
 
     .addStyleEntry('css/trick/home', './assets/scss/trick/home.scss')
 
-    .addStyleEntry('css/security/connection', './assets/scss/security/connection.scss')
-    .addStyleEntry('css/security/registration', './assets/scss/security/registration.scss')
+    .addStyleEntry('css/security/formFrame', './assets/scss/security/formFrame.scss')
 
     /*
      * FEATURE CONFIG

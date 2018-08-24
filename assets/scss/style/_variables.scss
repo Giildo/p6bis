@@ -22,7 +22,7 @@
     $buttonFramePadding: 14px 16px;
     $buttonFrameFontSize: 17px;
     $buttonFrameFontColor: #7d7d7d;
-    $buttonFrameFontColorActive: #000000;
+    $buttonFrameFontColorActive: $black;
 
       //Section form
       $sectionFormMargin: 0 auto 20px auto;
@@ -37,12 +37,16 @@
           //Fields
           $fieldTransition: .15s ease-in-out;
           $fieldFontColor: #495057;
-          $fieldBGColor: #fff;
+          $fieldBGColor: $white;
           $fieldBorder: 1px solid #ced4da;
           $fieldBorderRadius: 5px;
           $fieldBorderFocus: 1px solid #1e1e1e;
           $fieldBoxShadowFocus: 0 0 10px #1e1e1e;
           $fieldBGColorFocus: #efefef;
+
+          //Button
+$buttonFormBGColor: $blue;
+$buttonFormFontColor: $white;
 
 /* GLOBAL */
 //========================================================
@@ -55,7 +59,7 @@
     $navElementsHeight: $navHeight - 10px;
     $navElementsMargin: ($navHeight - $navElementsHeight) / 2;
     $navElementsMarginSides: $navElementsMargin * 3;
-    $navLinkColor: white;
+    $navLinkColor: $white;
     $navLinkColorHover: #e6e6e6;
     $navLinkBorderSize: 3px;
 
@@ -71,7 +75,7 @@
   $widthFlexCard: 25%;
   $marginSize: 10px;
   $paddingSize: 5px;
-  $borderCard: 1px solid black;
+  $borderCard: 1px solid $black;
   $borderRadiusCard: 10px;
 
 /* CONNECTION */

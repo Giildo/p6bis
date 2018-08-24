@@ -11,7 +11,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
 
   Scenario: [Fail] The User submit the form without data.
     Given I am on "/enregistrement"
-    When I press "Valider"
+    When I press "S'enregistrer"
     Then I should see "Le nom d'utilisateur doit être renseigné"
     And I should see "Le prénom doit être renseigné"
     And I should see "Le nom doit être renseigné"
@@ -27,7 +27,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
       | user_registration_lastName        | j |
       | user_registration_password_first  | j |
       | user_registration_password_second | j |
-    And I press "Valider"
+    And I press "S'enregistrer"
     Then I should see "Le nom d'utilisateur doit avoir au moins 5 caractères."
     And I should see "Le prénom doit avoir au moins 2 caractères."
     And I should see "Le nom doit avoir au moins 2 caractères."
@@ -40,7 +40,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
       | user_registration_username  | 123456789012345678901234567890123456789012345678901234567890 |
       | user_registration_firstName | 123456789012345678901234567890123456789012345678901234567890 |
       | user_registration_lastName  | 123456789012345678901234567890123456789012345678901234567890 |
-    And I press "Valider"
+    And I press "S'enregistrer"
     Then I should see "Le nom d'utilisateur ne doit pas avoir plus de 50 caractères."
     And I should see "Le prénom ne doit pas avoir plus de 50 caractères."
     And I should see "Le nom ne doit pas avoir plus de 50 caractères."
@@ -51,7 +51,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
     When I fill in the following:
       | user_registration_mail_first  | johndoe.fr |
       | user_registration_mail_second | johndoe.fr |
-    And I press "Valider"
+    And I press "S'enregistrer"
     Then I should see "n'est pas une adresse mail valide."
     And I should be on "/enregistrement"
 
@@ -65,5 +65,5 @@ Feature: As an anonymous user, I need to be able to registration on application.
       | user_registration_mail_second     | john@doe.fr |
       | user_registration_password_first  | 12345678    |
       | user_registration_password_second | 12345678    |
-    And I press "Valider"
+    And I press "S'enregistrer"
     Then I should be on "/accueil"

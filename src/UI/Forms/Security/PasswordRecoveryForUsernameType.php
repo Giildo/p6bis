@@ -16,7 +16,11 @@ class PasswordRecoveryForUsernameType extends AbstractType
     {
         $builder->add('username', TextType::class, [
             'required' => false,
-            'label'    => 'Nom d\'utilisateur',
+            'error_bubbling' => true,
+            'attr'           => [
+                'placeholder' => 'Nom d\'utilisateur*',
+                'class'       => 'form-control',
+            ],
         ]);
     }
 

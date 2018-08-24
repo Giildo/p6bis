@@ -48,6 +48,7 @@ class PasswordRecoveryForPasswordHandler implements PasswordRecoveryForPasswordH
                 return false;
             }
 
+            /** @var User $user */
             $user = $this->repository->loadUserByToken($token);
 
             if (is_null($user)) {

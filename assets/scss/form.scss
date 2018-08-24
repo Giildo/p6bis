@@ -48,11 +48,11 @@
 
     button{
       cursor: pointer;
-      background-color: #02b3e4;
+      background-color: $buttonFormBGColor;
       border-radius: 5px;
       border: none;
       width: 100%;
-      color: #ffffff;
+      color: $buttonFormFontColor;
       padding: 0.7em 4em;
       margin-top: 5px;
       -webkit-box-shadow: 12px 15px 20px rgba(0,0,0,0.1);
