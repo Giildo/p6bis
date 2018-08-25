@@ -1,35 +1,61 @@
 /* CORE */
 /* GLOBAL */
 /* HOME */
-/* CONNECTION */
 h1 {
-  font-size: 4em; }
+  font-size: 4em;
+  font-family: "Jura", sans-serif;
+  font-weight: bold; }
   h1 span {
-    font-weight: bold;
     position: relative;
+    font-weight: bold;
     top: -15px;
     right: -15px;
     text-shadow: -15px 15px 15px #4b4b4b; }
 
 #section-home {
   display: flex;
+  justify-content: space-around;
   flex-wrap: wrap;
   width: auto;
   padding: 0 50px; }
   #section-home article {
-    flex-basis: 25%;
-    margin: 10px 0; }
-    #section-home article div {
-      margin: 10px;
-      padding: 5px;
-      height: 100%;
-      border: 1px solid #000000;
-      border-radius: 10px;
-      position: relative;
-      background-color: #fff; }
-      #section-home article div footer {
-        position: absolute;
-        bottom: 0;
-        right: 25px; }
+    flex-basis: 31%;
+    margin: 1%;
+    border: 1px solid #7d7d7d;
+    border-radius: 10px;
+    background-color: #fffaf5;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; }
+    #section-home article header img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px 10px 0 0; }
+    #section-home article section {
+      padding: 5px; }
+    #section-home article footer {
+      display: flex;
+      justify-content: flex-end; }
+      #section-home article footer a {
+        text-decoration: none;
+        color: #00050a;
+        width: 100%; }
+        #section-home article footer a button {
+          width: 100%;
+          border: none;
+          border-radius: 0 0 8px 8px;
+          background-color: #02b3e4;
+          padding: 15px;
+          -webkit-transition: 0.2s;
+          -moz-transition: 0.2s;
+          -o-transition: 0.2s;
+          transition: 0.2s;
+          cursor: pointer;
+          font-weight: bold; }
+          #section-home article footer a button:hover {
+            background-color: #12d0e4; }
 
 /*# sourceMappingURL=home.css.map */

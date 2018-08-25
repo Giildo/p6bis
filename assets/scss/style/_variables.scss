@@ -3,26 +3,24 @@
 /* CORE */
 //========================================================
   //Text
-  $baseFont: 'Roboto', sans-serif;
-  $linkColor: #1e1e1e;
-  $linkColorHover: #454545;
+  $baseFont: 'Raleway', sans-serif;
+  $titleFont: 'Jura', sans-serif;
+  $linkColor: $greyBlack;
+  $linkColorHover: $greyBlackHover;
 
   //FlashMessage
-  $errorMessage: $red;
-  $successMessage: $green;
+  $flashMessagePadding: 20px 25px;
 
   //Form frame
-  $frameBorder: 1px solid #ccc;
-  $frameBGColor: #f1f1f1;
+  $frameBorderWidth: 1px;
+  $frameBorderStyle: solid;
   $frameWidth: 35%;
   $frameMargin: 50px auto;
 
     //Button form frame
-    $buttonFrameBGColor: #dfdfdf;
     $buttonFramePadding: 14px 16px;
     $buttonFrameFontSize: 17px;
-    $buttonFrameFontColor: #7d7d7d;
-    $buttonFrameFontColorActive: $black;
+    $buttonFrameTransitionTime: 0.3s;
 
       //Section form
       $sectionFormMargin: 0 auto 20px auto;
@@ -36,23 +34,32 @@
 
           //Fields
           $fieldTransition: .15s ease-in-out;
-          $fieldFontColor: #495057;
+          $fieldFontColor: $greyBlue;
           $fieldBGColor: $white;
-          $fieldBorder: 1px solid #ced4da;
+          $fieldBorder: 1px solid $greyAlu;
           $fieldBorderRadius: 5px;
-          $fieldBorderFocus: 1px solid #1e1e1e;
-          $fieldBoxShadowFocus: 0 0 10px #1e1e1e;
-          $fieldBGColorFocus: #efefef;
+          $fieldBorderFocus: 1px solid $greyBlack;
+          $fieldBoxShadowFocus: 0 0 10px $greyBlack;
+          $fieldBGColorFocus: $grey01;
 
           //Button
-$buttonFormBGColor: $blue;
-$buttonFormFontColor: $white;
+          $formButtonBorderRadius: 5px;
+          $formButtonWidth: 100%;
+          $formButtonPadding: 0.7em 4em;
+          $formButtonMarginTop: 5px;
+          $formButtonShadowSize: 12px 15px 20px;
+          $formButtonShadowSizeHover: 2px 4px 8px;
+          $formButtonTransition: 0.2s ease-in-out;
+
+    //H1 form frame
+    $h1FrameMargin: 20px 0;
+    $h1FrameFontSize: 1.8em;
 
 /* GLOBAL */
 //========================================================
 
   //Navbar
-  $navBGColor: #404852;
+  $navBGColor: $greyBlue;
   $navHeight: 60px;
 
     //Navabar/Elements
@@ -60,26 +67,28 @@ $buttonFormFontColor: $white;
     $navElementsMargin: ($navHeight - $navElementsHeight) / 2;
     $navElementsMarginSides: $navElementsMargin * 3;
     $navLinkColor: $white;
-    $navLinkColorHover: #e6e6e6;
+    $navLinkColorHover: $grey01;
     $navLinkBorderSize: 3px;
 
 /* HOME */
 //========================================================
 
   //Header
-  $H1Size: 4em;
-  $textShiftH1: 15px;
-  $colorShadowH1: #4b4b4b;
+  $homeH1FontSize: 4em;
+  $homeH1TextShift: 15px;
 
-  //Trick
-  $widthFlexCard: 25%;
-  $marginSize: 10px;
-  $paddingSize: 5px;
-  $borderCard: 1px solid $black;
-  $borderRadiusCard: 10px;
+  //Section
+  $homeSectionPadding: 0 50px;
 
-/* CONNECTION */
-//========================================================
+    //Article
+    $homeSectionArticleWidthFlexCard: 31%;
+    $homeSectionArticleMarginSize: 1%;
+    $homeSectionArticlePaddingSize: 5px;
+    $homeSectionArticleBorderCardWidth: 1px;
+    $homeSectionArticleBorderCardStyle: solid;
+    $homeSectionArticleBorderRadiusCard: 10px;
 
-  //Global
-  $bgColor: #c2c2c2;
+    //Button
+    $homeSectionArticleButtonPadding: 15px;
+    $homeSectionArticleButtonTransition: 0.2s;
+    $homeSectionArticleButtonBorderRadius: 8px;

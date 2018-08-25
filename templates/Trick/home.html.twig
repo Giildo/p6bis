@@ -15,17 +15,34 @@
         <section id="section-home">
             {% for trick in tricks %}
                 <article>
-                    <div>
-                        <p class="card-description">{{ trick.description }}</p>
+                    <header>
+                        {% set picturePresent = false %}
+                        {% for picture in trick.pictures %}
+                            {% if picture.headPicture == true %}
+                                <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}" alt="{{ picture.description }}" />
+                                {% set picturePresent = true %}
+                            {% endif %}
+                        {% endfor %}
 
-                        <footer>
-                            <p>
-                                <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}" class="btn">
-                                    Voir la figure
-                                </a>
-                            </p>
-                        </footer>
-                    </div>
+                        {% if picturePresent == false  %}
+                            <img src="/pic/general/head_picture.jpg" alt="Image montrant un snowboarder." />
+                        {% endif %}
+                    </header>
+
+                    <section>
+                        <h3>
+                            <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}">
+                                {{ trick.name|upper }}
+                            </a>
+                        </h3>
+                        <p class="card-description">{{ trick.description }}</p>
+                    </section>
+
+                    <footer>
+                        <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}" class="btn">
+                            <button>Voir la figure</button>
+                        </a>
+                    </footer>
                 </article>
             {% endfor %}
         </section>

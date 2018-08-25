@@ -1,40 +1,79 @@
 @import "../style/variables";
 
 h1 {
-  font-size: $H1Size;
+  font: {
+    size: $homeH1FontSize;
+    family: $titleFont;
+    weight: bold;
+  }
 
   span {
-    font-weight: bold;
     position: relative;
-    top: $textShiftH1 * -1;
-    right: $textShiftH1 * -1;
-    text-shadow: $textShiftH1 * -1 $textShiftH1 $textShiftH1 $colorShadowH1;
+    font-weight: bold;
+    top: $homeH1TextShift * -1;
+    right: $homeH1TextShift * -1;
+    text-shadow: $homeH1TextShift * -1 $homeH1TextShift $homeH1TextShift $grey05;
   }
 }
 
 #section-home {
   display: flex;
+  justify-content: space-around;
   flex-wrap: wrap;
   width: auto;
-  padding: 0 50px;
+  padding: $homeSectionPadding;
 
   article {
-    flex-basis: $widthFlexCard;
-    margin: $marginSize 0;
+    flex-basis: $homeSectionArticleWidthFlexCard;
+    margin: $homeSectionArticleMarginSize;
+    border: $homeSectionArticleBorderCardWidth $homeSectionArticleBorderCardStyle $grey04;
+    border-radius: $homeSectionArticleBorderRadiusCard;
+    background-color: $white;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-    div {
-      margin: $marginSize;
-      padding: $paddingSize;
-      height: 100%;
-      border: $borderCard;
-      border-radius: $borderRadiusCard;
-      position: relative;
-      background-color: #fff;
+    header {
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: $homeSectionArticleBorderRadiusCard $homeSectionArticleBorderRadiusCard 0 0;
+      }
+    }
 
-      footer {
-        position: absolute;
-        bottom: 0;
-        right: 25px;
+    section {
+      padding: $homeSectionArticlePaddingSize;
+    }
+
+    footer {
+      display: flex;
+      justify-content: flex-end;
+
+      a {
+        text-decoration: none;
+        color: $black;
+        width: 100%;
+
+        button {
+          width: 100%;
+          border: none;
+          border-radius: 0 0 $homeSectionArticleButtonBorderRadius $homeSectionArticleButtonBorderRadius;
+          background-color: $blue;
+          padding: $homeSectionArticleButtonPadding;
+          -webkit-transition: $homeSectionArticleButtonTransition;
+          -moz-transition: $homeSectionArticleButtonTransition;
+          -o-transition: $homeSectionArticleButtonTransition;
+          transition: $homeSectionArticleButtonTransition;
+          cursor: pointer;
+          font-weight: bold;
+
+          &:hover {
+            background-color: $blueHover;
+          }
+        }
       }
     }
   }

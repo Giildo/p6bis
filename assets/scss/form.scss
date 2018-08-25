@@ -48,25 +48,25 @@
 
     button{
       cursor: pointer;
-      background-color: $buttonFormBGColor;
-      border-radius: 5px;
+      background-color: $blue;
+      border-radius: $formButtonBorderRadius;
       border: none;
-      width: 100%;
-      color: $buttonFormFontColor;
-      padding: 0.7em 4em;
-      margin-top: 5px;
-      -webkit-box-shadow: 12px 15px 20px rgba(0,0,0,0.1);
-      -moz-box-shadow: 12px 15px 20px rgba(0,0,0,0.1);
-      box-shadow: 12px 15px 20px rgba(0,0,0,0.1);
-      -webkit-transition: 0.2s ease-in-out;
-      -moz-transition: 0.2s ease-in-out;
-      -o-transition: 0.2s ease-in-out;
-      transition: 0.2s ease-in-out;
+      width: $formButtonWidth;
+      color: $white;
+      padding: $formButtonPadding;
+      margin-top: $formButtonMarginTop;
+      -webkit-box-shadow: $formButtonShadowSize $blackTransparent;
+      -moz-box-shadow: $formButtonShadowSize $blackTransparent;
+      box-shadow: $formButtonShadowSize $blackTransparent;
+      -webkit-transition: $formButtonTransition;
+      -moz-transition: $formButtonTransition;
+      -o-transition: $formButtonTransition;
+      transition: $formButtonTransition;
       font-size: $formFontSize;
       font-weight: bold;
 
       &:hover, &:active {
-        box-shadow: 2px 4px 8px 0 rgba(0, 0, 0, 0.1);
+        box-shadow: $formButtonShadowSizeHover $blackTransparent;
       }
     }
   }

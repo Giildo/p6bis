@@ -1,8 +1,8 @@
 @import "../style/variables";
 
 #group-button-form {
-  border: $frameBorder;
-  background-color: $frameBGColor;
+  border: $frameBorderWidth $frameBorderStyle $grey03;
+  background-color: $grey01;
   width: $frameWidth;
   margin: $frameMargin;
 
@@ -10,39 +10,39 @@
     display: flex;
 
     .button-security {
-      background-color: $buttonFrameBGColor;
+      background-color: $grey02;
       border: none;
-      border-bottom: $frameBorder;
+      border-bottom: $frameBorderWidth $frameBorderStyle $grey03;
       outline: none;
       padding: $buttonFramePadding;
       width: 50%;
-      transition: 0.3s;
+      transition: $buttonFrameTransitionTime;
       font-size: $buttonFrameFontSize;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
 
       &:first-child {
-        border-right: $frameBorder;
+        border-right: $frameBorderWidth $frameBorderStyle $grey03;
       }
 
       a {
         text-decoration: none;
-        color: $buttonFrameFontColor;
+        color: $grey04;
       }
     }
 
     .active {
       border-bottom: none;
       font-weight: bold;
-      color: $buttonFrameFontColorActive;
-      background-color: $frameBGColor;
+      color: $black;
+      background-color: $grey01;
     }
   }
 
   h1 {
-    margin: 20px 0;
-    font-size: 1.8em;
+    margin: $h1FrameMargin;
+    font-size: $h1FrameFontSize;
   }
 
   p {

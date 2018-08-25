@@ -1,7 +1,6 @@
 /* CORE */
 /* GLOBAL */
 /* HOME */
-/* CONNECTION */
 .section-form {
   margin: 0 auto 20px auto;
   padding: 10px 30px; }
@@ -22,7 +21,7 @@
         font-size: 1rem;
         line-height: 1.5;
         color: #495057;
-        background-color: #ffffff;
+        background-color: #fffaf5;
         background-clip: padding-box;
         border: 1px solid #ced4da;
         border-radius: 5px;
@@ -32,16 +31,16 @@
         transition: 0.15s ease-in-out; }
         .section-form form .form-fields .form-control:focus {
           outline: none;
-          border: 1px solid #1e1e1e;
-          box-shadow: 0 0 10px #1e1e1e;
-          background-color: #efefef; }
+          border: 1px solid #323944;
+          box-shadow: 0 0 10px #323944;
+          background-color: #f0f0f0; }
     .section-form form button {
       cursor: pointer;
       background-color: #02b3e4;
       border-radius: 5px;
       border: none;
       width: 100%;
-      color: #ffffff;
+      color: #fffaf5;
       padding: 0.7em 4em;
       margin-top: 5px;
       -webkit-box-shadow: 12px 15px 20px rgba(0, 0, 0, 0.1);
@@ -54,6 +53,6 @@
       font-size: 1rem;
       font-weight: bold; }
       .section-form form button:hover, .section-form form button:active {
-        box-shadow: 2px 4px 8px 0 rgba(0, 0, 0, 0.1); }
+        box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1); }
 
 /*# sourceMappingURL=form.css.map */
