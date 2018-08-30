@@ -1,0 +1,114 @@
+@import "../color";
+@import "../font";
+
+/* TRICK SHOW */
+//========================================================
+
+//General
+
+  //Titles
+  $titlesFontFamily: $titleFont;
+
+//Section show
+$showSectionPadding: 0 30px;
+%sectionStyle {
+  width: 60%;
+  margin: auto;
+  background-color: $grey01;
+  border: 1px solid $grey03;
+  box-sizing: border-box;
+}
+
+  //Header section title 1
+  $headerTitle1Width: 100%;
+  $headerTitle1TopPosition: 20px;
+  $headerTitle1Margin: 0 auto;
+  $headerTitle1FontSize: 4em;
+
+  //Article
+
+    //Article section title 2
+    $articleTitle2MarginTop: 0;
+
+    //Article section title 3
+    $articleTitle3TextAlign: left;
+
+    //Pictures
+
+      //Pictures div container
+      $articlePicturesContainerFlexBasis: 25%;
+      $articlePicturesContainerPadding: 5px;
+      $articlePicturesContainerCursor: Pointer;
+
+    //Videos
+
+      //Video container
+      $containerPerLine: 2;
+      $articleVideoContainerFlexBasis: 100% / $containerPerLine;
+      $articleVideoContainerPaddingBottom: 56.25% / $containerPerLine;
+      $articleVideoContainerPaddingTop: 30px;
+      $articleVideoContainerHeight: 0;
+      $articleVideoContainerOverflow: hidden;
+      $articleVideoIframeTop: 0;
+      $articleVideoIframeLeft: 0;
+      $articleVideoIframeWidth: 100%;
+      $articleVideoIframeHeight: 100%;
+
+  //Footer section
+  $footerSectionJustifyContent: space-around;
+  $footerSectionMargin: 15px 0;
+
+    //Footer section div and label
+    $footerSectionDivPadding: 7px;
+    $footerSectionDivBorderRadius: 15px;
+
+//Section com
+$sectionComMarginTop: 50px;
+
+  //Comment
+  $sectionComCommentMargin: 20px 0;
+  $sectionComPadding: 15px;
+
+    //header
+
+      //Title
+      $sectionComCommentTitleAndDateMargin: 0;
+      $sectionComCommentTitleFontSize: 1.2em;
+
+      //Date
+      $sectionComCommentDateFontSize: 0.8em;
+
+//Footer
+$footerPageMarginTop: 0;
+
+//Other
+
+  //Picture span vertical align helper
+  %helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  //Picture vertical align with helper
+  %imgWithHelper {
+    width: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    left: -4px;
+  }
+
+  @mixin pseudoElement($position) {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, $totallyTransparent, $black, $totallyTransparent);
+
+    @if($position == "top") {
+      margin-top: 15px;
+    } @else if($position == "bottom") {
+      margin-bottom: 15px;
+    }
+  }

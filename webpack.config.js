@@ -22,11 +22,13 @@ Encore
     .addEntry('js/scrollspy', './assets/js/scrollspy.js')
     .addEntry('js/footerPosition', './assets/js/footerPosition.js')
 
+    .addEntry('js/tricks/modal', './assets/js/tricks/modal.js')
 
     .addStyleEntry('css/global', './assets/scss/global.scss')
     .addStyleEntry('css/form', './assets/scss/form.scss')
 
     .addStyleEntry('css/trick/home', './assets/scss/trick/home.scss')
+    .addStyleEntry('css/trick/show', './assets/scss/trick/show.scss')
 
     .addStyleEntry('css/security/formFrame', './assets/scss/security/formFrame.scss')
 

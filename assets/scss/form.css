@@ -54,5 +54,8 @@
       font-weight: bold; }
       .section-form form button:hover, .section-form form button:active {
         box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1); }
+      .section-form form button span {
+        display: inline-block;
+        vertical-align: middle; }
 
 /*# sourceMappingURL=form.css.map */

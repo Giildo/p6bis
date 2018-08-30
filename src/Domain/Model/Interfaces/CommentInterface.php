@@ -33,9 +33,9 @@ interface CommentInterface
     public function getCreatedAt(): DateTime;
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getUpdatedAt(): DateTime;
+    public function getUpdatedAt(): ?DateTime;
 
     /**
      * @return TrickInterface

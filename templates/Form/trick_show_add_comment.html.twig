@@ -1,0 +1,20 @@
+{% use '/Form/form_general_layout.html.twig' %}
+
+{% block form %}
+    <section class="section-form">
+        {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+
+        <div class="form-fields">
+            {{ form_row(form.comment) }}
+        </div>
+
+        <button type="submit">
+            <span class="material-icons">question_answer</span>
+            <span>Ajouter un commentaire</span>
+        </button>
+
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

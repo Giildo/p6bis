@@ -3,7 +3,10 @@
 
 // General
 $red: #f04546;
+$redHover: #f01f29;
 $green: #15c26b;
+$orange: #ff9c41;
+$orangeHover: #ff9112;
 $blue: #02b3e4;
 $blueHover: #12d0e4;
 $white: #fffaf5;
@@ -23,3 +26,6 @@ $greyBlackHover: #1c202b;
 
 // Transparent color
 $blackTransparent: rgba(0,0,0,0.1);
+$whiteTransparent: rgba(255,255,255,0.1);
+$greyTransparent: rgba(200,200,200,0.5);
+$totallyTransparent: rgba(255,255,255,0);

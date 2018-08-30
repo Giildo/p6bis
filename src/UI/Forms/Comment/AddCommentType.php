@@ -16,7 +16,11 @@ class AddCommentType extends AbstractType
     {
         $builder->add('comment', TextareaType::class, [
             'required' => false,
-            'label'    => 'Votre commentaire',
+            'error_bubbling' => true,
+            'attr'           => [
+                'placeholder' => 'Votre commentaire',
+                'class'       => 'form-control',
+            ],
         ]);
     }
 

@@ -68,6 +68,11 @@
       &:hover, &:active {
         box-shadow: $formButtonShadowSizeHover $blackTransparent;
       }
+
+      span {
+        display: inline-block;
+        vertical-align: middle;
+      }
     }
   }
 }

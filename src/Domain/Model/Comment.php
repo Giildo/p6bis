@@ -110,7 +110,7 @@ class Comment implements CommentInterface
     /**
      * {@inheritdoc}
      */
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }

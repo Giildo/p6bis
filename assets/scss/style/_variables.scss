@@ -1,13 +1,8 @@
 @import "color";
+@import "font";
 
 /* CORE */
 //========================================================
-  //Text
-  $baseFont: 'Raleway', sans-serif;
-  $titleFont: 'Jura', sans-serif;
-  $linkColor: $greyBlack;
-  $linkColorHover: $greyBlackHover;
-
   //FlashMessage
   $flashMessagePadding: 20px 25px;
 
@@ -74,8 +69,10 @@
 //========================================================
 
   //Header
-  $homeH1FontSize: 4em;
-  $homeH1TextShift: 15px;
+  $homeH1FontSize: 5em;
+  $homeH1TextShift: 20px;
+  $homeH1TextBlurring: 10px;
+
 
   //Section
   $homeSectionPadding: 0 50px;

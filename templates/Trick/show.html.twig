@@ -1,61 +1,163 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}{{ trick.name }}{% endblock %}
 
 {% block stylesheets %}
-
+    <link rel="stylesheet" href="/build/css/trick/show.css"/>
 {% endblock %}
 
 {% block body %}
-    <h1>Page de présentation de la figure {{ trick.name }}</h1>
+    <section id="section-show">
+        <header>
+            {% set headPicture = false %}
+            {% if trick.pictures is not empty %}
+                {% for picture in trick.pictures %}
+                    {% if picture.headPicture == true %}
+                        <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
+                             alt="{{ picture.description }}" class="img-fluid"/>
+                        {% set headPicture = true %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
 
-    <p>Description : {{ trick.description }}</p>
+            {% if headPicture == false %}
+                <img src="/pic/general/head_picture.jpg" alt="Photo par défaut"/>
+            {% endif %}
+            <h1>&laquo; {{ trick.name }} &raquo;</h1>
+        </header>
 
+        <article>
+            <h2>Description</h2>
+            <p>{{ trick.description }}</p>
+
+            <!-- Media -->
+            {% if trick.pictures is not empty or trick.videos is not empty %}
+                <h2>Médias</h2>
+            {% endif %}
+
+            <!-- Pictures -->
+            {% if trick.pictures is not empty %}
+                <h3>Images :</h3>
+
+                <div id="show-pictures">
+                    {% for picture in trick.pictures %}
+                        <div class="thumbnail-pic">
+                            <span class="helper"></span>
+                            <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
+                                 alt="{{ picture.description }}"/>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Video -->
+            {% if trick.videos is not empty %}
+                <h3>Vidéos :</h3>
+
+                <div id="video-container">
+                    {% for video in trick.videos %}
+                        <div class="video-containers">
+                            <iframe src="https://www.youtube.com/embed/{{ video.name }}"
+                                    frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </article>
+
+        <footer>
+            <div><span class="label">Catégorie</span> {{ trick.category.name }}</div>
+            <div><span class="label">Auteur</span> {{ trick.author.username }}</div>
+
+            <div>
+                {% if trick.updatedAt is not null %}
+                    <span class="label">Modifiée le</span> {{ trick.updatedAt | date('Y-m-d H:i:s') }}
+                {% else %}
+                    <span class="label">Crée le</span> {{ trick.createdAt | date('Y-m-d H:i:s') }}
+                {% endif %}
+            </div>
+        </footer>
+    </section>
+
+    <!-- Comment section -->
+    <section id="section-com">
+        <h2>Espace de discussion</h2>
+
+        {% if app.user is not null %}
+            {% form_theme formComment 'Form/trick_show_add_comment.html.twig' %}
+            {{ form(formComment) }}
+        {% endif %}
+
+        {% if trick.comments is not empty %}
+            <div id="comments">
+                {% for comment in trick.comments %}
+                    <div class="comment">
+                        <header>
+                            <!--<div>
+                            <img src="/pic/users/{# comment.author.picture.username #}.{# comment.author.picture.extension #}"
+                                 alt="{# comment.author.picture.description #}">
+                        </div>-->
+                            <h5>{{ comment.author.username }}</h5>
+                        </header>
+                        <section>
+                            <p>{{ comment.comment }}</p>
+                        </section>
+                        <footer>
+                            <p>Publié le {{ comment.createdAt | date('Y-m-d H:i:s') }}</p>
+                            {% if comment.updatedAt is not null %}
+                                <p>Modifié le {{ comment.updatedAt | date('Y-m-d H:i:s') }}</p>
+                            {% endif %}
+                            {% if app.user is not null and (is_granted('ROLE_ADMIN') or app.user == comment.author) %}
+                                <div>
+                                    <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}?action=modifier&id={{ comment.id }}"
+                                       class="material-icons update">create</a>
+                                    <a href="{{ path('Trick_show_comment_deletion', {'trickSlug': trick.slug, 'id': comment.id}) }}"
+                                       class="material-icons delete">delete</a>
+                                </div>
+                            {% endif %}
+                        </footer>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Modal windows -->
     {% if trick.pictures is not empty %}
-        {% for picture in trick.pictures %}
-            <h5>{{ picture.name }}</h5>
-        {% endfor %}
-    {% endif %}
+        <aside id="modalWindows">
+            <p><span class="material-icons" id="close">close</span></p>
 
-    {% if trick.videos is not empty %}
-        {% for video in trick.videos %}
-            <h5>{{ video.name }}</h5>
-        {% endfor %}
-    {% endif %}
+            <div id="modal-content">
+                <div id="display-picture">
+                    {% for picture in trick.pictures %}
+                        <div class="slide" data-index="{{ loop.index }}">
+                            <div class="number">{{ loop.index }}/{{ loop.length }}</div>
+                            <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
+                                 alt="{{ picture.description }}"/>
+                        </div>
+                    {% endfor %}
 
-    {% if app.user is not null %}
-        {{ form_start(formComment) }}
-        {{ form_widget(formComment) }}
-        <input type="submit" value="Valider" class="btn btn-success"/>
-        {{ form_end(formComment) }}
-    {% endif %}
+                    <div class="router">
+                        <button id="prev">&#10094;</button>
+                        <button id="next">&#10095;</button>
+                    </div>
+                </div>
 
-    {% if trick.comments is not empty %}
-        <table>
-            <thead>
-            <tr>
-                <th>Commentaire</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for comment in trick.comments %}
-                <tr>
-                    <td>{{ comment.author.username }} le {{ comment.createdAt | date('Y-m-d H:i:s') }} a dit
-                        : {{ comment.comment }}</td>
-                    <td>
-                        {% if app.user is not null and (is_granted('ROLE_ADMIN') or app.user == comment.author) %}
-                            <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}?action=modifier&id={{ comment.id }}"
-                               class="btn btn-success">Modifier</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                <div id="thumbnails">
+                    {% for picture in trick.pictures %}
+                        <div class="thumbnail">
+                            <span class="helper"></span>
+                            <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
+                                 alt="{{ picture.description }}" data-index="{{ loop.index }}"/>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
     {% endif %}
 {% endblock %}
 
 {% block javascripts %}
-
+    <script type="text/javascript" src="/build/js/tricks/modal.js"></script>
 {% endblock %}
