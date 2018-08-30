@@ -1,0 +1,29 @@
+{% use '/Form/form_general_layout.html.twig' %}
+
+{% block form %}
+    <section class="section-form">
+        {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+
+        <div class="form-fields">
+            {{ form_row(form.username) }}
+            <div class="field-group">
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.lastName) }}
+            </div>
+            <div class="field-group">
+                {{ form_row(form.mail) }}
+                {{ form_row(form.mail) }}
+            </div>
+            <div class="field-group">
+                {{ form_row(form.password) }}
+                {{ form_row(form.password) }}
+            </div>
+        </div>
+
+        <button type="submit"><span>S'enregistrer</span></button>
+
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

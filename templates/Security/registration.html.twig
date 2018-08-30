@@ -3,14 +3,22 @@
 {% block title %}Enregistrement d'un nouvel utilisateur{% endblock %}
 
 {% block stylesheets %}
-
+    <link rel="stylesheet" href="/build/css/security/formFrame.css"/>
 {% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Valider" />
-    {{ form_end(form) }}
+    <div id="group-button-form">
+        <div id="group-button">
+            <button class="button-security"><a href="/connexion">Connexion</a></button>
+            <button class="button-security active">Enregistrement</button>
+        </div>
+
+        <h1>Enregistrement d'un nouvel utilisateur</h1>
+        <p>Créer un compte vous permet de créer de nouvelle trick et laisser des commentaires.</p>
+
+        {% form_theme form 'Form/security_user_registration.html.twig' %}
+        {{ form(form) }}
+    </div>
 {% endblock %}
 
 {% block javascripts %}

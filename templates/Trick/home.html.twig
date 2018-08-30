@@ -3,42 +3,53 @@
 {% block title %}Snowtricks{% endblock %}
 
 {% block stylesheets %}
-
+    <link rel="stylesheet" href="/build/css/trick/home.css"/>
 {% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur la page d'accueil</h1>
-
-    <h5>
-        {% for message in app.flashes('messageFlash') %}
-            {{ message }}
-        {% endfor %}
-    </h5>
+    <h1>Snow<span>Tricks</span></h1>
 
     {% if tricks is not empty %}
-        <table>
-            <thead>
-            <tr>
-                <th>Nom de la figure</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
+        <section id="section-home">
             {% for trick in tricks %}
-                <tr>
-                    <td><a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}">{{ trick.name }}</a></td>
-                    {% if app.user != null and (app.user.username == trick.author.username or is_granted('ROLE_ADMIN')) %}
-                        <td>
-                            <button>Modifier</button>
-                            <button>Supprimer</button>
-                        </td>
-                    {% else %}
-                        <td></td>
-                    {% endif %}
-                </tr>
+                <article>
+                    <header>
+                        {% set picturePresent = false %}
+                        {% for picture in trick.pictures %}
+                            {% if picture.headPicture == true %}
+                                <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}">
+                                    <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
+                                         alt="{{ picture.description }}" class="img-fluid"/>
+                                </a>
+                                {% set picturePresent = true %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if picturePresent == false %}
+                            <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}">
+                                <img src="/pic/general/head_picture.jpg" alt="Image montrant un snowboarder."
+                                     class="img-fluid"/>
+                            </a>
+                        {% endif %}
+                    </header>
+
+                    <section>
+                        <h3>
+                            <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}">
+                                {{ trick.name|upper }}
+                            </a>
+                        </h3>
+                        <p class="card-description">{{ trick.description }}</p>
+                    </section>
+
+                    <footer>
+                        <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}" class="btn">
+                            <button>Voir la figure</button>
+                        </a>
+                    </footer>
+                </article>
             {% endfor %}
-            </tbody>
-        </table>
+        </section>
     {% else %}
         <h2>Désolé, aucune figure n'a été crée ou n'a été publiée.</h2>
     {% endif %}

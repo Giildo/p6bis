@@ -1,0 +1,17 @@
+@import "variables";
+
+.alert {
+  padding: $flashMessagePadding;
+  color: $white;
+  text-align: left;
+}
+
+.alert-error {
+  @extend .alert;
+  background: $red;
+}
+
+.alert-success {
+  @extend .alert;
+  background: $green;
+}

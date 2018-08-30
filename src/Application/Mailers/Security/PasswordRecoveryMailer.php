@@ -4,7 +4,7 @@ namespace App\Application\Mailers\Security;
 
 use App\Application\Mailers\Interfaces\Security\PasswordRecoveryMailerInterface;
 use Swift_Mailer;
-use Swift_Message;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
 class PasswordRecoveryMailer implements PasswordRecoveryMailerInterface
@@ -14,40 +14,41 @@ class PasswordRecoveryMailer implements PasswordRecoveryMailerInterface
      */
     private $mailer;
     /**
-     * @var Swift_Message
+     * @var Environment
      */
-    private $message;
+    private $twig;
 
     /**
      * PasswordRecoveryMailer constructor.
      * @param Swift_Mailer $mailer
      * @param Environment $twig
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function __construct(
         Swift_Mailer $mailer,
         Environment $twig
     ) {
         $this->mailer = $mailer;
-        $this->message = ($mailer->createMessage())
-            ->setFrom('giildo.jm@gmail.com')
-            ->setSubject('Récupération du mot de passe')
-            ->setBody(
-                $twig->render('Security/mailer.html.twig'),
-                'text/html'
-            );
+        $this->twig = $twig;
     }
 
     /**
-     * @param string $mail
-     * @return bool
+     * {@inheritdoc}
      */
-    public function message(string $mail): bool
+    public function message(UserInterface $user): bool
     {
-        $this->message->setTo($mail);
+        $message = $this->mailer->createMessage();
 
-        return $this->mailer->send($this->message);
+        $header = $message->embed(\Swift_Image::fromPath(__DIR__ .'/../../../../public/pic/general/header_mail.jpg'));
+        $logo = $message->embed(\Swift_Image::fromPath(__DIR__ .'/../../../../public/pic/general/logo.png'));
+
+        $message->setFrom('giildo.jm@gmail.com')
+            ->setSubject('Récupération du mot de passe')
+            ->setTo($user->getMail())
+            ->setBody(
+                $this->twig->render('Security/mailer.html.twig', compact('user', 'header', 'logo')),
+                'text/html'
+            );
+
+        return $this->mailer->send($message);
     }
 }

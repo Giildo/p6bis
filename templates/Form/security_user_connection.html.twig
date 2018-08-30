@@ -1,0 +1,30 @@
+{% use '/Form/form_general_layout.html.twig' %}
+
+{% block form %}
+    <section class="section-form">
+        {% for message in app.flashes('success') %}
+            <div class="alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="alert-error">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+
+        <div class="form-fields">
+            {{ form_row(form.username) }}
+            {{ form_row(form.password) }}
+        </div>
+
+        <button type="submit"><span>Se connecter</span></button>
+
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

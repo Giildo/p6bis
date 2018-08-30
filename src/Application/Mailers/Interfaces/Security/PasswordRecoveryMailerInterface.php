@@ -2,11 +2,13 @@
 
 namespace App\Application\Mailers\Interfaces\Security;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+
 interface PasswordRecoveryMailerInterface
 {
     /**
-     * @param string $mail
+     * @param UserInterface $user
      * @return bool
      */
-    public function message(string $mail): bool;
+    public function message(UserInterface $user): bool;
 }

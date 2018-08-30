@@ -1,0 +1,39 @@
+/* CORE */
+/* GLOBAL */
+/* HOME */
+#group-button-form {
+  border: 1px solid #c8c8c8;
+  background-color: #f0f0f0;
+  width: 35%;
+  margin: 50px auto; }
+  #group-button-form #group-button {
+    display: flex; }
+    #group-button-form #group-button .button-security {
+      background-color: #dcdcdc;
+      border: none;
+      border-bottom: 1px solid #c8c8c8;
+      outline: none;
+      padding: 14px 16px;
+      width: 50%;
+      transition: 0.3s;
+      font-size: 17px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
+      #group-button-form #group-button .button-security:first-child {
+        border-right: 1px solid #c8c8c8; }
+      #group-button-form #group-button .button-security a {
+        text-decoration: none;
+        color: #7d7d7d; }
+    #group-button-form #group-button .active {
+      border-bottom: none;
+      font-weight: bold;
+      color: #00050a;
+      background-color: #f0f0f0; }
+  #group-button-form h1 {
+    margin: 20px 0;
+    font-size: 1.8em; }
+  #group-button-form p {
+    padding: 10px 30px; }
+
+/*# sourceMappingURL=formFrame.css.map */

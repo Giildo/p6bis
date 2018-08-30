@@ -1,0 +1,295 @@
+@import "../style/variables";
+@import "../style/trick/showTrickVariables";
+
+#section-show {
+  @extend %sectionStyle;
+
+  header {
+    position: relative;
+
+    h1 {
+      position: absolute;
+      background: linear-gradient(to right, $whiteTransparent, $white, $whiteTransparent);
+      width: $headerTitle1Width;
+      top: $headerTitle1TopPosition;
+      font-family: $titleFont;
+      margin: $headerTitle1Margin;
+      display: inline;
+      font-size: $headerTitle1FontSize;
+    }
+  }
+
+  article {
+    p {
+      padding: $showSectionPadding;
+    }
+
+    h2 {
+      margin-top: $articleTitle2MarginTop;
+      font-family: $titlesFontFamily;
+
+      &::before {
+        @include pseudoElement("bottom");
+      }
+    }
+
+    h3 {
+      text-align: $articleTitle3TextAlign;
+      padding: $showSectionPadding;
+      font-family: $titlesFontFamily;
+    }
+
+    #show-pictures {
+      display: flex;
+      flex-wrap: wrap;
+
+      .thumbnail-pic {
+        flex-basis: $articlePicturesContainerFlexBasis;
+        padding: $articlePicturesContainerPadding;
+        box-sizing: border-box;
+        cursor: $articlePicturesContainerCursor;
+        white-space: nowrap;
+
+        .helper {
+          @extend %helper;
+        }
+
+        img {
+          @extend %imgWithHelper;
+        }
+      }
+    }
+
+    #video-container {
+      display: flex;
+      flex-wrap: wrap;
+
+      .video-containers {
+        flex-basis: $articleVideoContainerFlexBasis;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        position: relative;
+        padding-bottom: $articleVideoContainerPaddingBottom;
+        padding-top: $articleVideoContainerPaddingTop;
+        height: $articleVideoContainerHeight;
+        overflow: $articleVideoContainerOverflow;
+
+        iframe {
+          position: absolute;
+          top: $articleVideoIframeTop;
+          left: $articleVideoIframeLeft;
+          width: $articleVideoIframeWidth;
+          height: $articleVideoIframeHeight;
+        }
+      }
+    }
+
+    &::after {
+      @include pseudoElement("top");
+    }
+  }
+
+  footer {
+    display: flex;
+    justify-content: $footerSectionJustifyContent;
+    margin: $footerSectionMargin;
+
+    div {
+      background-color: $blueHover;
+      padding: {
+        top: $footerSectionDivPadding;
+        right: $footerSectionDivPadding;
+        bottom: $footerSectionDivPadding;
+        left: 0;
+      }
+      border-radius: $footerSectionDivBorderRadius;
+
+      .label {
+        background-color: $blue;
+        padding: $footerSectionDivPadding;
+        border-radius: $footerSectionDivBorderRadius;
+      }
+    }
+  }
+}
+
+#section-com {
+  @extend %sectionStyle;
+
+  margin-top: $sectionComMarginTop;
+
+  h2 {
+    font-family: $titlesFontFamily;
+  }
+
+  #comments {
+    display: flex;
+    padding: $showSectionPadding;
+    flex-direction: column;
+
+    .comment {
+      margin: $sectionComCommentMargin;
+      border: 1px solid $greyTransparent;
+
+      header {
+        background-color: $blueHover;
+        padding: $sectionComPadding;
+
+        h5 {
+          margin: $sectionComCommentTitleAndDateMargin;
+          text-align: left;
+          font-size: $sectionComCommentTitleFontSize;
+          font-weight: bold;
+        }
+      }
+
+      section {
+        padding: $sectionComPadding;
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        background-color: $grey02;
+
+        p:first-child {
+          padding-left: 15px;
+        }
+
+        div {
+          a {
+            text-decoration: none;
+            padding: 13px 25px;
+          }
+
+          .update {
+            background-color: $orange;
+
+            &:hover {
+              background-color: $orangeHover;
+            }
+          }
+
+          .delete {
+            background-color: $red;
+
+            &:hover {
+              background-color: $redHover;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#footer {
+  margin-top: $footerPageMarginTop;
+}
+
+#modalWindows {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: $black;
+
+  p {
+    margin: 0;
+    text-align: right;
+
+    #close {
+      color: $white;
+      cursor: pointer;
+      font-size: 2em;
+      font-weight: bold;
+    }
+  }
+
+  #modal-content {
+    width: 50%;
+    max-width: 1200px;
+    padding: 0;
+    margin: auto;
+
+    #display-picture {
+      position: relative;
+
+      .slide {
+        display: none;
+
+        img {
+          width: 100%;
+        }
+
+        .number {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          text-align: center;
+          font-size: 1.5em;
+          background: linear-gradient(to right, $whiteTransparent, $white, $whiteTransparent);
+        }
+      }
+
+      .router {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 250;
+
+        button {
+          width: 15%;
+          height: 30%;
+          cursor: pointer;
+          background-color: $totallyTransparent;
+          font-size: 3em;
+          border: none;
+          color: $greyBlackHover;
+
+          &:hover {
+            background-color: $greyTransparent;
+          }
+        }
+      }
+    }
+
+    #thumbnails {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      z-index: 500;
+
+      .thumbnail {
+        flex-basis: 20%;
+        align-items: center;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 2px;
+        cursor: pointer;
+        white-space: nowrap;
+
+        .helper {
+          @extend %helper;
+        }
+
+        img {
+          @extend %imgWithHelper;
+        }
+      }
+    }
+  }
+}

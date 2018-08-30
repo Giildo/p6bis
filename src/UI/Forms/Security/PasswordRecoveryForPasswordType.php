@@ -18,8 +18,19 @@ class PasswordRecoveryForPasswordType extends AbstractType
         $builder->add('password', RepeatedType::class, [
             'type'           => PasswordType::class,
             'required'       => false,
-            'first_options'  => ['label' => 'Nouveau mot de passe',],
-            'second_options' => ['label' => 'Vérifiez le mot de passe'],
+            'first_options'  => [
+                'attr'           => [
+                    'placeholder' => 'Nouveau mot de passe*',
+                    'class'       => 'form-control',
+                ],
+            ],
+            'second_options' => [
+                'attr'           => [
+                    'placeholder' => 'Vérifiez le mot de passe*',
+                    'class'       => 'form-control',
+                ],
+            ],
+            'error_bubbling' => true,
         ]);
     }
 

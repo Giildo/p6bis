@@ -1,0 +1,217 @@
+/* CORE */
+/* GLOBAL */
+/* HOME */
+/* TRICK SHOW */
+#section-show, #section-com {
+  width: 60%;
+  margin: auto;
+  background-color: #f0f0f0;
+  border: 1px solid #c8c8c8;
+  box-sizing: border-box; }
+
+#section-show article #show-pictures .thumbnail-pic .helper, #modalWindows #modal-content #thumbnails .thumbnail .helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle; }
+
+#section-show article #show-pictures .thumbnail-pic img, #modalWindows #modal-content #thumbnails .thumbnail img {
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  left: -4px; }
+
+#section-show header {
+  position: relative; }
+  #section-show header h1 {
+    position: absolute;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.1), #fffaf5, rgba(255, 255, 255, 0.1));
+    width: 100%;
+    top: 20px;
+    font-family: "Jura", sans-serif;
+    margin: 0 auto;
+    display: inline;
+    font-size: 4em; }
+#section-show article p {
+  padding: 0 30px; }
+#section-show article h2 {
+  margin-top: 0;
+  font-family: "Jura", sans-serif; }
+  #section-show article h2::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), #00050a, rgba(255, 255, 255, 0));
+    margin-bottom: 15px; }
+#section-show article h3 {
+  text-align: left;
+  padding: 0 30px;
+  font-family: "Jura", sans-serif; }
+#section-show article #show-pictures {
+  display: flex;
+  flex-wrap: wrap; }
+  #section-show article #show-pictures .thumbnail-pic {
+    flex-basis: 25%;
+    padding: 5px;
+    box-sizing: border-box;
+    cursor: Pointer;
+    white-space: nowrap; }
+#section-show article #video-container {
+  display: flex;
+  flex-wrap: wrap; }
+  #section-show article #video-container .video-containers {
+    flex-basis: 50%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+    padding-bottom: 28.125%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden; }
+    #section-show article #video-container .video-containers iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%; }
+#section-show article::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), #00050a, rgba(255, 255, 255, 0));
+  margin-top: 15px; }
+#section-show footer {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0; }
+  #section-show footer div {
+    background-color: #12d0e4;
+    padding-top: 7px;
+    padding-right: 7px;
+    padding-bottom: 7px;
+    padding-left: 0;
+    border-radius: 15px; }
+    #section-show footer div .label {
+      background-color: #02b3e4;
+      padding: 7px;
+      border-radius: 15px; }
+
+#section-com {
+  margin-top: 50px; }
+  #section-com h2 {
+    font-family: "Jura", sans-serif; }
+  #section-com #comments {
+    display: flex;
+    padding: 0 30px;
+    flex-direction: column; }
+    #section-com #comments .comment {
+      margin: 20px 0;
+      border: 1px solid rgba(200, 200, 200, 0.5); }
+      #section-com #comments .comment header {
+        background-color: #12d0e4;
+        padding: 15px; }
+        #section-com #comments .comment header h5 {
+          margin: 0;
+          text-align: left;
+          font-size: 1.2em;
+          font-weight: bold; }
+      #section-com #comments .comment section {
+        padding: 15px; }
+      #section-com #comments .comment footer {
+        display: flex;
+        justify-content: space-between;
+        background-color: #dcdcdc; }
+        #section-com #comments .comment footer p:first-child {
+          padding-left: 15px; }
+        #section-com #comments .comment footer div a {
+          text-decoration: none;
+          padding: 13px 25px; }
+        #section-com #comments .comment footer div .update {
+          background-color: #ff9c41; }
+          #section-com #comments .comment footer div .update:hover {
+            background-color: #ff9112; }
+        #section-com #comments .comment footer div .delete {
+          background-color: #f04546; }
+          #section-com #comments .comment footer div .delete:hover {
+            background-color: #f01f29; }
+
+#footer {
+  margin-top: 0; }
+
+#modalWindows {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: #00050a; }
+  #modalWindows p {
+    margin: 0;
+    text-align: right; }
+    #modalWindows p #close {
+      color: #fffaf5;
+      cursor: pointer;
+      font-size: 2em;
+      font-weight: bold; }
+  #modalWindows #modal-content {
+    width: 50%;
+    max-width: 1200px;
+    padding: 0;
+    margin: auto; }
+    #modalWindows #modal-content #display-picture {
+      position: relative; }
+      #modalWindows #modal-content #display-picture .slide {
+        display: none; }
+        #modalWindows #modal-content #display-picture .slide img {
+          width: 100%; }
+        #modalWindows #modal-content #display-picture .slide .number {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          text-align: center;
+          font-size: 1.5em;
+          background: linear-gradient(to right, rgba(255, 255, 255, 0.1), #fffaf5, rgba(255, 255, 255, 0.1)); }
+      #modalWindows #modal-content #display-picture .router {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 250; }
+        #modalWindows #modal-content #display-picture .router button {
+          width: 15%;
+          height: 30%;
+          cursor: pointer;
+          background-color: rgba(255, 255, 255, 0);
+          font-size: 3em;
+          border: none;
+          color: #1c202b; }
+          #modalWindows #modal-content #display-picture .router button:hover {
+            background-color: rgba(200, 200, 200, 0.5); }
+    #modalWindows #modal-content #thumbnails {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      z-index: 500; }
+      #modalWindows #modal-content #thumbnails .thumbnail {
+        flex-basis: 20%;
+        align-items: center;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 2px;
+        cursor: pointer;
+        white-space: nowrap; }
+
+/*# sourceMappingURL=show.css.map */

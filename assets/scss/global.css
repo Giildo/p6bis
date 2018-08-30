@@ -1,0 +1,77 @@
+/* CORE */
+/* GLOBAL */
+/* HOME */
+/* CORE */
+/* GLOBAL */
+/* HOME */
+.alert, .alert-error, .alert-success {
+  padding: 20px 25px;
+  color: #fffaf5;
+  text-align: left; }
+
+.alert-error {
+  background: #f04546; }
+
+.alert-success {
+  background: #15c26b; }
+
+/* GENERAL */
+body {
+  padding-top: 60px;
+  margin: 0;
+  background: url("/pic/general/header.jpg") top left fixed; }
+
+p, a, h1, h2, h3, h4, h5 {
+  font-family: "Raleway", sans-serif; }
+
+h1, h2, h3, h4, h5 {
+  text-align: center; }
+
+a {
+  color: #323944; }
+  a:hover {
+    text-decoration: none; }
+
+.img-fluid {
+  width: 100%;
+  height: auto; }
+
+/* NavBar */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  background-color: #495057;
+  display: flex;
+  z-index: 500; }
+  nav .nav-link {
+    line-height: 50px;
+    padding: 5px 15px;
+    vertical-align: middle;
+    color: #fffaf5;
+    font-weight: bold;
+    text-decoration: none; }
+    nav .nav-link:hover {
+      color: #f0f0f0;
+      border-bottom: 3px solid #f0f0f0; }
+  nav #logo {
+    width: 50px;
+    padding: 5px;
+    background-color: #7b8289; }
+
+/* Footer */
+#footer {
+  background-color: #495057;
+  width: 100%;
+  margin-top: 50px; }
+  #footer p {
+    margin: 0;
+    padding: 50px 0; }
+
+.footer-bottom {
+  position: absolute;
+  bottom: 0; }
+
+/*# sourceMappingURL=global.css.map */
