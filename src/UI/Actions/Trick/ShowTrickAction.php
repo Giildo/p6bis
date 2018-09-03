@@ -75,7 +75,7 @@ class ShowTrickAction
             return $this->responder->showTrickResponse(
                 true,
                 'Trick_show',
-                ['trickSlug' => $trickSlug]
+                ['trickSlug' => $trickSlug, '_fragment' => false]
             );
         }
 
