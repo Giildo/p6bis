@@ -45,7 +45,7 @@ class NewTrickResponder implements NewTrickResponderInterface
         ?FormInterface $form = null
     ): Response {
         return ($redirection) ?
-            new RedirectResponse($this->urlGenerator->generate('Trick_show', ['trickSlug' => $trick->getSlug()])) :
+            new RedirectResponse($this->urlGenerator->generate('Home')) :
             new Response($this->presenter->newTrickPresentation($form));
     }
 }

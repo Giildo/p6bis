@@ -1,10 +1,43 @@
 @import "../style/variables";
+@import "../style/color";
+
+//Form frame
+$frameBorderWidth: 1px;
+$frameBorderStyle: solid;
+$frameWidth-L: 35%;
+$frameWidth-M: 60%;
+$frameWidth-S: 100%;
+$frameMargin: 0 auto;
+
+//Button form frame
+$buttonFramePadding: 14px 16px;
+$buttonFrameFontSize: 17px;
+$buttonFrameTransitionTime: 0.2s;
+
+//Section form
+$sectionFormPadding: 10px 30px;
+
+//H1 form frame
+$h1FrameMargin: 20px 0;
+$h1FrameFontSize: 1.8em;
+
+//Link margin
+$linkMargin: 16px 0 0 0;
 
 #group-button-form {
   border: $frameBorderWidth $frameBorderStyle $grey03;
   background-color: $grey01;
-  width: $frameWidth;
+  width: $frameWidth-L;
   margin: $frameMargin;
+
+  @media all and (max-width: $medium) and (min-width: $small) {
+    width: $frameWidth-M;
+  }
+
+  @media all and (max-width: $small) {
+    border: none;
+    width: $frameWidth-S;
+  }
 
   #group-button {
     display: flex;
@@ -21,6 +54,7 @@
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
+
 
       &:first-child {
         border-right: $frameBorderWidth $frameBorderStyle $grey03;
@@ -47,5 +81,9 @@
 
   p {
     padding: $sectionFormPadding;
+
+    @media all and (max-width: $small) {
+      margin: $linkMargin;
+    }
   }
 }

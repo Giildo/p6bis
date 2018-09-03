@@ -11,5 +11,5 @@
 {%- endblock form_errors -%}
 
 {% block form_row %}
-    {{ form_widget(form) }}
+    <div class="form-block">{{ form_label(form) }}{{ form_widget(form) }}</div>
 {% endblock %}

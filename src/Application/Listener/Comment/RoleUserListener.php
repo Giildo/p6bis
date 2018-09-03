@@ -61,6 +61,7 @@ class RoleUserListener
                 'Trick_show',
                 ['trickSlug' => $request->attributes->get('trickSlug')]
             );
+            $request->getSession()->set('comment', null);
 
             if (preg_match("#{$uri}#", $request->getUri())) {
                 $comment = null;

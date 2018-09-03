@@ -1,14 +1,21 @@
 /* CORE */
 /* GLOBAL */
-/* HOME */
-/* TRICK SHOW */
+/* SHOW - NEW */
 #section-show, #section-com {
-  width: 60%;
+  width: 80%;
   margin: auto;
   background-color: #f0f0f0;
-  border: 1px solid #c8c8c8;
+  border: 1px solid #a0a2a9;
   box-sizing: border-box; }
+  @media screen and (max-width: 1024px) and (min-width: 740px) {
+    #section-show, #section-com {
+      width: 90%; } }
+  @media screen and (max-width: 740px) {
+    #section-show, #section-com {
+      width: 100%;
+      border: none; } }
 
+/* VARIABLES */
 #section-show article #show-pictures .thumbnail-pic .helper, #modalWindows #modal-content #thumbnails .thumbnail .helper {
   display: inline-block;
   height: 100%;
@@ -21,6 +28,7 @@
   position: relative;
   left: -4px; }
 
+/* CSS */
 #section-show header {
   position: relative; }
   #section-show header h1 {
@@ -31,7 +39,7 @@
     font-family: "Jura", sans-serif;
     margin: 0 auto;
     display: inline;
-    font-size: 4em; }
+    font-size: 6.5vw; }
 #section-show article p {
   padding: 0 30px; }
 #section-show article h2 {
@@ -57,19 +65,29 @@
     box-sizing: border-box;
     cursor: Pointer;
     white-space: nowrap; }
+    @media screen and (max-width: 1024px) and (min-width: 740px) {
+      #section-show article #show-pictures .thumbnail-pic {
+        flex-basis: 33%; } }
+    @media screen and (max-width: 740px) {
+      #section-show article #show-pictures .thumbnail-pic {
+        flex-basis: 50%; } }
 #section-show article #video-container {
   display: flex;
   flex-wrap: wrap; }
   #section-show article #video-container .video-containers {
     flex-basis: 50%;
+    padding-bottom: 28.125%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     position: relative;
-    padding-bottom: 28.125%;
     padding-top: 30px;
     height: 0;
     overflow: hidden; }
+    @media screen and (max-width: 740px) {
+      #section-show article #video-container .video-containers {
+        flex-basis: 100%;
+        padding-bottom: 56.25%; } }
     #section-show article #video-container .video-containers iframe {
       position: absolute;
       top: 0;
@@ -87,15 +105,22 @@
   display: flex;
   justify-content: space-around;
   margin: 15px 0; }
+  @media screen and (max-width: 1024px) {
+    #section-show footer {
+      flex-direction: column; } }
   #section-show footer div {
-    background-color: #12d0e4;
+    background-color: #b1a513;
     padding-top: 7px;
     padding-right: 7px;
     padding-bottom: 7px;
     padding-left: 0;
     border-radius: 15px; }
+    @media screen and (max-width: 1024px) {
+      #section-show footer div {
+        margin: 10px; } }
     #section-show footer div .label {
       background-color: #02b3e4;
+      color: #00050a;
       padding: 7px;
       border-radius: 15px; }
 
@@ -111,8 +136,9 @@
       margin: 20px 0;
       border: 1px solid rgba(200, 200, 200, 0.5); }
       #section-com #comments .comment header {
-        background-color: #12d0e4;
-        padding: 15px; }
+        background-color: #0083b2;
+        padding: 15px;
+        color: #fffaf5; }
         #section-com #comments .comment header h5 {
           margin: 0;
           text-align: left;
@@ -123,12 +149,18 @@
       #section-com #comments .comment footer {
         display: flex;
         justify-content: space-between;
-        background-color: #dcdcdc; }
-        #section-com #comments .comment footer p:first-child {
-          padding-left: 15px; }
+        background-color: #d7d7d9; }
+        #section-com #comments .comment footer p {
+          padding-left: 15px;
+          font-size: 12px; }
         #section-com #comments .comment footer div a {
           text-decoration: none;
           padding: 13px 25px; }
+          @media screen and (max-width: 740px) {
+            #section-com #comments .comment footer div a {
+              border-radius: 50%;
+              padding: 5px;
+              margin: 2px; } }
         #section-com #comments .comment footer div .update {
           background-color: #ff9c41; }
           #section-com #comments .comment footer div .update:hover {
@@ -145,16 +177,22 @@
   display: none;
   position: fixed;
   z-index: 1;
-  padding-top: 60px;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
   background-color: #00050a; }
+  @media screen and (min-width: 740px) {
+    #modalWindows {
+      margin-top: 60px; } }
   #modalWindows p {
     margin: 0;
     text-align: right; }
+    @media screen and (max-width: 740px) {
+      #modalWindows p {
+        position: absolute;
+        bottom: 0; } }
     #modalWindows p #close {
       color: #fffaf5;
       cursor: pointer;
@@ -165,6 +203,9 @@
     max-width: 1200px;
     padding: 0;
     margin: auto; }
+    @media screen and (max-width: 740px) {
+      #modalWindows #modal-content {
+        width: 100%; } }
     #modalWindows #modal-content #display-picture {
       position: relative; }
       #modalWindows #modal-content #display-picture .slide {

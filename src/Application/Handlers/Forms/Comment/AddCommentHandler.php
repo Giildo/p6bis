@@ -60,6 +60,7 @@ class AddCommentHandler implements AddCommentHandlerInterface
             $comment->updateComment($dto);
 
             $this->commentRepository->saveComment($comment);
+            $request->getSession()->set('comment', null);
 
             return true;
         }

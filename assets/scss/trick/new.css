@@ -1,0 +1,33 @@
+/* CORE */
+/* GLOBAL */
+/* SHOW - NEW */
+.section-form {
+  width: 80%;
+  margin: auto;
+  background-color: #f0f0f0;
+  border: 1px solid #a0a2a9;
+  box-sizing: border-box; }
+  @media screen and (max-width: 1024px) and (min-width: 740px) {
+    .section-form {
+      width: 90%; } }
+  @media screen and (max-width: 740px) {
+    .section-form {
+      width: 100%;
+      border: none; } }
+
+.section-form {
+  margin-top: 5vh; }
+  .section-form h1 {
+    font-family: "Jura", sans-serif; }
+  .section-form .collection-group:before {
+    content: '';
+    width: 90%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), #00050a, rgba(255, 255, 255, 0));
+    height: 1px;
+    display: block;
+    margin: 20px auto; }
+  .section-form .collection-group .form-block div {
+    display: flex;
+    flex-direction: column; }
+
+/*# sourceMappingURL=new.css.map */

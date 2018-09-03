@@ -17,18 +17,19 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
-    .addEntry('js/collectionPicture', './assets/js/collectionPicture.js')
-    .addEntry('js/collectionVideo', './assets/js/collectionVideo.js')
-    .addEntry('js/scrollspy', './assets/js/scrollspy.js')
-    .addEntry('js/footerPosition', './assets/js/footerPosition.js')
+    .addEntry('js/collectionTypeTrickModification', './assets/js/collectionTypeTrickModification.js')
+    .addEntry('js/collectionTypeNewTrick', './assets/js/collectionTypeNewTrick.js')
+    .addEntry('js/menuButton', './assets/js/menuButton.js')
 
     .addEntry('js/tricks/modal', './assets/js/tricks/modal.js')
+    .addEntry('js/tricks/commentButton', './assets/js/tricks/commentButton.js')
 
-    .addStyleEntry('css/global', './assets/scss/global.scss')
+    .addStyleEntry('css/global', './assets/scss/global/global.scss')
     .addStyleEntry('css/form', './assets/scss/form.scss')
 
     .addStyleEntry('css/trick/home', './assets/scss/trick/home.scss')
     .addStyleEntry('css/trick/show', './assets/scss/trick/show.scss')
+    .addStyleEntry('css/trick/new', './assets/scss/trick/new.scss')
 
     .addStyleEntry('css/security/formFrame', './assets/scss/security/formFrame.scss')
 

@@ -1,0 +1,34 @@
+@import "../style/variables";
+@import "../style/mixin";
+
+.section-form {
+  @extend %sectionStyle;
+
+  margin-top: 5vh;
+
+  h1 {
+    font-family: $titleFont;
+  }
+
+  .collection-group {
+    &:before {
+      content: '';
+      width: 90%;
+      background: linear-gradient(to right, $totallyTransparent, $black, $totallyTransparent);
+      height: 1px;
+      display: block;
+      margin: 20px auto;
+    }
+
+    .form-block {
+      div {
+        display: flex;
+        flex-direction: column;
+
+        button {
+
+        }
+      }
+    }
+  }
+}

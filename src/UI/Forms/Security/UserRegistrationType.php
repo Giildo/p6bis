@@ -47,12 +47,14 @@ class UserRegistrationType extends AbstractType
                 'type'           => EmailType::class,
                 'required'       => false,
                 'first_options'  => [
+                    'label' => false,
                     'attr' => [
                         'placeholder' => 'Adresse mail*',
                         'class'       => 'form-control',
                         ],
                     ],
                 'second_options' => [
+                    'label' => false,
                     'attr' => [
                         'placeholder' => 'Confirmer l\'adresse mail*',
                         'class'       => 'form-control',
@@ -64,12 +66,14 @@ class UserRegistrationType extends AbstractType
                 'type'           => PasswordType::class,
                 'required'       => false,
                 'first_options'  => [
+                    'label' => false,
                     'attr' => [
                         'placeholder' => 'Mot de passe*',
                         'class'       => 'form-control',
                         ],
                     ],
                 'second_options' => [
+                    'label' => false,
                     'attr' => [
                         'placeholder' => 'Confirmer le mot de passe*',
                         'class'       => 'form-control',
