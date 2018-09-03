@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="language" content="fr-FR">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}Snowtricks{% endblock %}</title>
 
     <!-- CSS -->
@@ -19,27 +21,38 @@
 <body>
 
 <nav id="navbar">
-    <a href="/accueil">
+    <a href="/accueil" id="logo-link">
         <img src="/pic/general/logo.png" alt="Logo du site SnowTrick représentant un snowboarder qui fait un figure"
              id="logo"/>
     </a>
-    <a href="/accueil#tricks" id="a_scrollspy" class="nav-link">Tricks</a>
+    <a href="/accueil#tricks" id="a_scrollspy" class="nav-link material-icons">home</a>
     {% if app.user is null %}
         <a class="nav-link" href="/connexion">Connexion</a>
         <a class="nav-link" href="/enregistrement">S'enregistrer</a>
     {% else %}
+        <div id="dropdown">
+            <a id="drop-btn" class="nav-link">Administration</a>
+            <div id="drop-content">
+                <a href="/espace-utilisateur/trick/nouvelle-figure" class="nav-link">Nouvelle trick</a>
+                <a href="/espace-utilisateur/trick/gestion" class="nav-link">Gestion des tricks</a>
+            </div>
+        </div>
         <a class="nav-link" href="/deconnexion">Déconnexion</a>
     {% endif %}
 </nav>
 
-{% block body %}{% endblock %}
+<button class="material-icons" id="menu-icon-open">menu</button>
+<button class="material-icons" id="menu-icon-close">close</button>
+
+<div id="body">
+    {% block body %}{% endblock %}
+</div>
 
 <footer id="footer">
     <p>Jojotique tout droits réservés, 2018.</p>
 </footer>
 
-<script type="text/javascript" src="/build/js/scrollspy.js"></script>
-<script type="text/javascript" src="/build/js/footerPosition.js"></script>
+<script type="text/javascript" src="/build/js/menuButton.js"></script>
 {% block javascripts %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,54 @@
+@import "../style/variables";
+@import "../style/alerts";
+
+body {
+  position: relative;
+  margin: 0;
+  background: url("/pic/general/header.jpg") top left fixed;
+}
+
+#body {
+  min-height: calc(100vh - 120px);
+}
+
+@media all and (min-width: $small) {
+  body {
+    padding-top: $navHeight-M;
+  }
+
+  #body {
+    margin: 50px 0;
+    min-height: calc(100vh - 280px);
+  }
+}
+
+p, a, h1, h2, h3, h4, h5, label {
+  font-family: $baseFont;
+}
+
+h1, h2, h3, h4, h5 {
+  text-align: center;
+}
+
+a {
+  color: $linkColor;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.img-fluid {
+  width: 100%;
+  height: auto;
+}
+
+@import "nav";
+
+@import "footer";
+
+@media all and (max-width: $small){
+  .sf-minitoolbar {
+    display: none !important;
+  }
+}

@@ -3,89 +3,36 @@
 
 /* CORE */
 //========================================================
+  //Limits
+  $small: 740px;
+  $medium: 1024px;
+
   //FlashMessage
   $flashMessagePadding: 20px 25px;
-
-  //Form frame
-  $frameBorderWidth: 1px;
-  $frameBorderStyle: solid;
-  $frameWidth: 35%;
-  $frameMargin: 50px auto;
-
-    //Button form frame
-    $buttonFramePadding: 14px 16px;
-    $buttonFrameFontSize: 17px;
-    $buttonFrameTransitionTime: 0.3s;
-
-      //Section form
-      $sectionFormMargin: 0 auto 20px auto;
-      $sectionFormPadding: 10px 30px;
-
-        //Form
-        $formMargin: 5px 0;
-        $formPadding: 6px 12px;
-        $formFontSize: 1rem;
-        $formLineHeight: 1.5;
-
-          //Fields
-          $fieldTransition: .15s ease-in-out;
-          $fieldFontColor: $greyBlue;
-          $fieldBGColor: $white;
-          $fieldBorder: 1px solid $greyAlu;
-          $fieldBorderRadius: 5px;
-          $fieldBorderFocus: 1px solid $greyBlack;
-          $fieldBoxShadowFocus: 0 0 10px $greyBlack;
-          $fieldBGColorFocus: $grey01;
-
-          //Button
-          $formButtonBorderRadius: 5px;
-          $formButtonWidth: 100%;
-          $formButtonPadding: 0.7em 4em;
-          $formButtonMarginTop: 5px;
-          $formButtonShadowSize: 12px 15px 20px;
-          $formButtonShadowSizeHover: 2px 4px 8px;
-          $formButtonTransition: 0.2s ease-in-out;
-
-    //H1 form frame
-    $h1FrameMargin: 20px 0;
-    $h1FrameFontSize: 1.8em;
 
 /* GLOBAL */
 //========================================================
 
-  //Navbar
-  $navBGColor: $greyBlue;
-  $navHeight: 60px;
+$navHeight-M: 60px;
+$navHeight-S: 100vh;
 
-    //Navabar/Elements
-    $navElementsHeight: $navHeight - 10px;
-    $navElementsMargin: ($navHeight - $navElementsHeight) / 2;
-    $navElementsMarginSides: $navElementsMargin * 3;
-    $navLinkColor: $white;
-    $navLinkColorHover: $grey01;
-    $navLinkBorderSize: 3px;
-
-/* HOME */
+/* SHOW - NEW */
 //========================================================
 
-  //Header
-  $homeH1FontSize: 5em;
-  $homeH1TextShift: 20px;
-  $homeH1TextBlurring: 10px;
+//Section
+%sectionStyle {
+  width: 80%;
+  margin: auto;
+  background-color: $grey01;
+  border: 1px solid $grey03;
+  box-sizing: border-box;
 
+  @media screen and (max-width: $medium) and (min-width: $small) {
+    width: 90%;
+  }
 
-  //Section
-  $homeSectionPadding: 0 50px;
-
-    //Article
-    $homeSectionArticleWidthFlexCard: 31%;
-    $homeSectionArticleMarginSize: 1%;
-    $homeSectionArticlePaddingSize: 5px;
-    $homeSectionArticleBorderCardWidth: 1px;
-    $homeSectionArticleBorderCardStyle: solid;
-    $homeSectionArticleBorderRadiusCard: 10px;
-
-    //Button
-    $homeSectionArticleButtonPadding: 15px;
-    $homeSectionArticleButtonTransition: 0.2s;
-    $homeSectionArticleButtonBorderRadius: 8px;
+  @media screen and (max-width: $small) {
+    width: 100%;
+    border: none;
+  }
+}

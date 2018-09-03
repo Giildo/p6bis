@@ -1,5 +1,28 @@
 @import "../style/variables";
 
+//Header
+$homeH1FontSize: 8vw;
+$homeH1TextShift: 1vw;
+$homeH1TextBlurring: 0.5vw;
+
+//Section
+$homeSectionPadding: 0 3vw;
+
+//Article
+$homeSectionArticleWidthFlexCard-L: 31%;
+$homeSectionArticleWidthFlexCard-M: 48%;
+$homeSectionArticleWidthFlexCard-S: 100%;
+$homeSectionArticleMarginSize: 1%;
+$homeSectionArticlePaddingSize: 15px;
+$homeSectionArticleBorderCardWidth: 1px;
+$homeSectionArticleBorderCardStyle: solid;
+$homeSectionArticleBorderRadiusCard: 10px;
+
+//Button
+$homeSectionArticleButtonPadding: 15px;
+$homeSectionArticleButtonTransition: 0.2s;
+$homeSectionArticleButtonBorderRadius: 8px;
+
 h1 {
   font: {
     size: $homeH1FontSize;
@@ -24,7 +47,16 @@ h1 {
   padding: $homeSectionPadding;
 
   article {
-    flex-basis: $homeSectionArticleWidthFlexCard;
+    flex-basis: $homeSectionArticleWidthFlexCard-L;
+
+    @media screen and (max-width: $medium) and (min-width: $small) {
+      flex-basis: $homeSectionArticleWidthFlexCard-M;
+    }
+
+    @media screen and (max-width: $small) {
+      flex-basis: $homeSectionArticleWidthFlexCard-S;
+    }
+
     margin: $homeSectionArticleMarginSize;
     border: $homeSectionArticleBorderCardWidth $homeSectionArticleBorderCardStyle $grey04;
     border-radius: $homeSectionArticleBorderRadiusCard;
@@ -71,10 +103,11 @@ h1 {
           font-weight: bold;
 
           &:hover {
-            background-color: $blueHover;
+            background-color: $blueLight;
           }
         }
       }
     }
   }
 }
+

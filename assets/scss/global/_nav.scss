@@ -1,0 +1,148 @@
+@import "../style/variables";
+@import "../style/color";
+
+//Navbar
+$navBGColor: $greyBlue;
+
+//Navabar/Elements
+$navElementsHeight: $navHeight-M - 10px;
+$navElementsMargin: ($navHeight-M - $navElementsHeight) / 2;
+$navElementsMarginSides: $navElementsMargin * 3;
+$navLinkColor: $white;
+$navLinkColorHover: $grey01;
+$navLinkBorderSize: 3px;
+
+nav {
+  #logo {
+    width: $navElementsHeight;
+    padding: $navElementsMargin;
+    background-color: $navBGColor + 50;
+  }
+
+  @media screen and (max-width: $small) {
+    #logo-link {
+      display: none;
+    }
+  }
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: $navHeight-M;
+  width: 100%;
+  background-color: $navBGColor;
+  display: flex;
+  z-index: 500;
+
+  @media screen and (max-width: $small) {
+    top: auto;
+    bottom: 0;
+    left: 100vw;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-align: right;
+    height: $navHeight-S;
+    padding-bottom: 50px;
+    transition: 0.5s;
+  }
+
+  .nav-link {
+    line-height: $navElementsHeight;
+    padding: $navElementsMargin $navElementsMarginSides;
+    vertical-align: middle;
+    color: $navLinkColor;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      color: $navLinkColorHover;
+      border-bottom: $navLinkBorderSize solid $navLinkColorHover;
+
+      @media screen and (max-width: $small) {
+        border-bottom: none;
+      }
+    }
+  }
+
+  #dropdown {
+    @media screen and (max-width: $small) {
+      background-color: $grey03;
+    }
+
+    .nav-link {
+      display: inline-block;
+      height: 100%;
+      padding: 5px 15px 0 15px;
+      box-sizing: border-box;
+      cursor: pointer;
+
+      @media screen and (max-width: $small) {
+        color: $black;
+      }
+    }
+
+    #drop-content {
+      display: none;
+      background-color: $grey02;
+
+      @media screen and (max-width: $small) {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .nav-link {
+        color: $black;
+        line-height: $navElementsHeight;
+
+        &:hover {
+          border: none;
+          background-color: $grey03;
+
+          @media screen and (max-width: $small) {
+            border: none;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      #drop-content {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #drop-btn {
+        border-bottom: $navLinkBorderSize solid $navLinkColorHover;
+
+        @media screen and (max-width: $small) {
+          border: none;
+        }
+      }
+    }
+  }
+}
+
+#menu-icon-close, #menu-icon-open {
+  display: none;
+
+  @media screen and (max-width: $small) {
+    z-index: 500;
+    position: fixed;
+    bottom: 1.5vw;
+    right: 1.5vw;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: $blueLight;
+    border: 1px solid $grey05;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: $small) {
+  #menu-icon-open {
+    display: block;
+  }
+}
+
+

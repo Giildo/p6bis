@@ -1,5 +1,49 @@
 @import "style/variables";
 
+//Form frame
+$frameBorderWidth: 1px;
+$frameBorderStyle: solid;
+$frameWidth: 35%;
+$frameMargin: 0 auto;
+
+//Button form frame
+$buttonFramePadding: 14px 16px;
+$buttonFrameFontSize: 17px;
+$buttonFrameTransitionTime: 0.2s;
+
+//Section form
+$sectionFormMargin: 0 auto 20px auto;
+$sectionFormPadding: 10px 30px;
+
+//Form
+$formMargin: 5px 0;
+$formPadding: 6px 12px;
+$formFontSize: 1rem;
+$formLineHeight: 1.5;
+
+//Fields
+$fieldTransition: .15s ease-in-out;
+$fieldFontColor: $greyBlue;
+$fieldBGColor: $white;
+$fieldBorder: 1px solid $greyAlu;
+$fieldBorderRadius: 5px;
+$fieldBorderFocus: 1px solid $greyBlack;
+$fieldBoxShadowFocus: 0 0 10px $greyBlack;
+$fieldBGColorFocus: $grey01;
+
+//Button
+$formButtonBorderRadius: 5px;
+$formButtonWidth: 100%;
+$formButtonPadding: 0.7em 4em;
+$formButtonMarginTop: 5px;
+$formButtonShadowSize: 12px 15px 20px;
+$formButtonShadowSizeHover: 2px 4px 8px;
+$formButtonTransition: 0.2s ease-in-out;
+
+//H1 form frame
+$h1FrameMargin: 20px 0;
+$h1FrameFontSize: 1.8em;
+
 .section-form {
   margin: $sectionFormMargin;
   padding: $sectionFormPadding;
@@ -17,6 +61,20 @@
 
         .form-control {
           width: 43%;
+        }
+
+        div {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+
+          .form-block {
+            width: 48%;
+
+            input {
+              width: 100%;
+            }
+          }
         }
       }
 
@@ -52,7 +110,7 @@
       border-radius: $formButtonBorderRadius;
       border: none;
       width: $formButtonWidth;
-      color: $white;
+      color: $black;
       padding: $formButtonPadding;
       margin-top: $formButtonMarginTop;
       -webkit-box-shadow: $formButtonShadowSize $blackTransparent;
@@ -67,12 +125,17 @@
 
       &:hover, &:active {
         box-shadow: $formButtonShadowSizeHover $blackTransparent;
+        background-color: $blueLight;
       }
 
       span {
         display: inline-block;
         vertical-align: middle;
       }
+    }
+
+    input, textarea {
+      font-family: $baseFont;
     }
   }
 }

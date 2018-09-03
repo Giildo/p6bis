@@ -1,5 +1,119 @@
+@import "../style/color";
+@import "../style/font";
+@import "../style/mixin";
 @import "../style/variables";
-@import "../style/trick/showTrickVariables";
+
+/* VARIABLES */
+//=======================================================
+
+//Titles
+$titlesFontFamily: $titleFont;
+
+//Section show
+$showSectionPadding: 0 30px;
+
+//Header section title 1
+$headerTitle1Width: 100%;
+$headerTitle1TopPosition: 20px;
+$headerTitle1Margin: 0 auto;
+$headerTitle1FontSize: 6.5vw;
+
+//Article
+
+//Article section title 2
+$articleTitle2MarginTop: 0;
+
+//Article section title 3
+$articleTitle3TextAlign: left;
+
+//Pseudo element
+@mixin pseudoElement($position) {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, $totallyTransparent, $black, $totallyTransparent);
+
+  @if ($position == "top") {
+    margin-top: 15px;
+  } @else if ($position == "bottom") {
+    margin-bottom: 15px;
+  }
+}
+
+//Pictures
+
+//Pictures div container
+$articlePicturesContainerFlexBasis-L: 25%;
+$articlePicturesContainerFlexBasis-M: 33%;
+$articlePicturesContainerFlexBasis-S: 50%;
+$articlePicturesContainerPadding: 5px;
+$articlePicturesContainerCursor: Pointer;
+
+//Picture span vertical align helper
+%helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+//Picture vertical align with helper
+%imgWithHelper {
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  left: -4px;
+}
+
+//Videos
+
+//Video container
+$containerPerLine-M: 2;
+$articleVideoContainerFlexBasis-M: 100% / $containerPerLine-M;
+$articleVideoContainerPaddingBottom-M: 56.25% / $containerPerLine-M;
+
+$containerPerLine-S: 1;
+$articleVideoContainerFlexBasis-S: 100% / $containerPerLine-S;
+$articleVideoContainerPaddingBottom-S: 56.25% / $containerPerLine-S;
+
+$articleVideoContainerPaddingTop: 30px;
+$articleVideoContainerHeight: 0;
+$articleVideoContainerOverflow: hidden;
+$articleVideoIframeTop: 0;
+$articleVideoIframeLeft: 0;
+$articleVideoIframeWidth: 100%;
+$articleVideoIframeHeight: 100%;
+
+//Section footer
+
+//Footer section
+$footerSectionJustifyContent: space-around;
+$footerSectionMargin: 15px 0;
+
+//Footer section div and label
+$footerSectionDivPadding: 7px;
+$footerSectionDivBorderRadius: 15px;
+
+//Section com
+$sectionComMarginTop: 50px;
+
+//Comment
+$sectionComCommentMargin: 20px 0;
+$sectionComPadding: 15px;
+
+//Header title
+$sectionComCommentTitleAndDateMargin: 0;
+$sectionComCommentTitleFontSize: 1.2em;
+
+//Footer
+$footerPageMarginTop: 0;
+
+//Date
+$sectionComCommentDateFontSize: 0.8em;
+
+/* CSS */
+//========================================================
 
 #section-show {
   @extend %sectionStyle;
@@ -44,7 +158,16 @@
       flex-wrap: wrap;
 
       .thumbnail-pic {
-        flex-basis: $articlePicturesContainerFlexBasis;
+        flex-basis: $articlePicturesContainerFlexBasis-L;
+
+        @media screen and (max-width: $medium) and (min-width: $small) {
+          flex-basis: $articlePicturesContainerFlexBasis-M;
+        }
+
+        @media screen and (max-width: $small) {
+          flex-basis: $articlePicturesContainerFlexBasis-S;
+        }
+
         padding: $articlePicturesContainerPadding;
         box-sizing: border-box;
         cursor: $articlePicturesContainerCursor;
@@ -65,12 +188,18 @@
       flex-wrap: wrap;
 
       .video-containers {
-        flex-basis: $articleVideoContainerFlexBasis;
+        flex-basis: $articleVideoContainerFlexBasis-M;
+        padding-bottom: $articleVideoContainerPaddingBottom-M;
+
+        @media screen and (max-width: $small) {
+          flex-basis: $articleVideoContainerFlexBasis-S;
+          padding-bottom: $articleVideoContainerPaddingBottom-S;
+        }
+
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
         position: relative;
-        padding-bottom: $articleVideoContainerPaddingBottom;
         padding-top: $articleVideoContainerPaddingTop;
         height: $articleVideoContainerHeight;
         overflow: $articleVideoContainerOverflow;
@@ -92,21 +221,32 @@
 
   footer {
     display: flex;
+
+    @media screen and (max-width: $medium) {
+      flex-direction: column;
+    }
+
     justify-content: $footerSectionJustifyContent;
     margin: $footerSectionMargin;
 
     div {
-      background-color: $blueHover;
+      background-color: $khaki;
       padding: {
         top: $footerSectionDivPadding;
         right: $footerSectionDivPadding;
         bottom: $footerSectionDivPadding;
         left: 0;
       }
+
+      @media screen and (max-width: $medium) {
+        margin: 10px;
+      }
+
       border-radius: $footerSectionDivBorderRadius;
 
       .label {
         background-color: $blue;
+        color: $black;
         padding: $footerSectionDivPadding;
         border-radius: $footerSectionDivBorderRadius;
       }
@@ -133,8 +273,9 @@
       border: 1px solid $greyTransparent;
 
       header {
-        background-color: $blueHover;
+        background-color: $blueDark;
         padding: $sectionComPadding;
+        color: $white;
 
         h5 {
           margin: $sectionComCommentTitleAndDateMargin;
@@ -155,12 +296,20 @@
 
         p:first-child {
           padding-left: 15px;
+          font-size: 12px;
         }
 
         div {
+
           a {
             text-decoration: none;
             padding: 13px 25px;
+
+            @media screen and (max-width: $small) {
+              border-radius: 50%;
+              padding: 5px;
+              margin: 2px;
+            }
           }
 
           .update {
@@ -192,7 +341,6 @@
   display: none;
   position: fixed;
   z-index: 1;
-  padding-top: 60px;
   left: 0;
   top: 0;
   width: 100%;
@@ -200,9 +348,18 @@
   overflow: auto;
   background-color: $black;
 
+  @media screen and (min-width: $small) {
+    margin-top: 60px;
+  }
+
   p {
     margin: 0;
     text-align: right;
+
+    @media screen and (max-width: $small) {
+      position: absolute;
+      bottom: 0;
+    }
 
     #close {
       color: $white;
@@ -214,6 +371,10 @@
 
   #modal-content {
     width: 50%;
+    @media screen and (max-width: $small) {
+      width: 100%;
+    }
+
     max-width: 1200px;
     padding: 0;
     margin: auto;
