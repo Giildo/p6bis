@@ -94,10 +94,13 @@
                 {% for comment in trick.comments %}
                     <div class="comment">
                         <header>
-                            <!--<div>
-                            <img src="/pic/users/{# comment.author.picture.username #}.{# comment.author.picture.extension #}"
-                                 alt="{# comment.author.picture.description #}">
-                        </div>-->
+                            {% if comment.author.picture is not null %}
+                                <img src="/pic/users/{{ comment.author.picture.name }}.{{ comment.author.picture.extension }}"
+                                     alt="{{ comment.author.picture.description }}" style="width: auto;height: 40px;margin: 1px;">
+                            {% else %}
+                                <img src="/pic/users/default.gif"
+                                     alt="Image par défaut des utilisateurs" style="width: auto;height: 40px;margin: 1px;">
+                            {% endif %}
                             <h5>{{ comment.author.username }}</h5>
                         </header>
                         <section>

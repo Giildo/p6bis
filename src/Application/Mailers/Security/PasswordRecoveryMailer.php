@@ -3,8 +3,8 @@
 namespace App\Application\Mailers\Security;
 
 use App\Application\Mailers\Interfaces\Security\PasswordRecoveryMailerInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use Swift_Mailer;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
 class PasswordRecoveryMailer implements PasswordRecoveryMailerInterface

@@ -100,7 +100,7 @@ $sectionComMarginTop: 50px;
 
 //Comment
 $sectionComCommentMargin: 20px 0;
-$sectionComPadding: 15px;
+$sectionComPadding: 5px;
 
 //Header title
 $sectionComCommentTitleAndDateMargin: 0;
@@ -277,11 +277,22 @@ $sectionComCommentDateFontSize: 0.8em;
         padding: $sectionComPadding;
         color: $white;
 
+        img {
+          display: inline-block;
+          vertical-align: middle;
+          width: auto;
+          height: 40px;
+          margin: 1px;
+          border-radius: 50%;
+        }
+
         h5 {
           margin: $sectionComCommentTitleAndDateMargin;
           text-align: left;
           font-size: $sectionComCommentTitleFontSize;
           font-weight: bold;
+          display: inline-block;
+          vertical-align: middle;
         }
       }
 

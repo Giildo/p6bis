@@ -2,7 +2,7 @@
 
 namespace App\Application\Mailers\Interfaces\Security;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 
 interface PasswordRecoveryMailerInterface
 {

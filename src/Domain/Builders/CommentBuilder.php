@@ -7,8 +7,8 @@ use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
 use App\Domain\Model\Comment;
 use App\Domain\Model\Interfaces\CommentInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class CommentBuilder implements CommentBuilderInterface
 {

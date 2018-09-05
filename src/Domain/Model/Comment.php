@@ -5,10 +5,10 @@ namespace App\Domain\Model;
 use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
 use App\Domain\Model\Interfaces\CommentInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class Comment

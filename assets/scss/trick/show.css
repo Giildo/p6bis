@@ -137,15 +137,24 @@
       border: 1px solid rgba(200, 200, 200, 0.5); }
       #section-com #comments .comment header {
         background-color: #0083b2;
-        padding: 15px;
+        padding: 5px;
         color: #fffaf5; }
+        #section-com #comments .comment header img {
+          display: inline-block;
+          vertical-align: middle;
+          width: auto;
+          height: 40px;
+          margin: 1px;
+          border-radius: 50%; }
         #section-com #comments .comment header h5 {
           margin: 0;
           text-align: left;
           font-size: 1.2em;
-          font-weight: bold; }
+          font-weight: bold;
+          display: inline-block;
+          vertical-align: middle; }
       #section-com #comments .comment section {
-        padding: 15px; }
+        padding: 5px; }
       #section-com #comments .comment footer {
         display: flex;
         justify-content: space-between;

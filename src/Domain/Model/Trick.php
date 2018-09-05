@@ -2,14 +2,12 @@
 
 namespace App\Domain\Model;
 
-use App\Application\Helpers\Interfaces\SluggerHelperInterface;
 use App\Domain\Model\Interfaces\CategoryInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * Class Trick

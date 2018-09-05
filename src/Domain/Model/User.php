@@ -2,11 +2,12 @@
 
 namespace App\Domain\Model;
 
+use App\Domain\Model\Interfaces\PictureInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 /**
@@ -84,6 +85,14 @@ class User implements UserInterface
     private $tokenDate;
 
     /**
+     * @var PictureInterface
+     *
+     * @ORM\OneToOne(targetEntity="App\Domain\Model\Picture", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(referencedColumnName="name", name="picture_name")
+     */
+    private $picture;
+
+    /**
      * User constructor.
      * @param string $username
      * @param string $firstName
@@ -107,7 +116,7 @@ s     */
     }
 
     /**
-     * @return UuidInterface
+     * {@inheritdoc}
      */
     public function getId(): UuidInterface
     {
@@ -115,7 +124,7 @@ s     */
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getUsername(): string
     {
@@ -123,7 +132,7 @@ s     */
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getFirstName(): string
     {
@@ -131,7 +140,7 @@ s     */
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getLastName(): string
     {
@@ -139,7 +148,7 @@ s     */
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getMail(): string
     {
@@ -147,7 +156,7 @@ s     */
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getPassword(): string
     {
@@ -155,7 +164,7 @@ s     */
     }
 
     /**
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getToken(): ?string
     {
@@ -163,7 +172,7 @@ s     */
     }
 
     /**
-     * @return DateTime|null
+     * {@inheritdoc}
      */
     public function getTokenDate(): ?DateTime
     {
@@ -171,32 +180,23 @@ s     */
     }
 
     /**
-     * Returns the roles granted to the user.
-     *
-     * <code>
-     * public function getRoles()
-     * {
-     *     return array('ROLE_USER');
-     * }
-     * </code>
-     *
-     * Alternatively, the roles might be stored on a ``roles`` property,
-     * and populated in any number of different ways when the user object
-     * is created.
-     *
-     * @return (Role|string)[] The user roles
+     * {@inheritdoc}
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles;
     }
 
     /**
-     * Returns the salt that was originally used to encode the password.
-     *
-     * This can return null if the password was not encoded using a salt.
-     *
-     * @return string|null The salt
+     * {@inheritdoc}
+     */
+    public function getPicture(): ?PictureInterface
+    {
+        return $this->picture;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getSalt()
     {
@@ -204,10 +204,7 @@ s     */
     }
 
     /**
-     * Removes sensitive data from the user.
-     *
-     * This is important if, at any given point, sensitive information like
-     * the plain-text password is stored on this object.
+     * {@inheritdoc}
      */
     public function eraseCredentials()
     {
@@ -215,8 +212,7 @@ s     */
     }
 
     /**
-     * @param string $newPassword
-     * @return void
+     * {@inheritdoc}
      */
     public function changePassword(string $newPassword): void
     {
@@ -224,8 +220,7 @@ s     */
     }
 
     /**
-     * @param array $newRole
-     * @return void
+     * {@inheritdoc}
      */
     public function changeRole(array $newRole): void
     {
@@ -233,8 +228,7 @@ s     */
     }
 
     /**
-     * @param string $roleAdd
-     * @return void
+     * {@inheritdoc}
      */
     public function addRole(string $roleAdd): void
     {
@@ -242,9 +236,7 @@ s     */
     }
 
     /**
-     * @param TokenGeneratorInterface $tokenGenerator
-     * @return void
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function createToken(TokenGeneratorInterface $tokenGenerator): void
     {
@@ -255,7 +247,7 @@ s     */
     }
 
     /**
-     * @return void
+     * {@inheritdoc}
      */
     public function deleteToken(): void
     {

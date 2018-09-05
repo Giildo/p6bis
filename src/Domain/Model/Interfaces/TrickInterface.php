@@ -4,7 +4,6 @@ namespace App\Domain\Model\Interfaces;
 
 use App\Domain\Model\Trick;
 use DateTime;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class Trick
