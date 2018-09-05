@@ -18,14 +18,22 @@ class TrickRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $paging
+     *
      * @return TrickInterface[]
      */
-    public function loadAllTricksWithAuthorCategoryAndHeadPicture(): array
+    public function loadTricksWithPaging(int $paging): array
     {
+        $first = ($paging - 1) * 10;
+
         return $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt')
             ->where('t.published = 1')
+            ->setFirstResult($first)
+            ->setMaxResults(10)
+            ->orderBy('t.createdAt', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->execute();
     }
 
     /**
@@ -78,5 +86,14 @@ class TrickRepository extends ServiceEntityRepository
 
         $entityManager->remove($trick);
         $entityManager->flush();
+    }
+
+    public function countTricks()
+    {
+        return $this->createQueryBuilder('trick')
+            ->select('count(trick.slug)')
+            ->where('trick.published = 1')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

@@ -32,14 +32,29 @@ class HomePageAction
     }
 
     /**
-     * @Route(path="/accueil", name="Home")
+     * @Route(
+     *     path="/accueil/{paging}",
+     *     requirements={"paging": "\d+"},
+     *     defaults={"paging": "1"},
+     *     name="Home"
+     * )
+     *
+     * @param int $paging
      *
      * @return Response
      */
-    public function homePage(): Response
+    public function homePage(int $paging): Response
     {
-        $tricks = $this->trickRepository->loadAllTricksWithAuthorCategoryAndHeadPicture();
+        $numberPage = (int)ceil($this->trickRepository->countTricks() / 10);
 
-        return $this->responder->homePageResponse($tricks);
+        if ($paging < 1) {
+            return $this->responder->homePageResponse([], true, 1);
+        } elseif ($paging > $numberPage) {
+            return $this->responder->homePageResponse([], true, $numberPage);
+        }
+
+        $tricks = $this->trickRepository->loadTricksWithPaging($paging);
+
+        return $this->responder->homePageResponse($tricks, false, null, $numberPage, $paging);
     }
 }
