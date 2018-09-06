@@ -4,13 +4,14 @@ namespace App\Domain\Repository;
 
 use App\Domain\Model\Comment;
 use App\Domain\Model\Interfaces\CommentInterface;
+use App\Domain\Repository\Interfaces\RepositoryCounterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 
-class CommentRepository extends ServiceEntityRepository
+class CommentRepository extends ServiceEntityRepository implements RepositoryCounterInterface
 {
     /**
      * CommentRepository constructor.
@@ -52,6 +53,40 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param string $trickSlug
+     * @param int|null $paging
+     *
+     * @return CommentInterface[]
+     */
+    public function loadCommentsWithPagination(string $trickSlug, ?int $paging = null): array
+    {
+        $first = ($paging - 1) * Comment::NUMBER_OF_ITEMS;
+
+        return $this->createQueryBuilder('comment')
+            ->where('comment.trick = :trickSlug')
+            ->setParameter('trickSlug', $trickSlug)
+            ->setMaxResults(Comment::NUMBER_OF_ITEMS)
+            ->setFirstResult($first)
+            ->orderBy('comment.updatedAt', 'DESC')
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * @param string $trickSlug
+     *
+     * @return CommentInterface[]|null
+     */
+    public function loadAllCommentsOfATrick(string $trickSlug): ?array
+    {
+        return $this->createQueryBuilder('comment')
+            ->where('comment.trick = :trickSlug')
+            ->setParameter('trickSlug', $trickSlug)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
      * @param CommentInterface $comment
      *
      * @return void
@@ -63,5 +98,18 @@ class CommentRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->remove($comment);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countEntries(?string $identifier = null): int
+    {
+        return (int)$this->createQueryBuilder('comment')
+            ->select('count(comment.id)')
+            ->where('comment.trick = :trickSlug')
+            ->setParameter('trickSlug', $identifier)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

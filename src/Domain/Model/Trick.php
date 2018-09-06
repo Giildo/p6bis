@@ -3,6 +3,7 @@
 namespace App\Domain\Model;
 
 use App\Domain\Model\Interfaces\CategoryInterface;
+use App\Domain\Model\Interfaces\EntityPaginerInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Interfaces\UserInterface;
 use DateTime;
@@ -16,7 +17,7 @@ use Doctrine\ORM\PersistentCollection;
  * @ORM\Table(name="p6bis_trick")
  * @ORM\Entity(repositoryClass="App\Domain\Repository\TrickRepository")
  */
-class Trick implements TrickInterface
+class Trick implements TrickInterface, EntityPaginerInterface
 {
     /**
      * @var string
@@ -57,7 +58,7 @@ class Trick implements TrickInterface
     /**
      * @var DateTime
      *
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
      */
     private $updatedAt;
 
@@ -92,13 +93,6 @@ class Trick implements TrickInterface
     private $videos;
 
     /**
-     * @var PersistentCollection
-     *
-     * @ORM\OneToMany(targetEntity="App\Domain\Model\Comment", mappedBy="trick")
-     */
-    private $comments;
-
-    /**
      * Trick constructor.
      * @param string $slug
      * @param string $name
@@ -118,6 +112,7 @@ class Trick implements TrickInterface
         $this->description = $description;
         $this->published = false;
         $this->createdAt = new DateTime();
+        $this->updatedAt = $this->createdAt;
         $this->category = $category;
         $this->author = $author;
     }
@@ -200,14 +195,6 @@ class Trick implements TrickInterface
     public function getVideos(): ?array
     {
         return $this->videos->toArray();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getComments(): ?array
-    {
-        return $this->comments->toArray();
     }
 
 	/**

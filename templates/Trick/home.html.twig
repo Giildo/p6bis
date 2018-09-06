@@ -51,27 +51,9 @@
             {% endfor %}
         </section>
 
-        <nav id="center">
-            <div id="pagination">
-                {% if currentPage > 1 %}
-                    {% set before = currentPage - 1 %}
-                    <a href="{{ path('Home', {'paging': before}) }}">&laquo;</a>
-                {% endif %}
-
-                {% for i in 1..pageNumber %}
-                    {% if i == currentPage %}
-                        <span class="active">{{ i }}</span>
-                    {% else %}
-                        <a href="{{ path('Home', {'paging': i}) }}">{{ i }}</a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if currentPage < pageNumber %}
-                    {% set after = currentPage + 1 %}
-                    <a href="{{ path('Home', {'paging': after}) }}">&raquo;</a>
-                {% endif %}
-            </div>
-        </nav>
+        {% if pageNumber > 1 %}
+            {% include 'services/pagination.html.twig' with {pathName: 'Home'} %}
+        {% endif %}
     {% else %}
         <h2>Désolé, aucune figure n'a été crée ou n'a été publiée.</h2>
     {% endif %}

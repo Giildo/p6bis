@@ -2,6 +2,9 @@
 
 namespace App\UI\Actions\Trick;
 
+use App\Application\Helpers\Interfaces\PaginationHelperInterface;
+use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Trick;
 use App\Domain\Repository\TrickRepository;
 use App\UI\Responders\Interfaces\Trick\HomePageResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,18 +20,25 @@ class HomePageAction
      * @var HomePageResponderInterface
      */
     private $responder;
+    /**
+     * @var PaginationHelperInterface
+     */
+    private $paginationHelper;
 
     /**
      * HomePageAction constructor.
      * @param TrickRepository $trickRepository
      * @param HomePageResponderInterface $responder
+     * @param PaginationHelperInterface $paginationHelper
      */
     public function __construct(
         TrickRepository $trickRepository,
-        HomePageResponderInterface $responder
+        HomePageResponderInterface $responder,
+        PaginationHelperInterface $paginationHelper
     ) {
         $this->trickRepository = $trickRepository;
         $this->responder = $responder;
+        $this->paginationHelper = $paginationHelper;
     }
 
     /**
@@ -45,16 +55,18 @@ class HomePageAction
      */
     public function homePage(int $paging): Response
     {
-        $numberPage = (int)ceil($this->trickRepository->countTricks() / 10);
+        $numberPage = $this->paginationHelper->pagination(
+            $this->trickRepository,
+            Trick::NUMBER_OF_ITEMS,
+            $paging
+        );
 
-        if ($paging < 1) {
+        if (is_null($numberPage)) {
             return $this->responder->homePageResponse([], true, 1);
-        } elseif ($paging > $numberPage) {
-            return $this->responder->homePageResponse([], true, $numberPage);
         }
 
         $tricks = $this->trickRepository->loadTricksWithPaging($paging);
 
-        return $this->responder->homePageResponse($tricks, false, null, $numberPage, $paging);
+        return $this->responder->homePageResponse($tricks, false, $numberPage, $paging);
     }
 }

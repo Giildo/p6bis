@@ -64,11 +64,6 @@ interface TrickInterface
 	 */
 	public function getVideos(): ?array;
 
-    /**
-     * @return CommentInterface[]|null
-     */
-    public function getComments(): ?array;
-
 	/**
 	 * @return void
 	 */

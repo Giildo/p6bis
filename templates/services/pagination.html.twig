@@ -1,0 +1,24 @@
+{% set pathParamName = pathParamName | default(null) %}
+{% set pathParamValue = pathParamValue | default(null) %}
+
+<nav id="center">
+    <div id="pagination">
+        {% if currentPage > 1 %}
+            {% set before = currentPage - 1 %}
+            <a href="{{ path(pathName, {'paging': before, (pathParamName): pathParamValue}) }}">&laquo;</a>
+        {% endif %}
+
+        {% for i in 1..pageNumber %}
+            {% if i == currentPage %}
+                <span class="active">{{ i }}</span>
+            {% else %}
+                <a href="{{ path(pathName, {'paging': i, (pathParamName): pathParamValue}) }}">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if currentPage < pageNumber %}
+            {% set after = currentPage + 1 %}
+            <a href="{{ path(pathName, {'paging': after, (pathParamName): pathParamValue}) }}">&raquo;</a>
+        {% endif %}
+    </div>
+</nav>

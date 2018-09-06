@@ -3,6 +3,7 @@
 namespace App\UI\Actions\Trick;
 
 use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Repository\CommentRepository;
 use App\Domain\Repository\TrickRepository;
 use App\UI\Responders\Interfaces\Trick\TrickDeletionResponderInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -19,6 +20,10 @@ class TrickDeletionAction
      */
     private $trickRepository;
     /**
+     * @var CommentRepository
+     */
+    private $commentRepository;
+    /**
      * @var TrickDeletionResponderInterface
      */
     private $responder;
@@ -30,15 +35,18 @@ class TrickDeletionAction
     /**
      * TrickDeletionAction constructor.
      * @param TrickRepository $trickRepository
+     * @param CommentRepository $commentRepository
      * @param TrickDeletionResponderInterface $responder
      * @param FlashBagInterface $flashBag
      */
     public function __construct(
         TrickRepository $trickRepository,
+        CommentRepository $commentRepository,
         TrickDeletionResponderInterface $responder,
         FlashBagInterface $flashBag
     ) {
         $this->trickRepository = $trickRepository;
+        $this->commentRepository = $commentRepository;
         $this->responder = $responder;
         $this->flashBag = $flashBag;
     }
@@ -59,9 +67,12 @@ class TrickDeletionAction
      */
     public function delete(Request $request): RedirectResponse
     {
-        $this->trickRepository->deleteTrick(
-            $request->getSession()->get('trick')
-        );
+        /** @var TrickInterface $trick */
+        $trick = $request->getSession()->get('trick');
+
+        $comments = $this->commentRepository->loadAllCommentsOfATrick($trick->getSlug());
+
+        $this->trickRepository->deleteTrick($trick, $comments);
 
         $request->getSession()->clear();
 

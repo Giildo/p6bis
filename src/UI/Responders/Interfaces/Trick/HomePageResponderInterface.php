@@ -10,7 +10,6 @@ interface HomePageResponderInterface
     /**
      * @param array|null $tricks
      * @param bool|null $redirect
-     * @param int|null $pageNumber
      * @param int|null $numberPage
      * @param int|null $currentPage
      *
@@ -19,7 +18,6 @@ interface HomePageResponderInterface
     public function homePageResponse(
         ?array $tricks = [],
         ?bool $redirect = false,
-        ?int $pageNumber = 1,
         ?int $numberPage = 0,
         ?int $currentPage = 0
     ): Response;

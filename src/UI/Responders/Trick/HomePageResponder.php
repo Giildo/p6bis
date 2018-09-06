@@ -38,12 +38,11 @@ class HomePageResponder implements HomePageResponderInterface
     public function homePageResponse(
         ?array $tricks = [],
         ?bool $redirect = false,
-        ?int $pageNumber = 1,
         ?int $numberPage = 0,
         ?int $currentPage = 0
     ): Response {
         return ($redirect) ?
-            new RedirectResponse($this->urlGenerator->generate('Home', ['paging' => $pageNumber])) :
+            new RedirectResponse($this->urlGenerator->generate('Home')) :
             new Response($this->presenter->homePagePresentation($tricks, $numberPage, $currentPage));
     }
 }

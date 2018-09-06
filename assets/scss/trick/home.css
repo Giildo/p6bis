@@ -62,37 +62,4 @@ h1 {
           #section-home article footer a button:hover {
             background-color: #64e5ff; }
 
-#center {
-  text-align: center;
-  margin-top: 30px; }
-  @media screen and (max-width: 740px) {
-    #center {
-      margin-bottom: 30px; } }
-  #center #pagination {
-    display: inline-block;
-    background-color: #d7d7d9;
-    border-top: 1px solid #365375;
-    border-bottom: 1px solid #365375; }
-    #center #pagination a, #center #pagination span {
-      display: flex;
-      width: 40px;
-      height: 40px;
-      justify-content: center;
-      align-items: center;
-      color: black;
-      float: left;
-      text-decoration: none;
-      transition: background-color .2s;
-      border-right: 1px solid #365375; }
-      #center #pagination a:hover, #center #pagination span:hover {
-        background-color: #a0a2a9; }
-      #center #pagination a:first-child, #center #pagination span:first-child {
-        border-left: 1px solid #365375; }
-      #center #pagination a.deselect, #center #pagination span.deselect {
-        background-color: #f0f0f0;
-        color: #00263e; }
-      #center #pagination a.active, #center #pagination span.active {
-        background-color: #64e5ff;
-        color: #00263e; }
-
 /*# sourceMappingURL=home.css.map */

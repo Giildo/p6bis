@@ -29,11 +29,17 @@ class ShowTrickPresenter implements ShowTrickPresenterInterface
      */
     public function showTrickPresentation(
         TrickInterface $trick,
-        FormInterface $formComment
+        FormInterface $formComment,
+        array $comments,
+        int $pageNumber,
+        ?int $currentPage = 0
     ): string {
         return $this->twig->render('Trick/show.html.twig', [
-            'trick' => $trick,
-            'formComment'  => $formComment->createView(),
+            'trick'       => $trick,
+            'formComment' => $formComment->createView(),
+            'comments'    => $comments,
+            'pageNumber'  => $pageNumber,
+            'currentPage' => $currentPage,
         ]);
     }
 }
