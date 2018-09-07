@@ -30,13 +30,7 @@
         <a class="nav-link" href="{{ path('Authentication_user_connection') }}">Connexion</a>
         <a class="nav-link" href="{{ path('Authentication_user_registration') }}">S'enregistrer</a>
     {% else %}
-        <div id="dropdown">
-            <a id="drop-btn" class="nav-link">Administration</a>
-            <div id="drop-content">
-                <a href="{{ path('New_trick') }}" class="nav-link">Nouvelle trick</a>
-                <a href="/espace-utilisateur/trick/gestion" class="nav-link">Gestion des tricks</a>
-            </div>
-        </div>
+        <a href="{{ path('New_trick') }}" class="nav-link">Nouvelle trick</a>
         <a class="nav-link" href="/deconnexion">Déconnexion</a>
     {% endif %}
 </nav>

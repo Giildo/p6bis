@@ -63,63 +63,6 @@ $navLinkBorderSize: 3px;
       }
     }
   }
-
-  #dropdown {
-    @media screen and (max-width: $small) {
-      background-color: $grey03;
-    }
-
-    .nav-link {
-      display: inline-block;
-      height: 100%;
-      padding: 5px 15px 0 15px;
-      box-sizing: border-box;
-      cursor: pointer;
-
-      @media screen and (max-width: $small) {
-        color: $black;
-      }
-    }
-
-    #drop-content {
-      display: none;
-      background-color: $grey02;
-
-      @media screen and (max-width: $small) {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .nav-link {
-        color: $black;
-        line-height: $navElementsHeight;
-
-        &:hover {
-          border: none;
-          background-color: $grey03;
-
-          @media screen and (max-width: $small) {
-            border: none;
-          }
-        }
-      }
-    }
-
-    &:hover {
-      #drop-content {
-        display: flex;
-        flex-direction: column;
-      }
-
-      #drop-btn {
-        border-bottom: $navLinkBorderSize solid $navLinkColorHover;
-
-        @media screen and (max-width: $small) {
-          border: none;
-        }
-      }
-    }
-  }
 }
 
 #menu-icon-close, #menu-icon-open {

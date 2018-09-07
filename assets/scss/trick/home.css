@@ -36,8 +36,34 @@ h1 {
     @media screen and (max-width: 740px) {
       #section-home article {
         flex-basis: 100%; } }
-    #section-home article header a img {
-      border-radius: 10px 10px 0 0; }
+    #section-home article header {
+      position: relative; }
+      #section-home article header a img {
+        border-radius: 10px 10px 0 0; }
+      #section-home article header .optionsButtons {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex; }
+        #section-home article header .optionsButtons a {
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          border: none;
+          cursor: pointer;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 5px; }
+          #section-home article header .optionsButtons a.delete {
+            background-color: #f04546; }
+            #section-home article header .optionsButtons a.delete:hover {
+              background-color: #f01f29; }
+          #section-home article header .optionsButtons a.modify {
+            background-color: #ff9c41; }
+            #section-home article header .optionsButtons a.modify:hover {
+              background-color: #ff9112; }
     #section-home article section {
       padding: 15px; }
     #section-home article footer {

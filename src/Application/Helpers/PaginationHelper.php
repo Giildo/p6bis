@@ -20,7 +20,7 @@ class PaginationHelper implements PaginationHelperInterface
 
         $numberPage = (int)ceil($entries / $numberItems);
 
-        if ($paging < 1 || $paging > $numberPage) {
+        if ($numberPage !== 0 && ($paging < 1 || $paging > $numberPage)) {
             return null;
         }
 

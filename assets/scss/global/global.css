@@ -88,42 +88,6 @@ a {
       @media screen and (max-width: 740px) {
         #navbar .nav-link:hover {
           border-bottom: none; } }
-  @media screen and (max-width: 740px) {
-    #navbar #dropdown {
-      background-color: #a0a2a9; } }
-  #navbar #dropdown .nav-link {
-    display: inline-block;
-    height: 100%;
-    padding: 5px 15px 0 15px;
-    box-sizing: border-box;
-    cursor: pointer; }
-    @media screen and (max-width: 740px) {
-      #navbar #dropdown .nav-link {
-        color: #00050a; } }
-  #navbar #dropdown #drop-content {
-    display: none;
-    background-color: #d7d7d9; }
-    @media screen and (max-width: 740px) {
-      #navbar #dropdown #drop-content {
-        display: flex;
-        flex-direction: column; } }
-    #navbar #dropdown #drop-content .nav-link {
-      color: #00050a;
-      line-height: 50px; }
-      #navbar #dropdown #drop-content .nav-link:hover {
-        border: none;
-        background-color: #a0a2a9; }
-        @media screen and (max-width: 740px) {
-          #navbar #dropdown #drop-content .nav-link:hover {
-            border: none; } }
-  #navbar #dropdown:hover #drop-content {
-    display: flex;
-    flex-direction: column; }
-  #navbar #dropdown:hover #drop-btn {
-    border-bottom: 3px solid #f0f0f0; }
-    @media screen and (max-width: 740px) {
-      #navbar #dropdown:hover #drop-btn {
-        border: none; } }
 
 #menu-icon-close, #menu-icon-open {
   display: none; }
@@ -156,5 +120,37 @@ a {
 @media all and (max-width: 740px) {
   .sf-minitoolbar {
     display: none !important; } }
+#center {
+  text-align: center;
+  margin-top: 30px; }
+  @media screen and (max-width: 740px) {
+    #center {
+      margin-bottom: 30px; } }
+  #center #pagination {
+    display: inline-block;
+    background-color: #d7d7d9;
+    border-top: 1px solid #365375;
+    border-bottom: 1px solid #365375; }
+    #center #pagination a, #center #pagination span {
+      display: flex;
+      width: 40px;
+      height: 40px;
+      justify-content: center;
+      align-items: center;
+      color: black;
+      float: left;
+      text-decoration: none;
+      transition: background-color .2s;
+      border-right: 1px solid #365375; }
+      #center #pagination a:hover, #center #pagination span:hover {
+        background-color: #a0a2a9; }
+      #center #pagination a:first-child, #center #pagination span:first-child {
+        border-left: 1px solid #365375; }
+      #center #pagination a.deselect, #center #pagination span.deselect {
+        background-color: #f0f0f0;
+        color: #00263e; }
+      #center #pagination a.active, #center #pagination span.active {
+        background-color: #64e5ff;
+        color: #00263e; }
 
 /*# sourceMappingURL=global.css.map */
