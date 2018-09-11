@@ -6,6 +6,7 @@ use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
 use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
 use App\Domain\DTO\Interfaces\Trick\TrickNewVideoDTOInterface;
 use App\Domain\Model\Interfaces\CategoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class NewTrickDTO implements NewTrickDTOInterface
@@ -66,6 +67,11 @@ class NewTrickDTO implements NewTrickDTOInterface
     public $videos;
 
     /**
+     * @var null|UploadedFile
+     */
+    public $headPicture;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
@@ -74,7 +80,8 @@ class NewTrickDTO implements NewTrickDTOInterface
         ?bool $published = false,
         ?CategoryInterface $category = null,
         ?array $pictures = [],
-        ?array $videos = []
+        ?array $videos = [],
+        ?TrickNewPictureDTOInterface $headPicture = null
     ) {
         $this->name = $name;
         $this->description = $description;
@@ -82,5 +89,6 @@ class NewTrickDTO implements NewTrickDTOInterface
         $this->category = $category;
         $this->pictures = $pictures;
         $this->videos = $videos;
+        $this->headPicture = $headPicture;
     }
 }

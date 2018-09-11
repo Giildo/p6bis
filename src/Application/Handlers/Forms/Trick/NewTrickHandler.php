@@ -78,6 +78,16 @@ class NewTrickHandler implements NewTrickHandlerInterface
                 }
             }
 
+            $headPicture = null;
+            if (!is_null($datas->headPicture)) {
+                $headPicture = $this->pictureBuilder->build($datas->headPicture, $trick, 0, true)
+                                                    ->getPicture();
+
+                $this->entityManager->persist($headPicture);
+
+                $headPicture = [$headPicture, $datas->headPicture->picture];
+            }
+
             $pictures = [];
             if (!empty($datas->pictures)) {
                 $counter = 1;
@@ -93,6 +103,10 @@ class NewTrickHandler implements NewTrickHandlerInterface
             }
 
             $this->entityManager->flush();
+
+            if (!is_null($headPicture)) {
+                $this->saveHelper->save([$headPicture]);
+            }
 
             if (!empty($pictures)) {
                 $this->saveHelper->save($pictures);

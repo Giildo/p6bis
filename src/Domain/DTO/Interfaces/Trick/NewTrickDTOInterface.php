@@ -3,6 +3,7 @@
 namespace App\Domain\DTO\Interfaces\Trick;
 
 use App\Domain\Model\Interfaces\CategoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface NewTrickDTOInterface
 {
@@ -15,6 +16,7 @@ interface NewTrickDTOInterface
      * @param CategoryInterface|null $category
      * @param TrickNewPictureDTOInterface[]|null $pictures
      * @param TrickNewVideoDTOInterface[]|null $videos
+     * @param TrickNewPictureDTOInterface|null $headPicture
      */
     public function __construct(
         ?string $name = '',
@@ -22,6 +24,7 @@ interface NewTrickDTOInterface
         ?bool $published = false,
         ?CategoryInterface $category = null,
         ?array $pictures = [],
-        ?array $videos = []
+        ?array $videos = [],
+        ?TrickNewPictureDTOInterface $headPicture = null
     );
 }
