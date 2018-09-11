@@ -32,7 +32,7 @@
                             </a>
                         {% endif %}
 
-                        {% if app.user is not null and (app.user.roles == 'ROLE_ADMIN' or trick.author == app.user) %}
+                        {% if app.user is not null and (is_granted('ROLE_ADMIN') or trick.author == app.user) %}
                             <div class="optionsButtons">
                                 <a href="{{ path('Trick_modification', {'trickSlug': trick.slug}) }}" class="material-icons modify">create</a>
                                 <a href="{{ path('Trick_deletion', {'trickSlug': trick.slug}) }}" class="material-icons delete">delete</a>

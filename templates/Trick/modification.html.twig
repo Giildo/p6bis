@@ -3,39 +3,38 @@
 {% block title %}{% endblock %}
 
 {% block stylesheets %}
-
+    <link rel="stylesheet" href="/build/css/trick/new.css"/>
 {% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur la page de modification des figures</h1>
+    <section class="section-form">
+        <h1>Modification de {{ trick.name }}</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" value="Valider"/>
-    {{ form_rest(form) }}
-    {{ form_end(form) }}
+        {% form_theme form 'Form/trick_modification.html.twig' %}
+        {{ form(form) }}
 
 
-    {% if trick.pictures is not empty %}
-        {% for picture in trick.pictures %}
-            <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}" alt="{{ picture.description }}"/>
-            <a href="http://localhost:8000/espace-utilisateur/trick/image-suppression?s={{ picture.name }}&t={{ picture.DeleteToken }}"
-                class="btn btn-danger">X</a>
-            <br />
-        {% endfor %}
-    {% endif %}
+        {% if trick.pictures is not empty %}
+            {% for picture in trick.pictures %}
+                <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}" alt="{{ picture.description }}"/>
+                <a href="http://localhost:8000/espace-utilisateur/trick/image-suppression?s={{ picture.name }}&t={{ picture.DeleteToken }}"
+                   class="btn-delete">X</a>
+                <br/>
+            {% endfor %}
+        {% endif %}
 
-    {% if trick.videos is not empty %}
-        {% for video in trick.videos %}
-            <iframe src="https://www.youtube.com/embed/{{ video.name }}" frameborder="0"
-                allow="autoplay; encrypted-media" allowfullscreen class="col-sm-3"></iframe>
-            <a href="http://localhost:8000/espace-utilisateur/trick/video-suppression?s={{ video.name }}&t={{ video.DeleteToken }}"
-               class="btn btn-danger">X</a>
-            <br />
-        {% endfor %}
-    {% endif %}
+        {% if trick.videos is not empty %}
+            {% for video in trick.videos %}
+                <iframe src="https://www.youtube.com/embed/{{ video.name }}" frameborder="0"
+                        allow="autoplay; encrypted-media" allowfullscreen class="col-sm-3"></iframe>
+                <a href="http://localhost:8000/espace-utilisateur/trick/video-suppression?s={{ video.name }}&t={{ video.DeleteToken }}"
+                   class="btn-delete material-icons">delete</a>
+                <br/>
+            {% endfor %}
+        {% endif %}
+    </section>
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="/js/collectionType2.js"></script>
+    <script type="text/javascript" src="/build/js/collectionTypeTrickModification.js"></script>
 {% endblock %}

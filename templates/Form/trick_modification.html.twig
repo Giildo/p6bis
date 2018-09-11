@@ -6,7 +6,6 @@
     {{ form_errors(form) }}
 
     <div class="form-fields">
-        {{ form_widget(form.name) }}
         {{ form_widget(form.description) }}
 
         <div class="field-group">
@@ -15,11 +14,11 @@
         </div>
 
         <div class="collection-group">
-            {{ form_widget(form.pictures) }}
+            {{ form_widget(form.newPictures) }}
         </div>
 
         <div class="collection-group">
-            {{ form_widget(form.videos) }}
+            {{ form_widget(form.newVideos) }}
         </div>
     </div>
 

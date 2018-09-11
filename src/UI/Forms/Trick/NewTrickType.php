@@ -38,10 +38,10 @@ class NewTrickType extends AbstractType
             ])
             ->add('published', CheckboxType::class, [
                 'required'       => false,
-                'label'          => 'Publier*',
+                'label'          => 'Publier',
                 'error_bubbling' => true,
                 'attr'           => [
-                    'class' => 'form-control',
+                    'class' => 'form-control checkbox',
                 ],
             ])
             ->add('category', EntityType::class, [

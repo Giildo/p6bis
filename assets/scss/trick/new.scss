@@ -1,13 +1,84 @@
 @import "../style/variables";
 @import "../style/mixin";
 
+$formButtonShadowSize: 7px 10px 10px;
+$formButtonShadowSizeHover: 2px 4px 8px;
+
 .section-form {
   @extend %sectionStyle;
+
+  form {
+    margin-bottom: 50px;
+  }
 
   margin-top: 5vh;
 
   h1 {
     font-family: $titleFont;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+
+    .check-block {
+      display: flex;
+      align-items: center;
+      margin: 15px 5px;
+      cursor: pointer;
+
+      &:hover .check-mark {
+        background-color: $grey03;
+      }
+
+      .checkbox {
+        display: none;
+
+        &:checked {
+          & + .check-mark {
+            background-color: $blueLight;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:after {
+              content: 'done';
+              color: $black;
+              font-weight: bold;
+              font-size: 17px;
+            }
+          }
+        }
+      }
+
+      .check-mark {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-color: $grey02;
+        margin-right: 10px;
+        border-radius: 5px;
+        border: 1px solid $greyBlue;
+      }
+    }
+
+    .form-block {
+      display: flex;
+      justify-content: left !important;
+      align-items: center !important;
+
+      select {
+        margin: 0 10px;
+        width: 100px;
+        height: 25px;
+        border-radius: 5px;
+        background-color: $blueLight;
+        cursor: pointer;
+        font-size: 15px;
+      }
+    }
   }
 
   .collection-group {
@@ -21,14 +92,46 @@
     }
 
     .form-block {
-      div {
+      display: flex;
+      flex-direction: column;
+
+      .label {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+
+        @media screen and (max-width: $small) {
+          flex-direction: column;
+        }
 
         button {
+          margin: 0 25px;
+          flex-basis: 25%;
+          box-shadow: $formButtonShadowSize $blackTransparent;
 
+          @media screen and (max-width: $small) {
+            margin: 10px 0;
+          }
+
+          &:hover, &:active {
+            box-shadow: $formButtonShadowSizeHover $blackTransparent;
+            background-color: $blueLight;
+          }
         }
       }
+
+      .widget {
+        display: flex;
+        flex-direction: column;
+        padding: 0 20px;
+
+        .collection-block {
+          padding: 10px;
+        }
+      }
+    }
+
+    &:last-child {
+      margin-bottom: 20px;
     }
   }
 }

@@ -3,9 +3,9 @@
 {%- block form_errors -%}
     {%- if errors|length > 0 -%}
         <div class="alert-error">
-        {%- for error in errors -%}
-            {{ error.message }}<br />
-        {%- endfor -%}
+            {%- for error in errors -%}
+                {{ error.message }}<br/>
+            {%- endfor -%}
         </div>
     {%- endif -%}
 {%- endblock form_errors -%}
@@ -13,3 +13,21 @@
 {% block form_row %}
     <div class="form-block">{{ form_label(form) }}{{ form_widget(form) }}</div>
 {% endblock %}
+
+{% block collection_widget %}
+    {% if prototype is defined %}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
+    {% endif %}
+    <div class="form-block">
+        <div class="label">{{ form_label(form) }}</div>
+        <div class="widget">{{ block('form_widget') }}</div>
+    </div>
+{% endblock %}
+
+{%- block checkbox_widget -%}
+    <label class="check-block">
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        <span class="check-mark material-icons"></span>
+        <span class="label-text">{{ label }}</span>
+    </label>
+{%- endblock checkbox_widget -%}

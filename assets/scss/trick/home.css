@@ -47,8 +47,6 @@ h1 {
         display: flex; }
         #section-home article header .optionsButtons a {
           border-radius: 50%;
-          width: 40px;
-          height: 40px;
           border: none;
           cursor: pointer;
           text-decoration: none;
@@ -56,6 +54,15 @@ h1 {
           align-items: center;
           justify-content: center;
           margin: 5px; }
+          @media screen and (max-width: 740px) {
+            #section-home article header .optionsButtons a {
+              width: 30px;
+              height: 30px;
+              font-size: 15px; } }
+          @media screen and (min-width: 740px) {
+            #section-home article header .optionsButtons a {
+              width: 40px;
+              height: 40px; } }
           #section-home article header .optionsButtons a.delete {
             background-color: #f04546; }
             #section-home article header .optionsButtons a.delete:hover {
