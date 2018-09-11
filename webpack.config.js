@@ -31,6 +31,7 @@ Encore
     .addStyleEntry('css/trick/home', './assets/scss/trick/home.scss')
     .addStyleEntry('css/trick/show', './assets/scss/trick/show.scss')
     .addStyleEntry('css/trick/new', './assets/scss/trick/new.scss')
+    .addStyleEntry('css/trick/modification', './assets/scss/trick/modification.scss')
 
     .addStyleEntry('css/security/formFrame', './assets/scss/security/formFrame.scss')
 
