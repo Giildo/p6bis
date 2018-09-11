@@ -4,8 +4,14 @@ let closeButton = document.getElementById("close");
 let nextButton = document.getElementById("next");
 let prevButton = document.getElementById("prev");
 
+let modalWindow = document.getElementById("modalWindows");
+let sectionShow = document.getElementById("section-show");
+let sectionCom = document.getElementById("section-com");
+
 closeButton.addEventListener("click", function() {
-    document.getElementById("modalWindows").style.display = "none";
+    modalWindow.style.display = "none";
+    sectionShow.style.display = "block";
+    sectionCom.style.display = "block";
 });
 
 nextButton.addEventListener("click", function() {
@@ -21,7 +27,9 @@ let pictures = document.getElementsByClassName("thumbnail-pic");
 
 for (let i = 0; i < pictures.length; i++) {
     pictures[i].addEventListener("click", function() {
-        document.getElementById("modalWindows").style.display = "block";
+        modalWindow.style.display = "block";
+        sectionShow.style.display = "none";
+        sectionCom.style.display = "none";
     });
 }
 

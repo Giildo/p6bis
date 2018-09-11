@@ -71,7 +71,8 @@ class NewTrickHandler implements NewTrickHandlerInterface
 
             if (!empty($datas->videos)) {
                 foreach ($datas->videos as $video) {
-                    $newVideo = $this->videoBuilder->build($video, $trick);
+                    $newVideo = $this->videoBuilder->build($video, $trick)
+                                                   ->getVideo();
 
                     $this->entityManager->persist($newVideo);
                 }
@@ -81,7 +82,8 @@ class NewTrickHandler implements NewTrickHandlerInterface
             if (!empty($datas->pictures)) {
                 $counter = 1;
                 foreach ($datas->pictures as $picture) {
-                    $newPicture = $this->pictureBuilder->build($picture, $trick, $counter);
+                    $newPicture = $this->pictureBuilder->build($picture, $trick, $counter)
+                                                       ->getPicture();
                     $pictures[] = [$newPicture, $picture->picture];
 
                     $this->entityManager->persist($newPicture);

@@ -1,5 +1,6 @@
 @import "../color";
 @import "../font";
+@import "../mixin";
 
 /* TRICK SHOW */
 //========================================================
@@ -11,13 +12,6 @@
 
 //Section show
 $showSectionPadding: 0 30px;
-%sectionStyle {
-  width: 60%;
-  margin: auto;
-  background-color: $grey01;
-  border: 1px solid $grey03;
-  box-sizing: border-box;
-}
 
   //Header section title 1
   $headerTitle1Width: 100%;

@@ -8,8 +8,14 @@ interface HomePagePresenterInterface
 {
     /**
      * @param TrickInterface[]|null $tricks
+     * @param int $pageNumber
+     * @param int $currentPage
      *
      * @return string
      */
-    public function homePagePresentation(?array $tricks = []): string;
+    public function homePagePresentation(
+        array $tricks,
+        int $pageNumber,
+        int $currentPage
+    ): string;
 }

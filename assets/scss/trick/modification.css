@@ -1,0 +1,103 @@
+/* CORE */
+/* GLOBAL */
+/* SHOW - NEW */
+.section-form {
+  width: 80%;
+  margin: auto;
+  background-color: #f0f0f0;
+  border: 1px solid #a0a2a9;
+  box-sizing: border-box; }
+  @media screen and (max-width: 1024px) and (min-width: 740px) {
+    .section-form {
+      width: 90%; } }
+  @media screen and (max-width: 740px) {
+    .section-form {
+      width: 100%;
+      border: none; } }
+
+.section-form {
+  margin-top: 5vh; }
+  .section-form form {
+    margin-bottom: 50px; }
+  .section-form h1 {
+    font-family: "Jura", sans-serif; }
+  .section-form .field-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: left; }
+    .section-form .field-group .check-block {
+      display: flex;
+      align-items: center;
+      margin: 15px 5px;
+      cursor: pointer; }
+      .section-form .field-group .check-block:hover .check-mark {
+        background-color: #a0a2a9; }
+      .section-form .field-group .check-block .checkbox {
+        display: none; }
+        .section-form .field-group .check-block .checkbox:checked + .check-mark {
+          background-color: #64e5ff;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center; }
+          .section-form .field-group .check-block .checkbox:checked + .check-mark:after {
+            content: 'done';
+            color: #00050a;
+            font-weight: bold;
+            font-size: 17px; }
+      .section-form .field-group .check-block .check-mark {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-color: #d7d7d9;
+        margin-right: 10px;
+        border-radius: 5px;
+        border: 1px solid #365375; }
+    .section-form .field-group .form-block {
+      display: flex;
+      justify-content: left !important;
+      align-items: center !important; }
+      .section-form .field-group .form-block select {
+        margin: 0 10px;
+        width: 100px;
+        height: 25px;
+        border-radius: 5px;
+        background-color: #64e5ff;
+        cursor: pointer;
+        font-size: 15px; }
+  .section-form .collection-group:before {
+    content: '';
+    width: 90%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), #00050a, rgba(255, 255, 255, 0));
+    height: 1px;
+    display: block;
+    margin: 20px auto; }
+  .section-form .collection-group .form-block {
+    display: flex;
+    flex-direction: column; }
+    .section-form .collection-group .form-block .label {
+      display: flex;
+      align-items: center; }
+      @media screen and (max-width: 740px) {
+        .section-form .collection-group .form-block .label {
+          flex-direction: column; } }
+      .section-form .collection-group .form-block .label button {
+        margin: 0 25px;
+        flex-basis: 25%;
+        box-shadow: 7px 10px 10px rgba(0, 0, 0, 0.1); }
+        @media screen and (max-width: 740px) {
+          .section-form .collection-group .form-block .label button {
+            margin: 10px 0; } }
+        .section-form .collection-group .form-block .label button:hover, .section-form .collection-group .form-block .label button:active {
+          box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+          background-color: #64e5ff; }
+    .section-form .collection-group .form-block .widget {
+      display: flex;
+      flex-direction: column;
+      padding: 0 20px; }
+      .section-form .collection-group .form-block .widget .collection-block {
+        padding: 10px; }
+  .section-form .collection-group:last-child {
+    margin-bottom: 20px; }
+
+/*# sourceMappingURL=modification.css.map */

@@ -6,7 +6,6 @@ namespace App\Domain\Model\Interfaces;
 use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
 use DateTime;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class Comment

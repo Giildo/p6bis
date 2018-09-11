@@ -1,27 +1,27 @@
 /* CORE */
 /* GLOBAL */
-/* HOME */
+/* SHOW - NEW */
 h1 {
-  font-size: 5em;
+  font-size: 8vw;
   font-family: "Jura", sans-serif;
   font-weight: bold; }
   h1 span {
     position: relative;
     font-weight: bold;
-    top: -20px;
-    right: -20px;
-    text-shadow: -20px 20px 10px #4b4b4b; }
+    top: -1vw;
+    right: -1vw;
+    text-shadow: -1vw 1vw 0.5vw #4b4b4b; }
 
 #section-home {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   width: auto;
-  padding: 0 50px; }
+  padding: 0 3vw; }
   #section-home article {
     flex-basis: 31%;
     margin: 1%;
-    border: 1px solid #7d7d7d;
+    border: 1px solid #5f6674;
     border-radius: 10px;
     background-color: #fffaf5;
     -webkit-box-sizing: border-box;
@@ -30,10 +30,49 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: space-between; }
-    #section-home article header a img {
-      border-radius: 10px 10px 0 0; }
+    @media screen and (max-width: 1024px) and (min-width: 740px) {
+      #section-home article {
+        flex-basis: 48%; } }
+    @media screen and (max-width: 740px) {
+      #section-home article {
+        flex-basis: 100%; } }
+    #section-home article header {
+      position: relative; }
+      #section-home article header a img {
+        border-radius: 10px 10px 0 0; }
+      #section-home article header .optionsButtons {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex; }
+        #section-home article header .optionsButtons a {
+          border-radius: 50%;
+          border: none;
+          cursor: pointer;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 5px; }
+          @media screen and (max-width: 740px) {
+            #section-home article header .optionsButtons a {
+              width: 30px;
+              height: 30px;
+              font-size: 15px; } }
+          @media screen and (min-width: 740px) {
+            #section-home article header .optionsButtons a {
+              width: 40px;
+              height: 40px; } }
+          #section-home article header .optionsButtons a.delete {
+            background-color: #f04546; }
+            #section-home article header .optionsButtons a.delete:hover {
+              background-color: #f01f29; }
+          #section-home article header .optionsButtons a.modify {
+            background-color: #ff9c41; }
+            #section-home article header .optionsButtons a.modify:hover {
+              background-color: #ff9112; }
     #section-home article section {
-      padding: 5px; }
+      padding: 15px; }
     #section-home article footer {
       display: flex;
       justify-content: flex-end; }
@@ -54,6 +93,19 @@ h1 {
           cursor: pointer;
           font-weight: bold; }
           #section-home article footer a button:hover {
-            background-color: #12d0e4; }
+            background-color: #64e5ff; }
+
+#moreTricks {
+  display: block;
+  margin: 10px auto;
+  width: 150px;
+  height: 4vh;
+  background-color: #02b3e4;
+  border: 1px solid #5f6674;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1); }
+  #moreTricks:hover {
+    background-color: #64e5ff; }
 
 /*# sourceMappingURL=home.css.map */

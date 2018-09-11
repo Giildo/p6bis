@@ -4,7 +4,6 @@ namespace App\Domain\Model\Interfaces;
 
 use App\Domain\Model\Trick;
 use DateTime;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class Trick
@@ -64,11 +63,6 @@ interface TrickInterface
 	 * @return VideoInterface[]|null
 	 */
 	public function getVideos(): ?array;
-
-    /**
-     * @return CommentInterface[]|null
-     */
-    public function getComments(): ?array;
 
 	/**
 	 * @return void

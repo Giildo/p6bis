@@ -21,7 +21,7 @@
             {% endif %}
 
             {% if headPicture == false %}
-                <img src="/pic/general/head_picture.jpg" alt="Photo par défaut"/>
+                <img src="/pic/general/head_picture.jpg" alt="Photo par défaut" class="img-fluid"/>
             {% endif %}
             <h1>&laquo; {{ trick.name }} &raquo;</h1>
         </header>
@@ -57,7 +57,7 @@
                 <div id="video-container">
                     {% for video in trick.videos %}
                         <div class="video-containers">
-                            <iframe src="https://www.youtube.com/embed/{{ video.name }}"
+                            <iframe src="https://www.youtube.com/embed/{{ video.name }}?rel=0"
                                     frameborder="0" allowfullscreen></iframe>
                         </div>
                     {% endfor %}
@@ -69,59 +69,72 @@
         <footer>
             <div><span class="label">Catégorie</span> {{ trick.category.name }}</div>
             <div><span class="label">Auteur</span> {{ trick.author.username }}</div>
+            <div><span class="label">Crée le</span> {{ trick.createdAt | date('Y-m-d H:i:s') }}</div>
 
-            <div>
-                {% if trick.updatedAt is not null %}
-                    <span class="label">Modifiée le</span> {{ trick.updatedAt | date('Y-m-d H:i:s') }}
-                {% else %}
-                    <span class="label">Crée le</span> {{ trick.createdAt | date('Y-m-d H:i:s') }}
-                {% endif %}
-            </div>
+
+            {% if trick.updatedAt != trick.createdAt %}
+                <div><span class="label">Modifiée le</span> {{ trick.updatedAt | date('Y-m-d H:i:s') }}</div>
+            {% endif %}
         </footer>
     </section>
 
     <!-- Comment section -->
-    <section id="section-com">
-        <h2>Espace de discussion</h2>
+    {% if comments is not empty or app.user is not null %}
+        <section id="section-com">
+            <h2>Espace de discussion</h2>
 
-        {% if app.user is not null %}
-            {% form_theme formComment 'Form/trick_show_add_comment.html.twig' %}
-            {{ form(formComment) }}
-        {% endif %}
+            {% if app.user is not null %}
+                {% form_theme formComment 'Form/trick_show_add_comment.html.twig' %}
+                {{ form(formComment) }}
+            {% endif %}
 
-        {% if trick.comments is not empty %}
-            <div id="comments">
-                {% for comment in trick.comments %}
-                    <div class="comment">
-                        <header>
-                            <!--<div>
-                            <img src="/pic/users/{# comment.author.picture.username #}.{# comment.author.picture.extension #}"
-                                 alt="{# comment.author.picture.description #}">
-                        </div>-->
-                            <h5>{{ comment.author.username }}</h5>
-                        </header>
-                        <section>
-                            <p>{{ comment.comment }}</p>
-                        </section>
-                        <footer>
-                            <p>Publié le {{ comment.createdAt | date('Y-m-d H:i:s') }}</p>
-                            {% if comment.updatedAt is not null %}
-                                <p>Modifié le {{ comment.updatedAt | date('Y-m-d H:i:s') }}</p>
-                            {% endif %}
-                            {% if app.user is not null and (is_granted('ROLE_ADMIN') or app.user == comment.author) %}
-                                <div>
-                                    <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}?action=modifier&id={{ comment.id }}"
-                                       class="material-icons update">create</a>
-                                    <a href="{{ path('Trick_show_comment_deletion', {'trickSlug': trick.slug, 'id': comment.id}) }}"
-                                       class="material-icons delete">delete</a>
-                                </div>
-                            {% endif %}
-                        </footer>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </section>
+            {% if comments is not empty %}
+                <div id="comments">
+                    {% for comment in comments %}
+                        <div class="comment">
+                            <header>
+                                {% if comment.author.picture is not null %}
+                                    <img src="/pic/users/{{ comment.author.picture.name }}.{{ comment.author.picture.extension }}"
+                                         alt="{{ comment.author.picture.description }}"
+                                         style="width: auto;height: 40px;margin: 1px;">
+                                {% else %}
+                                    <img src="/pic/users/default.gif"
+                                         alt="Image par défaut des utilisateurs"
+                                         style="width: auto;height: 40px;margin: 1px;">
+                                {% endif %}
+                                <h5>{{ comment.author.username }}</h5>
+                            </header>
+                            <section>
+                                <p>{{ comment.comment }}</p>
+                            </section>
+                            <footer>
+                                <p>Publié le {{ comment.createdAt | date('Y-m-d H:i:s') }}</p>
+                                {% if comment.updatedAt != comment.createdAt %}
+                                    <p>Modifié le {{ comment.updatedAt | date('Y-m-d H:i:s') }}</p>
+                                {% endif %}
+                                {% if app.user is not null and (is_granted('ROLE_ADMIN') or app.user == comment.author) %}
+                                    <div>
+                                        <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}?action=modifier&id={{ comment.id }}#comment-form"
+                                           class="material-icons update">create</a>
+                                        <a href="{{ path('Trick_show_comment_deletion', {'trickSlug': trick.slug, 'id': comment.id}) }}"
+                                           class="material-icons delete">delete</a>
+                                    </div>
+                                {% endif %}
+                            </footer>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if comments is not empty and pageNumber > 1 %}
+                {% include 'services/pagination.html.twig' with {
+                    pathName: 'Trick_show',
+                    pathParamName: 'trickSlug',
+                    pathParamValue: trick.slug
+                } %}
+            {% endif %}
+        </section>
+    {% endif %}
 
     <!-- Modal windows -->
     {% if trick.pictures is not empty %}
@@ -160,4 +173,5 @@
 
 {% block javascripts %}
     <script type="text/javascript" src="/build/js/tricks/modal.js"></script>
+    <script type="text/javascript" src="/build/js/tricks/commentButton.js"></script>
 {% endblock %}

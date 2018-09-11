@@ -3,18 +3,18 @@
 {% block title %}{% endblock %}
 
 {% block stylesheets %}
-
+    <link rel="stylesheet" href="/build/css/trick/new.css"/>
 {% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur la page d'ajout d'une nouvelle figure</h1>
+    <section class="section-form">
+        <h1>Nouvelle trick</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" value="Valider" />
-    {{ form_end(form) }}
+        {% form_theme form 'Form/trick_new.html.twig' %}
+        {{ form(form) }}
+    </section>
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="/build/js/collectionType.js"></script>
+    <script type="text/javascript" src="/build/js/collectionTypeNewTrick.js"></script>
 {% endblock %}

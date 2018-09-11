@@ -32,32 +32,32 @@ function removeTagForm(divParent, divParentId) {
     }
 }
 
-let buttonAddVideo = document.createElement("button");
-let contentAddVideo = document.createTextNode("Ajouter une vidéo");
-buttonAddVideo.className = "add_picture btn btn-success";
-buttonAddVideo.appendChild(contentAddVideo);
+let buttonAddNewVideo = document.createElement("button");
+let contentAddNewVideo = document.createTextNode("Ajouter une vidéo");
+buttonAddNewVideo.className = "add_picture btn btn-success";
+buttonAddNewVideo.appendChild(contentAddNewVideo);
 
-let buttonRemoveVideo = document.createElement("button");
-let contentRemoveVideo = document.createTextNode("Supprimer une vidéo");
-buttonRemoveVideo.className = "remove_picture btn btn-danger";
-buttonRemoveVideo.appendChild(contentRemoveVideo);
+let buttonRemoveNewVideo = document.createElement("button");
+let contentRemoveNewVideo = document.createTextNode("Supprimer une vidéo");
+buttonRemoveNewVideo.className = "remove_picture btn btn-danger";
+buttonRemoveNewVideo.appendChild(contentRemoveNewVideo);
 
-let divParentVideo = document.getElementById("trick_modification_newVideos");
-divParentVideo.appendChild(buttonAddVideo);
-divParentVideo.appendChild(buttonRemoveVideo);
+let divParentNewVideo = document.getElementById("trick_modification_newVideos");
+divParentNewVideo.parentElement.parentElement.childNodes[1].appendChild(buttonAddNewVideo);
+divParentNewVideo.parentElement.parentElement.childNodes[1].appendChild(buttonRemoveNewVideo);
 
-divParentVideo.setAttribute("data-index", "0");
+divParentNewVideo.setAttribute("data-index", "0");
 
-buttonAddVideo.addEventListener("click", function (e) {
+buttonAddNewVideo.addEventListener("click", function (e) {
     e.preventDefault();
 
-    addTagForm(divParentVideo, "URL de la vidéo ");
+    addTagForm(divParentNewVideo, "URL de la vidéo ");
 });
 
-buttonRemoveVideo.addEventListener("click", function (e) {
+buttonRemoveNewVideo.addEventListener("click", function (e) {
     e.preventDefault();
 
-    removeTagForm(divParentVideo, "trick_modification_newVideos_");
+    removeTagForm(divParentNewVideo, "trick_modification_newVideos_");
 });
 
 let buttonAddNewPicture = document.createElement("button");
@@ -71,8 +71,8 @@ buttonRemoveNewPicture.className = "remove_picture btn btn-danger";
 buttonRemoveNewPicture.appendChild(contentRemoveNewPicture);
 
 let divParentNewPicture = document.getElementById("trick_modification_newPictures");
-divParentNewPicture.appendChild(buttonAddNewPicture);
-divParentNewPicture.appendChild(buttonRemoveNewPicture);
+divParentNewPicture.parentElement.parentElement.childNodes[1].appendChild(buttonAddNewPicture);
+divParentNewPicture.parentElement.parentElement.childNodes[1].appendChild(buttonRemoveNewPicture);
 
 divParentNewPicture.setAttribute("data-index", "0");
 

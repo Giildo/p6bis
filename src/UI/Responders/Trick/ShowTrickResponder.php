@@ -2,6 +2,8 @@
 
 namespace App\UI\Responders\Trick;
 
+use App\Domain\Model\Interfaces\CommentInterface;
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\UI\Presenters\Interfaces\Trick\ShowTrickPresenterInterface;
 use App\UI\Responders\Interfaces\Trick\ShowTrickResponderInterface;
@@ -41,11 +43,20 @@ class ShowTrickResponder implements ShowTrickResponderInterface
         ?bool $redirect = true,
         ?string $path = 'Home',
         ?array $parameters = [],
-        ?Trick $trick = null,
-        ?FormInterface $formComment = null
+        ?TrickInterface $trick = null,
+        ?array $comments = [],
+        ?FormInterface $formComment = null,
+        ?int $numberPage = 0,
+        ?int $paging = 0
     ) {
         return $redirect ?
             new RedirectResponse($this->urlGenerator->generate($path, $parameters)) :
-            new Response($this->presenter->showTrickPresentation($trick, $formComment));
+            new Response($this->presenter->showTrickPresentation(
+                $trick,
+                $formComment,
+                $comments,
+                $numberPage,
+                $paging
+            ));
     }
 }

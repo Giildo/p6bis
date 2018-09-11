@@ -22,7 +22,7 @@ class HomePageActionTest extends TestCase
         $responder = new HomePageResponder($presenter);
 
         $repository = $this->createMock(TrickRepository::class);
-        $repository->method('loadAllTricksWithAuthorCategoryAndHeadPicture')->willReturn([]);
+        $repository->method('loadTricksWithPaging')->willReturn([]);
 
         $this->action = new HomePageAction($repository, $responder);
     }

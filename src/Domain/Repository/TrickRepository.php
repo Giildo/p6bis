@@ -4,13 +4,14 @@ namespace App\Domain\Repository;
 
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
+use App\Domain\Repository\Interfaces\RepositoryCounterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 
-class TrickRepository extends ServiceEntityRepository
+class TrickRepository extends ServiceEntityRepository implements RepositoryCounterInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -18,14 +19,22 @@ class TrickRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $paging
+     *
      * @return TrickInterface[]
      */
-    public function loadAllTricksWithAuthorCategoryAndHeadPicture(): array
+    public function loadTricksWithPaging(int $paging): array
     {
-        return $this->createQueryBuilder('t')
-            ->where('t.published = 1')
+        $first = ($paging - 1) * Trick::NUMBER_OF_ITEMS;
+
+        return $this->createQueryBuilder('trick')
+            ->orderBy('trick.createdAt')
+            ->where('trick.published = 1')
+            ->setFirstResult($first)
+            ->setMaxResults(Trick::NUMBER_OF_ITEMS)
+            ->orderBy('trick.updatedAt', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->execute();
     }
 
     /**
@@ -40,10 +49,8 @@ class TrickRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('trick')
             ->leftJoin('trick.videos', 'videos')
             ->leftJoin('trick.pictures', 'pictures')
-            ->leftJoin('trick.comments', 'comments')
             ->addSelect('videos')
             ->addSelect('pictures')
-            ->addSelect('comments')
             ->where('trick.slug = :slug')
             ->setParameter('slug', $trickSlug)
             ->getQuery()
@@ -52,14 +59,17 @@ class TrickRepository extends ServiceEntityRepository
 
     /**
      * @param TrickInterface $trick
+     * @param array $comments
      *
      * @return void
      *
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function deleteTrick(TrickInterface $trick): void
-    {
+    public function deleteTrick(
+        TrickInterface $trick,
+        array $comments
+    ): void {
         $entityManager = $this->getEntityManager();
 
         $pictures = $trick->getPictures();
@@ -76,7 +86,25 @@ class TrickRepository extends ServiceEntityRepository
             }
         }
 
+        if (!empty($comments)) {
+            foreach ($comments as $comment) {
+                $entityManager->remove($comment);
+            }
+        }
+
         $entityManager->remove($trick);
         $entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countEntries(?string $identifier = null): int
+    {
+        return (int)$this->createQueryBuilder('trick')
+            ->select('count(trick.slug)')
+            ->where('trick.published = 1')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

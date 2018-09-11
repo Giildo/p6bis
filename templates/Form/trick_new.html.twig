@@ -1,0 +1,29 @@
+{% use '/Form/form_general_layout.html.twig' %}
+
+{% block form %}
+    {{ form_start(form) }}
+
+    {{ form_errors(form) }}
+
+    <div class="form-fields">
+        {{ form_widget(form.name) }}
+        {{ form_widget(form.description) }}
+
+        <div class="field-group">
+            {{ form_widget(form.published) }}
+            {{ form_row(form.category) }}
+        </div>
+
+        <div class="collection-group">
+            {{ form_widget(form.pictures) }}
+        </div>
+
+        <div class="collection-group">
+            {{ form_widget(form.videos) }}
+        </div>
+    </div>
+
+    <button type="submit"><span>Nouvelle trick</span></button>
+
+    {{ form_end(form) }}
+{% endblock %}

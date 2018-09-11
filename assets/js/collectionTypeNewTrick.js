@@ -9,6 +9,7 @@ function addTagForm(divParent, labelName) {
 
     let divInner = document.createElement("div");
     divInner.innerHTML = newForm;
+    divInner.className = "collection-block";
     let label = divInner.getElementsByTagName("label")[0];
     label.textContent = labelName + index;
 
@@ -34,17 +35,17 @@ function removeTagForm(divParent, divParentId) {
 
 let buttonAddVideo = document.createElement("button");
 let contentAddVideo = document.createTextNode("Ajouter une vidéo");
-buttonAddVideo.className = "add_picture btn btn-success";
+buttonAddVideo.className = "add_picture";
 buttonAddVideo.appendChild(contentAddVideo);
 
 let buttonRemoveVideo = document.createElement("button");
 let contentRemoveVideo = document.createTextNode("Supprimer une vidéo");
-buttonRemoveVideo.className = "remove_picture btn btn-danger";
+buttonRemoveVideo.className = "remove_picture";
 buttonRemoveVideo.appendChild(contentRemoveVideo);
 
 let divParentVideo = document.getElementById("new_trick_videos");
-divParentVideo.appendChild(buttonAddVideo);
-divParentVideo.appendChild(buttonRemoveVideo);
+divParentVideo.parentElement.parentElement.childNodes[1].appendChild(buttonAddVideo);
+divParentVideo.parentElement.parentElement.childNodes[1].appendChild(buttonRemoveVideo);
 
 divParentVideo.setAttribute("data-index", "0");
 
@@ -71,8 +72,8 @@ buttonRemovePicture.className = "remove_picture btn btn-danger";
 buttonRemovePicture.appendChild(contentRemovePicture);
 
 let divParentPicture = document.getElementById("new_trick_pictures");
-divParentPicture.appendChild(buttonAddPicture);
-divParentPicture.appendChild(buttonRemovePicture);
+divParentPicture.parentElement.parentElement.childNodes[1].appendChild(buttonAddPicture);
+divParentPicture.parentElement.parentElement.childNodes[1].appendChild(buttonRemovePicture);
 
 divParentPicture.setAttribute("data-index", "0");
 

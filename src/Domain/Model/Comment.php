@@ -4,11 +4,12 @@ namespace App\Domain\Model;
 
 use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
 use App\Domain\Model\Interfaces\CommentInterface;
+use App\Domain\Model\Interfaces\EntityPaginerInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class Comment
@@ -17,7 +18,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="p6bis_comment")
  * @ORM\Entity(repositoryClass="App\Domain\Repository\CommentRepository")
  */
-class Comment implements CommentInterface
+class Comment implements CommentInterface, EntityPaginerInterface
 {
     /**
      * @var UuidInterface
@@ -46,14 +47,14 @@ class Comment implements CommentInterface
     /**
      * @var DateTime
      *
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
      */
     private $updatedAt;
 
     /**
      * @var TrickInterface
      *
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"}, inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false, referencedColumnName="slug", name="trick_slug")
      */
     private $trick;
@@ -81,6 +82,7 @@ class Comment implements CommentInterface
         $this->trick = $trick;
         $this->author = $author;
         $this->createdAt = new DateTime();
+        $this->updatedAt = $this->createdAt;
     }
 
     /**

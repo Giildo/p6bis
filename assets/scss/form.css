@@ -1,6 +1,6 @@
 /* CORE */
 /* GLOBAL */
-/* HOME */
+/* SHOW - NEW */
 .section-form {
   margin: 0 auto 20px auto;
   padding: 10px 30px; }
@@ -14,13 +14,21 @@
         justify-content: space-between; }
         .section-form form .form-fields .field-group .form-control {
           width: 43%; }
+        .section-form form .form-fields .field-group div {
+          width: 100%;
+          display: flex;
+          justify-content: space-between; }
+          .section-form form .form-fields .field-group div .form-block {
+            width: 48%; }
+            .section-form form .form-fields .field-group div .form-block input {
+              width: 100%; }
       .section-form form .form-fields .form-control {
         display: block;
         margin: 5px 0;
         padding: 6px 12px;
         font-size: 1rem;
         line-height: 1.5;
-        color: #495057;
+        color: #365375;
         background-color: #fffaf5;
         background-clip: padding-box;
         border: 1px solid #ced4da;
@@ -40,7 +48,7 @@
       border-radius: 5px;
       border: none;
       width: 100%;
-      color: #fffaf5;
+      color: #00050a;
       padding: 0.7em 4em;
       margin-top: 5px;
       -webkit-box-shadow: 12px 15px 20px rgba(0, 0, 0, 0.1);
@@ -53,9 +61,12 @@
       font-size: 1rem;
       font-weight: bold; }
       .section-form form button:hover, .section-form form button:active {
-        box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1); }
+        box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #64e5ff; }
       .section-form form button span {
         display: inline-block;
         vertical-align: middle; }
+    .section-form form input, .section-form form textarea {
+      font-family: "Raleway", sans-serif; }
 
 /*# sourceMappingURL=form.css.map */

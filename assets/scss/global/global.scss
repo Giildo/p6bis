@@ -1,0 +1,103 @@
+@import "../style/variables";
+@import "../style/alerts";
+
+body {
+  position: relative;
+  margin: 0;
+  background: url("/pic/general/header.jpg") top left fixed;
+}
+
+#body {
+  min-height: calc(100vh - 120px);
+}
+
+@media all and (min-width: $small) {
+  body {
+    padding-top: $navHeight-M;
+  }
+
+  #body {
+    margin: 50px 0;
+    min-height: calc(100vh - 280px);
+  }
+}
+
+p, a, h1, h2, h3, h4, h5, label {
+  font-family: $baseFont;
+}
+
+h1, h2, h3, h4, h5 {
+  text-align: center;
+}
+
+a {
+  color: $linkColor;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.img-fluid {
+  width: 100%;
+  height: auto;
+}
+
+@import "nav";
+
+@import "footer";
+
+@media all and (max-width: $small){
+  .sf-minitoolbar {
+    display: none !important;
+  }
+}
+
+#center {
+  text-align: center;
+  margin-top: 30px;
+
+  @media screen and (max-width: $small) {
+    margin-bottom: 30px;
+  }
+
+  #pagination {
+    display: inline-block;
+    background-color: $grey02;
+    border: {
+      top: 1px solid $greyBlue;
+      bottom: 1px solid $greyBlue;
+    }
+
+    a, span {
+      display: flex;
+      width: 40px;
+      height: 40px;
+      justify-content: center;
+      align-items: center;
+      color: black;
+      float: left;
+      text-decoration: none;
+      transition: background-color .2s;
+      border-right: 1px solid $greyBlue;
+
+      &:hover {
+        background-color: $grey03;
+      }
+
+      &:first-child {
+        border-left: 1px solid $greyBlue;
+      }
+
+      &.deselect {
+        background-color: $grey01;
+        color: $greyBlueDark;
+      }
+
+      &.active {
+        background-color: $blueLight;
+        color: $greyBlueDark;
+      }
+    }
+  }
+}

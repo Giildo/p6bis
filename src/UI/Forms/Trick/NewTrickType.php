@@ -21,22 +21,34 @@ class NewTrickType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'required' => false,
-                'label'    => 'Nom de la figure',
+                'required'       => false,
+                'error_bubbling' => true,
+                'attr'           => [
+                    'placeholder' => 'Nom de la figure*',
+                    'class'       => 'form-control',
+                ],
             ])
             ->add('description', TextareaType::class, [
-                'required' => false,
-                'label'    => 'Description',
+                'required'       => false,
+                'error_bubbling' => true,
+                'attr'           => [
+                    'placeholder' => 'Description*',
+                    'class'       => 'form-control',
+                ],
             ])
             ->add('published', CheckboxType::class, [
-                'required' => false,
-                'label'    => 'Publier',
+                'required'       => false,
+                'label'          => 'Publier',
+                'error_bubbling' => true,
+                'attr'           => [
+                    'class' => 'form-control checkbox',
+                ],
             ])
             ->add('category', EntityType::class, [
                 'required'     => false,
                 'class'        => Category::class,
                 'choice_label' => 'name',
-                'label'        => 'Catégorie',
+                'label'        => 'Catégorie*',
                 'placeholder'  => null,
             ])
             ->add('pictures', CollectionType::class, [
@@ -54,8 +66,7 @@ class NewTrickType extends AbstractType
                 'entry_options' => [
                     'label' => false,
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

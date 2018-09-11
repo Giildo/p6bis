@@ -1,5 +1,28 @@
 @import "../style/variables";
 
+//Header
+$homeH1FontSize: 8vw;
+$homeH1TextShift: 1vw;
+$homeH1TextBlurring: 0.5vw;
+
+//Section
+$homeSectionPadding: 0 3vw;
+
+//Article
+$homeSectionArticleWidthFlexCard-L: 31%;
+$homeSectionArticleWidthFlexCard-M: 48%;
+$homeSectionArticleWidthFlexCard-S: 100%;
+$homeSectionArticleMarginSize: 1%;
+$homeSectionArticlePaddingSize: 15px;
+$homeSectionArticleBorderCardWidth: 1px;
+$homeSectionArticleBorderCardStyle: solid;
+$homeSectionArticleBorderRadiusCard: 10px;
+
+//Button
+$homeSectionArticleButtonPadding: 15px;
+$homeSectionArticleButtonTransition: 0.2s;
+$homeSectionArticleButtonBorderRadius: 8px;
+
 h1 {
   font: {
     size: $homeH1FontSize;
@@ -24,7 +47,16 @@ h1 {
   padding: $homeSectionPadding;
 
   article {
-    flex-basis: $homeSectionArticleWidthFlexCard;
+    flex-basis: $homeSectionArticleWidthFlexCard-L;
+
+    @media screen and (max-width: $medium) and (min-width: $small) {
+      flex-basis: $homeSectionArticleWidthFlexCard-M;
+    }
+
+    @media screen and (max-width: $small) {
+      flex-basis: $homeSectionArticleWidthFlexCard-S;
+    }
+
     margin: $homeSectionArticleMarginSize;
     border: $homeSectionArticleBorderCardWidth $homeSectionArticleBorderCardStyle $grey04;
     border-radius: $homeSectionArticleBorderRadiusCard;
@@ -37,9 +69,56 @@ h1 {
     justify-content: space-between;
 
     header {
+      position: relative;
+
       a {
         img {
           border-radius: $homeSectionArticleBorderRadiusCard $homeSectionArticleBorderRadiusCard 0 0;
+        }
+      }
+
+      .optionsButtons {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex;
+
+        a {
+          border-radius: 50%;
+          border: none;
+          cursor: pointer;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 5px;
+
+          @media screen and (max-width: $small) {
+            width: 30px;
+            height: 30px;
+            font-size: 15px;
+          }
+
+          @media screen and (min-width: $small) {
+            width: 40px;
+            height: 40px;
+          }
+
+          &.delete {
+            background-color: $red;
+
+            &:hover {
+              background-color: $redHover;
+            }
+          }
+
+          &.modify {
+            background-color: $orange;
+
+            &:hover {
+              background-color: $orangeHover;
+            }
+          }
         }
       }
     }
@@ -71,10 +150,26 @@ h1 {
           font-weight: bold;
 
           &:hover {
-            background-color: $blueHover;
+            background-color: $blueLight;
           }
         }
       }
     }
+  }
+}
+
+#moreTricks {
+  display: block;
+  margin: 10px auto;
+  width: 150px;
+  height: 4vh;
+  background-color: $blue;
+  border: 1px solid $grey04;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 2px 4px 8px $blackTransparent;
+
+  &:hover {
+    background-color: $blueLight;
   }
 }
