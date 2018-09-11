@@ -73,8 +73,10 @@ class TrickRepository extends ServiceEntityRepository implements RepositoryCount
         $entityManager = $this->getEntityManager();
 
         $pictures = $trick->getPictures();
+        $picturesName = [];
         if (!empty($pictures)) {
             foreach ($pictures as $picture) {
+                $picturesName[] = "{$picture->getName()}.{$picture->getExtension()}";
                 $entityManager->remove($picture);
             }
         }
@@ -94,6 +96,12 @@ class TrickRepository extends ServiceEntityRepository implements RepositoryCount
 
         $entityManager->remove($trick);
         $entityManager->flush();
+
+        if (!empty($picturesName)) {
+            foreach ($picturesName as $name) {
+                unlink(__DIR__ . '/../../../public/pic/tricks/' . $name);
+            }
+        }
     }
 
     /**

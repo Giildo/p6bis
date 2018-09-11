@@ -116,7 +116,7 @@
                                     <div>
                                         <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}?action=modifier&id={{ comment.id }}#comment-form"
                                            class="material-icons update">create</a>
-                                        <a href="{{ path('Trick_show_comment_deletion', {'trickSlug': trick.slug, 'id': comment.id}) }}"
+                                        <a href="{{ path('Trick_show_comment_deletion', {'trickSlug': trick.slug}) }}?action=suppression&id={{ comment.id }}"
                                            class="material-icons delete">delete</a>
                                     </div>
                                 {% endif %}

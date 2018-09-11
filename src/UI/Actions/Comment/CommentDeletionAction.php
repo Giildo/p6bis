@@ -34,8 +34,8 @@ class CommentDeletionAction
 
     /**
      * @Route(
-     *     path="/trick/{trickSlug}/suppression-commentaire/{id}",
-     *     requirements={"trickSlug"="\w+", "id"="[\w\-\d]+"},
+     *     path="/trick/{trickSlug}/suppression-commentaire",
+     *     requirements={"trickSlug"="\w+"},
      *     name="Trick_show_comment_deletion"
      * )
      *
