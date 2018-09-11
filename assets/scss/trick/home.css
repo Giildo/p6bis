@@ -95,4 +95,17 @@ h1 {
           #section-home article footer a button:hover {
             background-color: #64e5ff; }
 
+#moreTricks {
+  display: block;
+  margin: 10px auto;
+  width: 150px;
+  height: 4vh;
+  background-color: #02b3e4;
+  border: 1px solid #5f6674;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1); }
+  #moreTricks:hover {
+    background-color: #64e5ff; }
+
 /*# sourceMappingURL=home.css.map */

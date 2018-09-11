@@ -157,3 +157,19 @@ h1 {
     }
   }
 }
+
+#moreTricks {
+  display: block;
+  margin: 10px auto;
+  width: 150px;
+  height: 4vh;
+  background-color: $blue;
+  border: 1px solid $grey04;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 2px 4px 8px $blackTransparent;
+
+  &:hover {
+    background-color: $blueLight;
+  }
+}

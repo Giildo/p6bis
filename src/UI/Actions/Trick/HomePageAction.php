@@ -42,19 +42,16 @@ class HomePageAction
     }
 
     /**
-     * @Route(
-     *     path="/accueil/{paging}",
-     *     requirements={"paging": "\d+"},
-     *     defaults={"paging": "1"},
-     *     name="Home"
-     * )
+     * @Route(path="/accueil",name="Home")
      *
      * @param int $paging
      *
      * @return Response
      */
-    public function homePage(int $paging): Response
+    public function homePage(): Response
     {
+        $paging = 1;
+
         $numberPage = $this->paginationHelper->pagination(
             $this->trickRepository,
             Trick::NUMBER_OF_ITEMS,
