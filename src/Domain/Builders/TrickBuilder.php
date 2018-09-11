@@ -46,7 +46,8 @@ class TrickBuilder implements TrickBuilderInterface
             $datas->name,
             $datas->description,
             $datas->category,
-            $this->tokenStorage->getToken()->getUser()
+            $this->tokenStorage->getToken()->getUser(),
+            $datas->published
         );
 
         return $this;

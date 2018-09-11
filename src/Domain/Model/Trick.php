@@ -99,18 +99,20 @@ class Trick implements TrickInterface, EntityPaginerInterface
      * @param string $description
      * @param CategoryInterface $category
      * @param UserInterface $author
+     * @param bool $published
      */
     public function __construct(
         string $slug,
         string $name,
         string $description,
         CategoryInterface $category,
-        UserInterface $author
+        UserInterface $author,
+        bool $published
     ) {
         $this->slug = $slug;
         $this->name = $name;
         $this->description = $description;
-        $this->published = false;
+        $this->published = $published;
         $this->createdAt = new DateTime();
         $this->updatedAt = $this->createdAt;
         $this->category = $category;
