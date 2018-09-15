@@ -139,3 +139,24 @@ $h1FrameFontSize: 1.8em;
     }
   }
 }
+
+#new_trick_pictures, #new_trick_videos, #trick_modification_newPictures, #trick_modification_newVideos {
+  .collection-block {
+    div {
+      div {
+        width: 100%;
+        
+        .form-block {
+          display: flex;
+          flex-direction: column;
+          align-items: self-start;
+          width: 100%;
+
+          input, textarea {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

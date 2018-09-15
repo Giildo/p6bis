@@ -31,7 +31,7 @@ class Video implements VideoInterface
     /**
      * @var TrickInterface
      *
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"}, inversedBy="videos")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist", "remove"}, inversedBy="videos")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="slug", name="trick_slug")
      */
     private $trick;

@@ -5,10 +5,13 @@ namespace App\UI\Forms\Trick;
 use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
 use App\Domain\DTO\Trick\NewTrickDTO;
 use App\Domain\Model\Category;
+use App\Domain\Model\Picture;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -51,6 +54,10 @@ class NewTrickType extends AbstractType
                 'label'        => 'Catégorie*',
                 'placeholder'  => null,
             ])
+            ->add('headPicture', NewTrickNewPictureType::class, [
+                'required' => false,
+                'label'    => 'Image d\'en-tête',
+            ])
             ->add('pictures', CollectionType::class, [
                 'label'         => 'Images',
                 'entry_type'    => NewTrickNewPictureType::class,
@@ -80,7 +87,8 @@ class NewTrickType extends AbstractType
                     $form->get('published')->getData(),
                     $form->get('category')->getData(),
                     $form->get('pictures')->getData(),
-                    $form->get('videos')->getData()
+                    $form->get('videos')->getData(),
+                    $form->get('headPicture')->getData()
                 );
             }
         ]);

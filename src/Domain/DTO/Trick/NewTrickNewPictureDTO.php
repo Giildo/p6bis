@@ -11,7 +11,7 @@ class NewTrickNewPictureDTO implements TrickNewPictureDTOInterface
     /**
      * @var null|string
      *
-     * @Assert\NotNull(message="La description doit être renseignée.")
+     * @Assert\NotNull(message="La description de l'image doit être renseignée.")
      */
     public $description;
 

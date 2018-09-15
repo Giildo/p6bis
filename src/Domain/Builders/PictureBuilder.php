@@ -22,7 +22,8 @@ class PictureBuilder implements PictureBuilderInterface
     public function build(
         TrickNewPictureDTOInterface $dto,
         TrickInterface $trick,
-        int $counter
+        int $counter,
+        ?bool $headPicture = false
     ): self {
         $name = $trick->getSlug() . (new DateTime())->format('YmdHis') . '_' . $counter;
 
@@ -30,7 +31,7 @@ class PictureBuilder implements PictureBuilderInterface
             $name,
             $dto->description,
             $dto->picture->guessExtension(),
-            false,
+            $headPicture,
             $trick
         );
 

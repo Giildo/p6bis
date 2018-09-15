@@ -12,12 +12,15 @@ interface PictureBuilderInterface
      * @param TrickNewPictureDTOInterface $dto
      * @param TrickInterface $trick
      * @param int $counter
+     * @param bool|null $headPicture
+     *
      * @return PictureBuilderInterface
      */
     public function build(
         TrickNewPictureDTOInterface $dto,
         TrickInterface $trick,
-        int $counter
+        int $counter,
+        ?bool $headPicture = false
     );
 
     /**

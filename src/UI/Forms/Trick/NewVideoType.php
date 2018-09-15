@@ -12,9 +12,13 @@ class NewVideoType extends AbstractType
     {
         $builder
             ->add('url', UrlType::class, [
-                'required' => false,
-                'label'    => 'URL de la vidéo',
-            ])
-        ;
+                'required'       => false,
+                'error_bubbling' => true,
+                'label'          => false,
+                'attr'           => [
+                    'placeholder' => 'URL de la vidéo*',
+                    'class'       => 'form-control',
+                ],
+            ]);
     }
 }
