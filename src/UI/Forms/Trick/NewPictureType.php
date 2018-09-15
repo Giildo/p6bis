@@ -13,13 +13,18 @@ class NewPictureType extends AbstractType
     {
         $builder
             ->add('description', TextareaType::class, [
-                'required' => false,
-                'label' => 'Description',
+                'required'       => false,
+                'error_bubbling' => true,
+                'label'          => false,
+                'attr'           => [
+                    'placeholder' => 'Description de l\'image*',
+                    'class'       => 'form-control',
+                ],
             ])
             ->add('picture', FileType::class, [
-                'required' => false,
-                'label' => 'Image'
-            ])
-        ;
+                'required'       => false,
+                'error_bubbling' => true,
+                'label'          => false,
+            ]);
     }
 }

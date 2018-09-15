@@ -99,6 +99,15 @@
         padding: 10px; }
   .section-form .collection-group:last-child {
     margin-bottom: 20px; }
+  .section-form .label-left .form-block {
+    display: flex;
+    flex-direction: column;
+    align-items: self-start; }
+    .section-form .label-left .form-block div {
+      width: 100%; }
+      .section-form .label-left .form-block div textarea {
+        box-sizing: border-box;
+        width: 100%; }
 
 .section-form #elements {
   display: flex;

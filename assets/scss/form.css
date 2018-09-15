@@ -69,4 +69,14 @@
     .section-form form input, .section-form form textarea {
       font-family: "Raleway", sans-serif; }
 
+#new_trick_pictures .collection-block div div, #new_trick_videos .collection-block div div, #trick_modification_newPictures .collection-block div div, #trick_modification_newVideos .collection-block div div {
+  width: 100%; }
+  #new_trick_pictures .collection-block div div .form-block, #new_trick_videos .collection-block div div .form-block, #trick_modification_newPictures .collection-block div div .form-block, #trick_modification_newVideos .collection-block div div .form-block {
+    display: flex;
+    flex-direction: column;
+    align-items: self-start;
+    width: 100%; }
+    #new_trick_pictures .collection-block div div .form-block input, #new_trick_pictures .collection-block div div .form-block textarea, #new_trick_videos .collection-block div div .form-block input, #new_trick_videos .collection-block div div .form-block textarea, #trick_modification_newPictures .collection-block div div .form-block input, #trick_modification_newPictures .collection-block div div .form-block textarea, #trick_modification_newVideos .collection-block div div .form-block input, #trick_modification_newVideos .collection-block div div .form-block textarea {
+      width: 100%; }
+
 /*# sourceMappingURL=form.css.map */

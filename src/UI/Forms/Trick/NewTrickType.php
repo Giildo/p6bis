@@ -55,8 +55,8 @@ class NewTrickType extends AbstractType
                 'placeholder'  => null,
             ])
             ->add('headPicture', NewTrickNewPictureType::class, [
-                'required'     => false,
-                'label'        => 'Image d\'en-tête',
+                'required' => false,
+                'label'    => 'Image d\'en-tête',
             ])
             ->add('pictures', CollectionType::class, [
                 'label'         => 'Images',
