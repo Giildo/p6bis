@@ -56,6 +56,7 @@ class NewTrickDTO implements NewTrickDTOInterface
      * @var TrickNewPictureDTOInterface[]|null
      *
      * @Assert\Type("array")
+     * @Assert\Valid()
      */
     public $pictures;
 
@@ -63,6 +64,7 @@ class NewTrickDTO implements NewTrickDTOInterface
      * @var TrickNewVideoDTOInterface[]|null
      *
      * @Assert\Type("array")
+     * @Assert\Valid()
      */
     public $videos;
 

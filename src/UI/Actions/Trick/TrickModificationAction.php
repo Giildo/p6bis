@@ -5,6 +5,8 @@ namespace App\UI\Actions\Trick;
 use App\Application\Handlers\Interfaces\Forms\Trick\TrickModificationHandlerInterface;
 use App\Application\Helpers\Interfaces\PictureAndVideoTokenManagerInterface;
 use App\Domain\DTO\Trick\TrickModificationDTO;
+use App\Domain\DTO\Trick\TrickModificationNewPictureDTO;
+use App\Domain\Model\Interfaces\TrickInterface;
 use App\UI\Forms\Trick\TrickModificationType;
 use App\UI\Responders\Interfaces\Trick\TrickModificationResponderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -64,9 +66,9 @@ class TrickModificationAction
      */
     public function modification(Request $request)
     {
+        /** @var TrickInterface $trick */
         $trick = $request->getSession()->get('trick');
-
-        $request->getSession()->clear();
+        $request->getSession()->set('trick', null);
 
         $dto = new TrickModificationDTO(
             $trick->getDescription(),
@@ -77,7 +79,7 @@ class TrickModificationAction
         );
 
         $form = $this->formFactory->create(TrickModificationType::class, $dto)
-            ->handleRequest($request);
+                                  ->handleRequest($request);
 
         if ($this->handler->handle($form, $trick)) {
             return $this->responder->trickModificationResponse(

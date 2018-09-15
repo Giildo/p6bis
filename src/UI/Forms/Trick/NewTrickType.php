@@ -54,7 +54,7 @@ class NewTrickType extends AbstractType
                 'label'        => 'Catégorie*',
                 'placeholder'  => null,
             ])
-            ->add('headPicture', NewPictureType::class, [
+            ->add('headPicture', NewTrickNewPictureType::class, [
                 'required'     => false,
                 'label'        => 'Image d\'en-tête',
             ])
