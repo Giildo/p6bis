@@ -186,7 +186,7 @@ body {
       cursor: pointer;
       background-color: $blue;
       border-radius: 10px;
-      border: 1px solid $black;
+      border: 1px solid $grey04;
       width: 40px;
       height: 40px;
 
@@ -196,3 +196,5 @@ body {
     }
   }
 }
+
+@import "../style/modalWindow/modal";

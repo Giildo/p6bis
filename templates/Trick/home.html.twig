@@ -24,9 +24,25 @@
             arrow_upward
         </button>
     </div>
+
+    <div id="modalElement">
+        <div id="modalWindow">
+            <header>
+                <p>Suppression de la trick</p>
+                <button class="material-icons" id="close-modal">close</button>
+            </header>
+            <section>
+                <p>Êtes-vous sûr de vouloir supprimer la trick ?</p>
+            </section>
+            <footer id="modalWindowFooter">
+                <a href="#" id="modal-cancel">Annuler</a>
+            </footer>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     <script type="text/javascript" src="/build/js/homeAddTricks.js"></script>
     <script type="text/javascript" src="/build/js/upButton.js"></script>
+    <script type="text/javascript" src="/build/js/modalWindow.js"></script>
 {% endblock %}
