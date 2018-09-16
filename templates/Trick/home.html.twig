@@ -18,8 +18,15 @@
     {% else %}
         <h2>Désolé, aucune figure n'a été crée ou n'a été publiée.</h2>
     {% endif %}
+
+    <div id="up-button">
+        <button class="material-icons" id="button-up">
+            arrow_upward
+        </button>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     <script type="text/javascript" src="/build/js/homeAddTricks.js"></script>
+    <script type="text/javascript" src="/build/js/upButton.js"></script>
 {% endblock %}

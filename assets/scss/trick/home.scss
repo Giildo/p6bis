@@ -173,3 +173,26 @@ h1 {
     background-color: $blueLight;
   }
 }
+
+body {
+  position: relative;
+
+  #up-button {
+    position: fixed;
+    bottom: 120px;
+    right: 10px;
+
+    button {
+      cursor: pointer;
+      background-color: $blue;
+      border-radius: 10px;
+      border: 1px solid $black;
+      width: 40px;
+      height: 40px;
+
+      &:hover {
+        background-color: $blueLight;
+      }
+    }
+  }
+}
