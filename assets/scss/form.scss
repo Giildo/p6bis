@@ -160,3 +160,12 @@ $h1FrameFontSize: 1.8em;
     }
   }
 }
+
+#gcu-group {
+  margin-top: 5px;
+  display: flex;
+
+  input {
+    margin-right: 10px;
+  }
+}

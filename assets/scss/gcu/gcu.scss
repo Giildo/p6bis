@@ -1,0 +1,24 @@
+@import "../style/color";
+@import "../style/variables";
+
+#gcu-article {
+  @extend %sectionStyle;
+
+  padding: 30px;
+
+  h1, h2 {
+    font-family: $titleFont;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    margin-top: 80px;
+  }
+
+  ul {
+    font-family: $baseFont;
+  }
+}

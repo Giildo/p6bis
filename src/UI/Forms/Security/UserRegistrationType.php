@@ -5,6 +5,7 @@ namespace App\UI\Forms\Security;
 use App\Domain\DTO\Interfaces\Security\UserRegistrationDTOInterface;
 use App\Domain\DTO\Security\UserRegistrationDTO;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -80,7 +81,15 @@ class UserRegistrationType extends AbstractType
                         ],
                     ],
                 'error_bubbling' => true,
-            ]);
+            ])
+            ->add('gcuValidation', CheckboxType::class, [
+                'required'       => false,
+                'error_bubbling' => true,
+                'attr'           => [
+                    'class'       => 'form-control',
+                ],
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -93,7 +102,8 @@ class UserRegistrationType extends AbstractType
                     $form->get('firstName')->getData(),
                     $form->get('lastName')->getData(),
                     $form->get('mail')->getData(),
-                    $form->get('password')->getData()
+                    $form->get('password')->getData(),
+                    $form->get('gcuValidation')->getData()
                 );
             },
         ]);
