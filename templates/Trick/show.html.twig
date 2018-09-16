@@ -169,9 +169,25 @@
             </div>
         </aside>
     {% endif %}
+
+    <div id="modalElement">
+        <div id="modalWindow">
+            <header>
+                <p>Suppression du commentaire</p>
+                <button class="material-icons" id="close-modal">close</button>
+            </header>
+            <section>
+                <p>Êtes-vous sûr de vouloir supprimer le commentaire ?</p>
+            </section>
+            <footer id="modalWindowFooter">
+                <a href="#" id="modal-cancel">Annuler</a>
+            </footer>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     <script type="text/javascript" src="/build/js/tricks/modal.js"></script>
     <script type="text/javascript" src="/build/js/tricks/commentButton.js"></script>
+    <script type="text/javascript" src="/build/js/modalWindow.js"></script>
 {% endblock %}

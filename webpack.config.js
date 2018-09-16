@@ -22,6 +22,7 @@ Encore
     .addEntry('js/menuButton', './assets/js/menuButton.js')
     .addEntry('js/homeAddTricks', './assets/js/homeAddTricks.js')
     .addEntry('js/upButton', './assets/js/upButton.js')
+    .addEntry('js/modalWindow', './assets/js/modalWindow.js')
 
     .addEntry('js/tricks/modal', './assets/js/tricks/modal.js')
     .addEntry('js/tricks/commentButton', './assets/js/tricks/commentButton.js')
