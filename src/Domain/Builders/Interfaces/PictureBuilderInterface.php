@@ -2,25 +2,28 @@
 
 namespace App\Domain\Builders\Interfaces;
 
-use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\PictureDTOInterface;
 use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 
 interface PictureBuilderInterface
 {
     /**
-     * @param TrickNewPictureDTOInterface $dto
-     * @param TrickInterface $trick
-     * @param int $counter
+     * @param PictureDTOInterface $dto
+     * @param TrickInterface|null $trick
+     * @param int|null $counter
      * @param bool|null $headPicture
+     * @param UserInterface|null $user
      *
      * @return PictureBuilderInterface
      */
     public function build(
-        TrickNewPictureDTOInterface $dto,
-        TrickInterface $trick,
-        int $counter,
-        ?bool $headPicture = false
+        PictureDTOInterface $dto,
+        ?TrickInterface $trick = null,
+        ?int $counter = 0,
+        ?bool $headPicture = false,
+        ?UserInterface $user = null
     );
 
     /**

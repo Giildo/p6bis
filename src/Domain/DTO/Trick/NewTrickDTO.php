@@ -3,8 +3,8 @@
 namespace App\Domain\DTO\Trick;
 
 use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
-use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
-use App\Domain\DTO\Interfaces\Trick\TrickNewVideoDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\PictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\VideoDTOInterface;
 use App\Domain\Model\Interfaces\CategoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -53,7 +53,7 @@ class NewTrickDTO implements NewTrickDTOInterface
     public $category;
 
     /**
-     * @var TrickNewPictureDTOInterface[]|null
+     * @var PictureDTOInterface[]|null
      *
      * @Assert\Type("array")
      * @Assert\Valid()
@@ -61,7 +61,7 @@ class NewTrickDTO implements NewTrickDTOInterface
     public $pictures;
 
     /**
-     * @var TrickNewVideoDTOInterface[]|null
+     * @var VideoDTOInterface[]|null
      *
      * @Assert\Type("array")
      * @Assert\Valid()
@@ -83,7 +83,7 @@ class NewTrickDTO implements NewTrickDTOInterface
         ?CategoryInterface $category = null,
         ?array $pictures = [],
         ?array $videos = [],
-        ?TrickNewPictureDTOInterface $headPicture = null
+        ?PictureDTOInterface $headPicture = null
     ) {
         $this->name = $name;
         $this->description = $description;

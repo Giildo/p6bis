@@ -7,11 +7,11 @@ use App\Application\Handlers\Interfaces\Forms\Trick\TrickModificationHandlerInte
 use App\Application\Helpers\PictureSaveHelper;
 use App\Domain\Builders\PictureBuilder;
 use App\Domain\Builders\VideoBuilder;
-use App\Domain\DTO\Trick\NewTrickNewPictureDTO;
-use App\Domain\DTO\Trick\NewTrickNewVideoDTO;
+use App\Domain\DTO\Trick\NewPictureDTO;
+use App\Domain\DTO\Trick\NewVideoDTO;
 use App\Domain\DTO\Trick\TrickModificationDTO;
-use App\Domain\DTO\Trick\TrickModificationNewPictureDTO;
-use App\Domain\DTO\Trick\TrickModificationNewVideoDTO;
+use App\Domain\DTO\Trick\PictureDTO;
+use App\Domain\DTO\Trick\VideoDTO;
 use App\Domain\Model\Category;
 use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
@@ -85,12 +85,12 @@ class TrickModificationHandlerTest extends KernelTestCase
         $uploadedFile = $this->createMock(UploadedFile::class);
         $uploadedFile->method('guessExtension')->willReturn('jpeg');
 
-        $pictureDTO = new TrickModificationNewPictureDTO(
+        $pictureDTO = new PictureDTO(
             'Description de la nouvelle photo',
             $uploadedFile
         );
 
-        $videoDTO = new TrickModificationNewVideoDTO('https://www.youtube.com/watch?v=B3Lhid5_HJc');
+        $videoDTO = new VideoDTO('https://www.youtube.com/watch?v=B3Lhid5_HJc');
 
         $dto = new TrickModificationDTO(
             'Nouvelle description de la figure',

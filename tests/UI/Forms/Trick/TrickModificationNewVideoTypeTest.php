@@ -2,7 +2,7 @@
 
 namespace App\Tests\UI\Forms\Trick;
 
-use App\Domain\DTO\Trick\TrickModificationNewVideoDTO;
+use App\Domain\DTO\Trick\VideoDTO;
 use App\UI\Forms\Trick\TrickModificationNewVideoType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
@@ -20,6 +20,6 @@ class TrickModificationNewVideoTypeTest extends TypeTestCase
 
         $dto = $form->getData();
 
-        self::assertInstanceOf(TrickModificationNewVideoDTO::class, $dto);
+        self::assertInstanceOf(VideoDTO::class, $dto);
     }
 }

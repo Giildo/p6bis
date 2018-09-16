@@ -63,14 +63,14 @@ class Picture implements PictureInterface
      * @param string $description
      * @param string $extension
      * @param bool $headPicture
-     * @param TrickInterface $trick
+     * @param TrickInterface|null $trick
      */
     public function __construct(
         string $name,
         string $description,
         string $extension,
         bool $headPicture,
-        TrickInterface $trick
+        ?TrickInterface $trick = null
     ) {
         $this->name = $name;
         $this->description = $description;

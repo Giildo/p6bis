@@ -2,10 +2,10 @@
 
 namespace App\Domain\DTO\Interfaces\Trick;
 
-interface TrickNewVideoDTOInterface
+interface VideoDTOInterface
 {
     /**
-     * NewTrickNewVideoDTO constructor.
+     * NewVideoDTO constructor.
      *
      * @param string|null $url
      */

@@ -3,8 +3,8 @@
 namespace App\Domain\DTO\Trick;
 
 use App\Domain\DTO\Interfaces\Trick\TrickModificationDTOInterface;
-use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
-use App\Domain\DTO\Interfaces\Trick\TrickNewVideoDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\PictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\VideoDTOInterface;
 use App\Domain\Model\Interfaces\CategoryInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,14 +38,14 @@ class TrickModificationDTO implements TrickModificationDTOInterface
     public $category;
 
     /**
-     * @var TrickNewPictureDTOInterface[]|null
+     * @var PictureDTOInterface[]|null
      *
      * @Assert\Type("array")
      */
     public $newPictures;
 
     /**
-     * @var TrickNewVideoDTOInterface[]|null
+     * @var VideoDTOInterface[]|null
      *
      * @Assert\Type("array")
      */

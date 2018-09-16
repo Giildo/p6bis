@@ -2,9 +2,9 @@
 
 namespace App\Domain\DTO\Trick;
 
-use App\Domain\DTO\Interfaces\Trick\TrickNewVideoDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\VideoDTOInterface;
 
-class TrickModificationNewVideoDTO implements TrickNewVideoDTOInterface
+class VideoDTO implements VideoDTOInterface
 {
     /**
      * @var null|string

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block body %}
+    {% form_theme form 'Form/profil_picture.html.twig' %}
+    {{ form(form) }}
+
+    {% if user.picture is not null %}
+        <img src="/pic/users/{{ user.picture.name }}.{{ user.picture.extension }}" alt="{{ user.picture.description }}"/>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

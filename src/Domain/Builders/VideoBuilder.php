@@ -3,7 +3,7 @@
 namespace App\Domain\Builders;
 
 use App\Domain\Builders\Interfaces\VideoBuilderInterface;
-use App\Domain\DTO\Interfaces\Trick\TrickNewVideoDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\VideoDTOInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Interfaces\VideoInterface;
 use App\Domain\Model\Video;
@@ -19,7 +19,7 @@ class VideoBuilder implements VideoBuilderInterface
      * {@inheritdoc}
      */
     public function build(
-        TrickNewVideoDTOInterface $dto,
+        VideoDTOInterface $dto,
         TrickInterface $trick
     ): self {
         $name = [];
