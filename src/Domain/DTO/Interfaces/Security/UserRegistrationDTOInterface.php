@@ -12,12 +12,14 @@ interface UserRegistrationDTOInterface
      * @param null|string $lastName
      * @param null|string $mail
      * @param null|string $password
+     * @param bool|null $gcuValidation
      */
     public function __construct(
         ?string $username,
         ?string $firstName,
         ?string $lastName,
         ?string $mail,
-        ?string $password
+        ?string $password,
+        ?bool $gcuValidation
     );
 }

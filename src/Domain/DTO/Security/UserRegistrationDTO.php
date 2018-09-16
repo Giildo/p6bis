@@ -69,6 +69,13 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
     public $password;
 
     /**
+     * @var bool
+     *
+     * @Assert\IsTrue(message="Vous devez lire et valider les conditions générales d'utilisation")
+     */
+    public $gcuValidation;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
@@ -76,12 +83,14 @@ class UserRegistrationDTO implements UserRegistrationDTOInterface
         ?string $firstName,
         ?string $lastName,
         ?string $mail,
-        ?string $password
+        ?string $password,
+        ?bool $gcuValidation
     ) {
         $this->username = $username;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->mail = $mail;
         $this->password = $password;
+        $this->gcuValidation = $gcuValidation;
     }
 }

@@ -20,6 +20,12 @@
                 {{ form_widget(form.password) }}
                 {{ form_widget(form.password) }}
             </div>
+            <div id="gcu-group">
+                {{ form_widget(form.gcuValidation) }}
+                <label for="user_registration_gcuValidation">
+                    J'accepte les <a href="{{ path('GCU') }}" target="_blank">conditions générales d'utilisation</a>
+                </label>
+            </div>
         </div>
 
         <button type="submit"><span>S'enregistrer</span></button>

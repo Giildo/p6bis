@@ -35,6 +35,8 @@ Encore
 
     .addStyleEntry('css/security/formFrame', './assets/scss/security/formFrame.scss')
 
+    .addStyleEntry('css/gcu/gcu', './assets/scss/gcu/gcu.scss')
+
     /*
      * FEATURE CONFIG
      *

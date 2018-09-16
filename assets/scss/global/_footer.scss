@@ -4,9 +4,40 @@
 #footer {
   background-color: $navBGColor;
   width: 100%;
-  height: 120px;
+  display: flex;
+  padding: 10px;
+  box-sizing: border-box;
 
-  p {
-    margin: 0;
+  .div-footer {
+    flex-basis: 50%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+
+    p {
+      margin: 0;
+      font-size: 0.9em;
+    }
+
+    a {
+      color: $grey01;
+    }
+
+    .subDiv-footer {
+      display: flex;
+      justify-content: space-around;
+
+      p {
+        font-family: $titleFont;
+        font-weight: bold;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+      }
+
+      img {
+        width: 50px;
+        height: 50px;
+      }
+    }
   }
 }
