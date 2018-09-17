@@ -9,19 +9,8 @@
       flex-basis: 20%;
       position: relative;
 
-      a {
-        position: absolute;
-        top: 10px;
-        right: 20px;
-        text-decoration: none;
-        background-color: $red;
-        color: $white;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .btn-delete {
+        @extend %btnDelete;
       }
     }
   }

@@ -269,4 +269,12 @@ s     */
         $this->mail = $mail;
         $this->picture = $picture;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deletePicture(): void
+    {
+        $this->picture = null;
+    }
 }

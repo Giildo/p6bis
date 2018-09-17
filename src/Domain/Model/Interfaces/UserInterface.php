@@ -115,4 +115,9 @@ interface UserInterface extends UserInterfaceSymfony
         string $mail,
         ?PictureInterface $picture = null
     ): void;
+
+    /**
+     *
+     */
+    public function deletePicture(): void;
 }

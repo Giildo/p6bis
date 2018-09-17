@@ -12,7 +12,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class ProfilePictureAction
 {
@@ -32,6 +34,14 @@ class ProfilePictureAction
      * @var ProfilePictureHandlerInterface
      */
     private $handler;
+    /**
+     * @var TokenGeneratorInterface
+     */
+    private $tokenGenerator;
+    /**
+     * @var SessionInterface
+     */
+    private $session;
 
     /**
      * ProfilePictureAction constructor.
@@ -39,17 +49,23 @@ class ProfilePictureAction
      * @param FormFactoryInterface $formFactory
      * @param TokenStorageInterface $tokenStorage
      * @param ProfilePictureHandlerInterface $handler
+     * @param TokenGeneratorInterface $tokenGenerator
+     * @param SessionInterface $session
      */
     public function __construct(
         ProfilePictureResponderInterface $responder,
         FormFactoryInterface $formFactory,
         TokenStorageInterface $tokenStorage,
-        ProfilePictureHandlerInterface $handler
+        ProfilePictureHandlerInterface $handler,
+        TokenGeneratorInterface $tokenGenerator,
+        SessionInterface $session
     ) {
         $this->responder = $responder;
         $this->formFactory = $formFactory;
         $this->tokenStorage = $tokenStorage;
         $this->handler = $handler;
+        $this->tokenGenerator = $tokenGenerator;
+        $this->session = $session;
     }
 
     /**
@@ -75,6 +91,12 @@ class ProfilePictureAction
                                   ->handleRequest($request);
 
         $this->handler->handle($form, $user);
+
+        if (!is_null($picture = $user->getPicture())) {
+            $picture->createToken($this->tokenGenerator->generateToken());
+
+            $this->session->set('tokenProfilePicture', $picture->getDeleteToken());
+        }
 
         return $this->responder->response($form, $user);
     }

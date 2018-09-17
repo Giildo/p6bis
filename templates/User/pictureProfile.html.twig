@@ -3,16 +3,28 @@
 {% block title %}{% endblock %}
 
 {% block stylesheets %}
-
+    <link rel="stylesheet" href="/build/css/user/profilePicture.css"/>
 {% endblock %}
 
 {% block body %}
-    {% form_theme form 'Form/profil_picture.html.twig' %}
-    {{ form(form) }}
+    <section id="section-profile">
+        <h1>Modification du profil</h1>
 
-    {% if user.picture is not null %}
-        <img src="/pic/users/{{ user.picture.name }}.{{ user.picture.extension }}" alt="{{ user.picture.description }}"/>
-    {% endif %}
+        {% form_theme form 'Form/profil_picture.html.twig' %}
+        {{ form(form) }}
+
+        {% if user.picture is not null %}
+            <div id="profile-picture">
+                <h2>Image de profil actuelle</h2>
+                <div>
+                    <img src="/pic/users/{{ user.picture.name }}.{{ user.picture.extension }}"
+                         alt="{{ user.picture.description }}" class="img-fluid"/>
+                    <a href="{{ path('Profile_picture_delete_picture') }}?s={{ user.picture.name }}&t={{ user.picture.deleteToken }}"
+                       class="btn-delete material-icons">delete</a>
+                </div>
+            </div>
+        {% endif %}
+    </section>
 {% endblock %}
 
 {% block javascripts %}
