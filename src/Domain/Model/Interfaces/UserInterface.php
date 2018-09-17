@@ -101,4 +101,23 @@ interface UserInterface extends UserInterfaceSymfony
      * @return void
      */
     public function deleteToken(): void;
+
+    /**
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $mail
+     * @param PictureInterface $picture
+     * @return void
+     */
+    public function updateProfile(
+        string $firstName,
+        string $lastName,
+        string $mail,
+        ?PictureInterface $picture = null
+    ): void;
+
+    /**
+     *
+     */
+    public function deletePicture(): void;
 }

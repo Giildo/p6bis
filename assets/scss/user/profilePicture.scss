@@ -1,0 +1,48 @@
+@import '../style/color';
+@import '../style/variables';
+
+#section-profile {
+  @extend %sectionStyle;
+
+  form {
+    #profile_picture_profilePicture {
+      text-align: left;
+
+      input {
+        margin: 10px 0;
+      }
+    }
+
+    h5 {
+      margin-bottom: 0;
+      text-align: left;
+      font-size: 1em;
+      font-family: $titleFont;
+
+      &::after {
+        content: '';
+        width: 25%;
+        height: 1px;
+        display: block;
+        margin-top: 5px;
+        background: linear-gradient(to right, $black, $totallyTransparent);
+      }
+    }
+  }
+
+  #profile-picture {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+
+    div {
+      position: relative;
+
+      .btn-delete {
+        @extend %btnDelete;
+      }
+    }
+  }
+}

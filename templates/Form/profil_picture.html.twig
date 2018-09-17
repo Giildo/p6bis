@@ -1,0 +1,25 @@
+{% extends 'Form/form_general_layout.html.twig' %}
+
+{% block form %}
+    <section class="section-form">
+        {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+
+        <div class="form-fields">
+            <div class="field-group">
+                {{ form_widget(form.firstName) }}
+                {{ form_widget(form.lastName) }}
+            </div>
+
+            {{ form_widget(form.mail) }}
+
+            <h5>Photo de profil</h5>
+            {{ form_widget(form.profilePicture) }}
+        </div>
+
+        <button type="submit"><span>Modifier profil</span></button>
+
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

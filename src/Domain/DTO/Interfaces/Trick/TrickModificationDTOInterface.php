@@ -12,8 +12,8 @@ interface TrickModificationDTOInterface
      * @param null|string $description
      * @param bool|null $published
      * @param CategoryInterface|null $category
-     * @param TrickNewPictureDTOInterface[]|null $newPictures
-     * @param TrickNewVideoDTOInterface[]|null $newVideos
+     * @param PictureDTOInterface[]|null $newPictures
+     * @param VideoDTOInterface[]|null $newVideos
      */
     public function __construct(
         ?string $description = '',

@@ -2,7 +2,7 @@
 
 namespace App\Tests\UI\Forms\Trick;
 
-use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\PictureDTOInterface;
 use App\UI\Forms\Trick\NewTrickNewPictureType;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -24,6 +24,6 @@ class NewTrickNewPictureTypeTest extends TypeTestCase
 
         $dto = $form->getData();
 
-        self::assertInstanceOf(TrickNewPictureDTOInterface::class, $dto);
+        self::assertInstanceOf(PictureDTOInterface::class, $dto);
     }
 }

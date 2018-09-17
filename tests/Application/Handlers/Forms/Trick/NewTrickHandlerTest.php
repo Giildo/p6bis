@@ -10,8 +10,8 @@ use App\Domain\Builders\Interfaces\PictureBuilderInterface;
 use App\Domain\Builders\Interfaces\VideoBuilderInterface;
 use App\Domain\Builders\TrickBuilder;
 use App\Domain\DTO\Trick\NewTrickDTO;
-use App\Domain\DTO\Trick\NewTrickNewPictureDTO;
-use App\Domain\DTO\Trick\NewTrickNewVideoDTO;
+use App\Domain\DTO\Trick\NewPictureDTO;
+use App\Domain\DTO\Trick\NewVideoDTO;
 use App\Domain\Model\Category;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Picture;
@@ -68,12 +68,12 @@ class NewTrickHandlerTest extends KernelTestCase
             $user
         );
 
-        $pictureDTO = new NewTrickNewPictureDTO(
+        $pictureDTO = new NewPictureDTO(
             'Description de l\'image',
             $this->createMock(UploadedFile::class)
         );
 
-        $videoDTO = new NewTrickNewVideoDTO('https://www.youtube.com/watch?v=6z6KBAbM0MY');
+        $videoDTO = new NewVideoDTO('https://www.youtube.com/watch?v=6z6KBAbM0MY');
 
         $trickDTO = new NewTrickDTO(
             'Indy',

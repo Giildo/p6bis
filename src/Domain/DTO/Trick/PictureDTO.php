@@ -2,23 +2,18 @@
 
 namespace App\Domain\DTO\Trick;
 
-use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\PictureDTOInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
 
-class NewTrickNewPictureDTO implements TrickNewPictureDTOInterface
+class PictureDTO implements PictureDTOInterface
 {
     /**
      * @var null|string
-     *
-     * @Assert\NotNull(message="La description de l'image doit être renseignée.")
      */
     public $description;
 
     /**
      * @var null|UploadedFile
-     *
-     * @Assert\NotNull(message="Un fichier valide doit être chargé.")
      */
     public $picture;
 

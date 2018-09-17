@@ -5,7 +5,7 @@ namespace App\UI\Actions\Trick;
 use App\Application\Handlers\Interfaces\Forms\Trick\TrickModificationHandlerInterface;
 use App\Application\Helpers\Interfaces\PictureAndVideoTokenManagerInterface;
 use App\Domain\DTO\Trick\TrickModificationDTO;
-use App\Domain\DTO\Trick\TrickModificationNewPictureDTO;
+use App\Domain\DTO\Trick\PictureDTO;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\UI\Forms\Trick\TrickModificationType;
 use App\UI\Responders\Interfaces\Trick\TrickModificationResponderInterface;

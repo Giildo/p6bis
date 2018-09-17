@@ -39,6 +39,8 @@ Encore
 
     .addStyleEntry('css/gcu/gcu', './assets/scss/gcu/gcu.scss')
 
+    .addStyleEntry('css/user/profilePicture', './assets/scss/user/profilePicture.scss')
+
     /*
      * FEATURE CONFIG
      *

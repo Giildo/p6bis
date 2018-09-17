@@ -9,7 +9,10 @@ class PictureSaveHelper implements PictureSaveHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function save(array $picturesAndFiles): void {
+    public function save(
+        array $picturesAndFiles,
+        ?string $folder = 'tricks'
+    ): void {
         foreach ($picturesAndFiles as $pictureAndFile) {
             $picture = $pictureAndFile[0];
             $file = $pictureAndFile[1];
@@ -17,7 +20,7 @@ class PictureSaveHelper implements PictureSaveHelperInterface
             $fileName = $picture->getName() . '.' . $file->guessExtension();
 
             $file->move(
-                __DIR__ . '/../../../public/pic/tricks/',
+                __DIR__ . "/../../../public/pic/{$folder}/",
                 $fileName
             );
         }

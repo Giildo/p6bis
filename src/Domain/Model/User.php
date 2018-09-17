@@ -254,4 +254,27 @@ s     */
         $this->token = null;
         $this->tokenDate = null;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateProfile(
+        string $firstName,
+        string $lastName,
+        string $mail,
+        ?PictureInterface $picture = null
+    ): void {
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->mail = $mail;
+        $this->picture = $picture;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deletePicture(): void
+    {
+        $this->picture = null;
+    }
 }

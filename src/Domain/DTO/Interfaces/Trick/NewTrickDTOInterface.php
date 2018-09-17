@@ -14,9 +14,9 @@ interface NewTrickDTOInterface
      * @param null|string $description
      * @param bool|null $published
      * @param CategoryInterface|null $category
-     * @param TrickNewPictureDTOInterface[]|null $pictures
-     * @param TrickNewVideoDTOInterface[]|null $videos
-     * @param TrickNewPictureDTOInterface|null $headPicture
+     * @param PictureDTOInterface[]|null $pictures
+     * @param VideoDTOInterface[]|null $videos
+     * @param PictureDTOInterface|null $headPicture
      */
     public function __construct(
         ?string $name = '',
@@ -25,6 +25,6 @@ interface NewTrickDTOInterface
         ?CategoryInterface $category = null,
         ?array $pictures = [],
         ?array $videos = [],
-        ?TrickNewPictureDTOInterface $headPicture = null
+        ?PictureDTOInterface $headPicture = null
     );
 }

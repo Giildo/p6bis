@@ -6,7 +6,7 @@ use App\Application\Handlers\Interfaces\Forms\Trick\TrickModificationHandlerInte
 use App\Application\Helpers\Interfaces\PictureSaveHelperInterface;
 use App\Domain\Builders\Interfaces\PictureBuilderInterface;
 use App\Domain\Builders\Interfaces\VideoBuilderInterface;
-use App\Domain\DTO\Interfaces\Trick\TrickNewPictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\PictureDTOInterface;
 use App\Domain\DTO\Trick\TrickModificationDTO;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Modifier\Interfaces\TrickModifierInterface;
@@ -75,7 +75,7 @@ class TrickModificationHandler implements TrickModificationHandlerInterface
                                          ->getTrick();
             $this->entityManager->persist($trick);
 
-            /** @var TrickNewPictureDTOInterface[] $pictureDTOs */
+            /** @var PictureDTOInterface[] $pictureDTOs */
             $pictureDTOs = $dto->newPictures;
             $newPictures = [];
             if (!empty($pictureDTOs)) {

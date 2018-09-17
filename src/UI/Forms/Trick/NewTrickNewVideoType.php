@@ -2,8 +2,8 @@
 
 namespace App\UI\Forms\Trick;
 
-use App\Domain\DTO\Interfaces\Trick\TrickNewVideoDTOInterface;
-use App\Domain\DTO\Trick\NewTrickNewVideoDTO;
+use App\Domain\DTO\Interfaces\Trick\VideoDTOInterface;
+use App\Domain\DTO\Trick\NewVideoDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,9 +20,9 @@ class NewTrickNewVideoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => TrickNewVideoDTOInterface::class,
+            'data_class' => VideoDTOInterface::class,
             'empty_data' => function (FormInterface $form) {
-                return new NewTrickNewVideoDTO(
+                return new NewVideoDTO(
                     $form->get('url')->getData()
                 );
             },

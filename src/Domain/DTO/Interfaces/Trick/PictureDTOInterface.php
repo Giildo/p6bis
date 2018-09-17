@@ -4,10 +4,10 @@ namespace App\Domain\DTO\Interfaces\Trick;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-interface TrickNewPictureDTOInterface
+interface PictureDTOInterface
 {
     /**
-     * NewTrickNewPictureDTO constructor.
+     * NewPictureDTO constructor.
      *
      * @param null|string $description
      * @param null|UploadedFile $picture
