@@ -57,7 +57,7 @@ class TrickModificationAction
      * @Route(
      *     path="/espace-utilisateur/trick/modification/{trickSlug}",
      *     name="Trick_modification",
-     *     requirements={"trickSlug"="\w+"}
+     *     requirements={"trickSlug"="[a-zA-Z0-9-]+"}
      * )
      *
      * @param Request $request

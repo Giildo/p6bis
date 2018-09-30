@@ -54,7 +54,7 @@ class TrickDeletionAction
     /**
      * @Route(
      *     path="/espace-utilisateur/trick/suppression/{trickSlug}",
-     *     requirements={"trickSlug"="\w+"},
+     *     requirements={"trickSlug"="[a-zA-Z0-9-]+"},
      *     name="Trick_deletion"
      * )
      *
