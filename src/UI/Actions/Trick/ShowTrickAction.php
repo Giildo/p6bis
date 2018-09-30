@@ -72,7 +72,7 @@ class ShowTrickAction
      *     path="/trick/{trickSlug}/ComPage/{paging}",
      *     name="Trick_show",
      *     requirements={
-     *          "trickSlug"="\w+",
+     *          "trickSlug"="[a-zA-Z0-9-]+",
      *          "paging"="\d+"
      *     },
      *     defaults={"paging"=1}
