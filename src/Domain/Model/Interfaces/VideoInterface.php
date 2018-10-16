@@ -2,8 +2,6 @@
 
 namespace App\Domain\Model\Interfaces;
 
-use App\Domain\Model\Trick;
-
 /**
  * Class Video
  * @package App\Domain\Model
@@ -19,9 +17,9 @@ interface VideoInterface
     public function getName(): string;
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getDeleteToken(): string;
+    public function getDeleteToken(): ?string;
 
     /**
      * @return TrickInterface

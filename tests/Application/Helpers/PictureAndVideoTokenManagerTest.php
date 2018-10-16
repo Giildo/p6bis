@@ -14,10 +14,15 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class PictureAndVideoTokenManagerTest extends TestCase
 {
+    /**
+     * @var Session
+     */
     private $session;
 
+    /**
+     * @var PictureAndVideoTokenManagerInterface
+     */
     private $helper;
-
 
     public function setUp()
     {
@@ -27,11 +32,6 @@ class PictureAndVideoTokenManagerTest extends TestCase
         $tokenGenerator->method('generateToken')
                        ->willReturn('bRlkYWJpFLpL_pgrh-zpclfYuKXwRN1XIjMJ4D_g_8M');
         $this->helper = new PictureAndVideoTokenManager($tokenGenerator);
-    }
-
-    public function testConstructor()
-    {
-        self::assertInstanceOf(PictureAndVideoTokenManagerInterface::class, $this->helper);
     }
 
     public function testTheCreationOfTokensInEntities()

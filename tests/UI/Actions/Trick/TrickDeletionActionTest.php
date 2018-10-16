@@ -2,13 +2,14 @@
 
 namespace App\Tests\UI\Actions\Trick;
 
-use App\Domain\Model\Category;
-use App\Domain\Model\Trick;
-use App\Domain\Model\User;
+use App\Domain\Repository\CommentRepository;
+use App\Domain\Repository\TrickRepository;
+use App\Tests\Fixtures\Traits\CommentFixtures;
 use App\UI\Actions\Trick\TrickDeletionAction;
 use App\UI\Responders\Trick\TrickDeletionResponder;
-use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
@@ -16,46 +17,15 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class TrickDeletionActionTest extends KernelTestCase
+class TrickDeletionActionTest extends TestCase
 {
     /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\Tools\ToolsException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function testAction()
+    public function testIfReturnActionIsResponse()
     {
-        $kernel = self::bootKernel();
-
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-
-        $schemaTool = new SchemaTool($entityManager);
-        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
-
-        $category = new Category(
-            'grab',
-            'Grab'
-        );
-
-        $author = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john@doe.fr',
-            '12345678'
-        );
-
-        $trick = new Trick(
-            'mute',
-            'Mute',
-            'Description de l\'image.',
-            $category,
-            $author
-        );
-
-        $entityManager->persist($trick);
-        $entityManager->flush();
+        $this->constructComments();
 
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $urlGenerator->method('generate')->willReturn('/url');
@@ -63,28 +33,31 @@ class TrickDeletionActionTest extends KernelTestCase
 
         $flashBag = new FlashBag();
 
+        $trickRepository = $this->createMock(TrickRepository::class);
+        $commentRepository = $this->createMock(CommentRepository::class);
+        $commentRepository->method('loadAllCommentsOfATrick')->willReturn(
+            [
+                $this->comment1,
+                $this->comment2,
+            ]
+        );
+
         $action = new TrickDeletionAction(
-            $entityManager->getRepository(Trick::class),
+            $trickRepository,
+            $commentRepository,
             $responder,
             $flashBag
         );
 
-        self::assertInstanceOf(TrickDeletionAction::class, $action);
-
-        $trickLoaded = $entityManager->getRepository(Trick::class)
-                               ->loadOneTrickWithCategoryAndAuthor('mute');
         $session = new Session(new MockArraySessionStorage());
-        $session->set('trick', $trickLoaded);
+        $session->set('trick', $this->mute);
         $request = new Request();
         $request->setSession($session);
 
         $response = $action->delete($request);
 
         self::assertInstanceOf(RedirectResponse::class, $response);
-
-        $trickNull = $entityManager->getRepository(Trick::class)
-                                     ->loadOneTrickWithCategoryAndAuthor('mute');
-
-        self::assertNull($trickNull);
     }
+
+    use CommentFixtures;
 }

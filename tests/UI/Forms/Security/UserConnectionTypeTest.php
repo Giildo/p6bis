@@ -8,25 +8,18 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class UserConnectionTypeTest extends TypeTestCase
 {
-    private $form;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->form = $this->factory->create(UserConnectionType::class);
-    }
-
     public function testReturnOfTheFormType()
     {
+        $form = $this->factory->create(UserConnectionType::class);
+
         $formData = [
             'username'  => 'JohnDoe',
             'password'  => '12345678',
         ];
 
-        $this->form->submit($formData);
+        $form->submit($formData);
 
-        $dto = $this->form->getData();
+        $dto = $form->getData();
 
         self::assertInstanceOf(UserConnectionDTOInterface::class, $dto);
     }

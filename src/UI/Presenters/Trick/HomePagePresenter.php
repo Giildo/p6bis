@@ -21,6 +21,7 @@ class HomePagePresenter implements HomePagePresenterInterface
         $this->twig = $twig;
     }
 
+
     /**
      * {@inheritdoc}
      */

@@ -2,14 +2,12 @@
 
 namespace App\Tests\UI\Actions\Comment;
 
-use App\Domain\Model\Category;
-use App\Domain\Model\Comment;
-use App\Domain\Model\Interfaces\CommentInterface;
-use App\Domain\Model\Trick;
-use App\Domain\Model\User;
 use App\Domain\Repository\CommentRepository;
+use App\Tests\Fixtures\Traits\CommentFixtures;
 use App\UI\Actions\Comment\CommentDeletionAction;
 use App\UI\Responders\Comment\CommentDeletionResponder;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +17,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CommentDeletionActionTest extends TestCase
 {
+    /**
+     * @var CommentDeletionAction
+     */
     private $action;
 
     /**
@@ -26,13 +27,10 @@ class CommentDeletionActionTest extends TestCase
      */
     private $request;
 
-    /**
-     * @var CommentInterface
-     */
-    private $comment;
-
     protected function setUp()
     {
+        $this->constructComments();
+
         $repository = $this->createMock(CommentRepository::class);
 
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
@@ -44,55 +42,35 @@ class CommentDeletionActionTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
         $this->request = new Request();
         $this->request->setSession($session);
-
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john@doe.fr',
-            '12345678'
-        );
-
-        $category = new Category(
-            'grab',
-            'Grab'
-        );
-
-        $trick = new Trick(
-            'mute',
-            'Mute',
-            'Description de la figure',
-            $category,
-            $user
-        );
-
-        $this->comment = new Comment(
-            'Commentaire simulé.',
-            $trick,
-            $user
-        );
     }
 
-    public function testConstructor()
-    {
-        self::assertInstanceOf(CommentDeletionAction::class, $this->action);
-    }
+    use CommentFixtures;
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function testTheRedirectResponseIfTheSessionHasNoComment()
     {
-        $response = $this->action->commentDeletion($this->request, 'trickSlug', 'id');
-
-        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertInstanceOf(
+            RedirectResponse::class,
+            $this->action->commentDeletion($this->request, 'trickSlug')
+        );
     }
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function testTheRedirectResponseIfTheSessionHasComment()
     {
         $session = $this->request->getSession();
-        $session->set('comment', $this->comment);
+        $session->set('comment', $this->comment1);
         $this->request->setSession($session);
 
-        $response = $this->action->commentDeletion($this->request, 'trickSlug', 'id');
-
-        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertInstanceOf(
+            RedirectResponse::class,
+            $this->action->commentDeletion($this->request, 'trickSlug')
+        );
     }
 }

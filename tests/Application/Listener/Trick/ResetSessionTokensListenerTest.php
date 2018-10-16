@@ -3,6 +3,7 @@
 namespace App\Tests\Application\Listener\Trick;
 
 use App\Application\Listener\Trick\ResetSessionTokensListener;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -12,12 +13,24 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ResetSessionTokensListenerTest extends TestCase
 {
+    /**
+     * @var ResetSessionTokensListener
+     */
     private $listener;
 
+    /**
+     * @var GetResponseEvent|MockObject
+     */
     private $event;
 
+    /**
+     * @var Request|MockObject
+     */
     private $request;
 
+    /**
+     * @var Session
+     */
     private $session;
 
     protected function setUp()
@@ -36,28 +49,21 @@ class ResetSessionTokensListenerTest extends TestCase
         $urlGenerator->method('generate')->willReturn('/url');
 
         $this->listener = new ResetSessionTokensListener(
-            $this->session,
             $urlGenerator
         );
 
         $this->request = $this->createMock(Request::class);
+        $this->request->method('getSession')->willReturn($this->session);
 
         $this->event = $this->createMock(GetResponseEvent::class);
         $this->event->method('getRequest')->willReturn($this->request);
-    }
-
-    public function testConstructor()
-    {
-        self::assertInstanceOf(ResetSessionTokensListener::class, $this->listener);
     }
 
     public function testReturnIfTheRequestIsntTheMasterRequest()
     {
         $this->event->method('isMasterRequest')->willReturn(false);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         self::assertEquals('token123456789', $this->session->get('tokens')['token1']);
     }
@@ -68,9 +74,7 @@ class ResetSessionTokensListenerTest extends TestCase
 
         $this->request->method('getUri')->willReturn('\_wdt\token');
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         self::assertEquals('token123456789', $this->session->get('tokens')['token1']);
     }
@@ -81,9 +85,7 @@ class ResetSessionTokensListenerTest extends TestCase
 
         $this->request->method('getUri')->willReturn('/url/targeted');
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         self::assertEquals('token123456789', $this->session->get('tokens')['token1']);
     }
@@ -94,9 +96,7 @@ class ResetSessionTokensListenerTest extends TestCase
 
         $this->request->method('getUri')->willReturn('\other\target');
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         self::assertEmpty($this->session->get('tokens'));
     }

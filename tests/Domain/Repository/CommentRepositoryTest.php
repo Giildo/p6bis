@@ -2,73 +2,159 @@
 
 namespace App\Tests\Domain\Repository;
 
-use App\Domain\Model\Category;
 use App\Domain\Model\Comment;
 use App\Domain\Model\Interfaces\CommentInterface;
-use App\Domain\Model\Trick;
-use App\Domain\Model\User;
+use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use App\Domain\Repository\CommentRepository;
-use App\Domain\Repository\TrickRepository;
+use App\Tests\Fixtures\Traits\CommentFixtures;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\ToolsException;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CommentRepositoryTest extends KernelTestCase
 {
-    public function testTheCommentSaving()
+    /**
+     * @var CommentRepository
+     */
+    private $repository;
+
+    /**
+     * @var string
+     */
+    private $commentId;
+
+    /**
+     * @var bool
+     */
+    private $initialized;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    protected function setUp()
     {
+        $this->constructComments();
+
         $kernel = self::bootKernel();
 
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        /** @var CommentRepository $repository */
-        $repository = $entityManager->getRepository(Comment::class);
+        $this->entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $this->repository = $this->entityManager->getRepository(Comment::class);
+    }
 
-        $schemaTool = new SchemaTool($entityManager);
-        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
+    use CommentFixtures;
 
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john@doe.fr',
-            '12345678'
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws ToolsException
+     */
+    public function testCommentSavingAndCount()
+    {
+        $schemaTool = new SchemaTool($this->entityManager);
+        $schemaTool->dropSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+        $schemaTool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+
+        $this->entityManager->persist($this->johnDoe);
+        $this->entityManager->persist($this->janeDoe);
+        $this->entityManager->persist($this->grab);
+        $this->entityManager->persist($this->rotations);
+        $this->entityManager->persist($this->mute);
+        $this->entityManager->persist($this->r180);
+        $this->entityManager->flush();
+
+        $this->initialized = true;
+
+        $this->repository->saveComment($this->comment1);
+        $this->repository->saveComment($this->comment2);
+
+        foreach ($this->commentsList as $comment) {
+            $this->repository->saveComment($comment);
+        }
+
+        self::assertEquals(
+            2,
+            $this->repository->countEntries($this->mute->getSlug())
         );
-        $entityManager->persist($user);
 
-        $category = new Category(
-            'grab',
-            'Grab'
+        $commentId = $this->comment1->getId();
+        return $commentId;
+    }
+
+    /**
+     * @depends testCommentSavingAndCount
+     *
+     * @param string $commentId
+     *
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function testCommentLoadingAndDeletion(string $commentId)
+    {
+        $commentLoaded = $this->repository->loadOneCommentWithHerId($commentId);
+
+        self::assertInstanceOf(
+            CommentInterface::class,
+            $commentLoaded
         );
-        $entityManager->persist($category);
 
-        $trick = new Trick(
-            'mute',
-            'Mute',
-            'Description de la figure',
-            $category,
-            $user
+        $this->repository->deleteComment($commentLoaded);
+        self::assertNull($this->repository->loadOneCommentWithHerId($commentId));
+    }
+
+    /**
+     * @depends testCommentSavingAndCount
+     */
+    public function testCommentLoadingWithPagination()
+    {
+        self::assertEquals(
+            Comment::NUMBER_OF_ITEMS,
+            count(
+                $this->repository->loadCommentsWithPagination(
+                    $this->r180->getSlug(),
+                    1
+                )
+            )
         );
-        $entityManager->persist($trick);
-        $entityManager->flush();
+    }
 
-        $comment = new Comment(
-            'Commentaire simulé',
-            $trick,
-            $user
+    /**
+     * @depends testCommentSavingAndCount
+     */
+    public function testAllCommentsLoadingByOneTrick()
+    {
+        $comments = $this->repository->loadAllCommentsOfATrick($this->r180->getSlug());
+
+        self::assertEquals(
+            15,
+            count(
+                $comments
+            )
         );
 
-        $repository->saveComment($comment);
+        return $comments[0];
+    }
 
-        $idComment = $comment->getId();
-
-        $comment = $repository->loadOneCommentWithHerId($idComment);
-
-        self::assertInstanceOf(CommentInterface::class, $comment);
-
-        $repository->deleteComment($comment);
-
-        $comment = $comment = $repository->loadOneCommentWithHerId($idComment);
-
-        self::assertNull($comment);
+    /**
+     * @depends testAllCommentsLoadingByOneTrick
+     * @param CommentInterface $comment
+     */
+    public function testGettersOfCommentModel(CommentInterface $comment)
+    {
+        self::assertInternalType('string', $comment->getComment());
+        self::assertInstanceOf(UserInterface::class, $comment->getAuthor());
+        self::assertInstanceOf(Uuid::class, $comment->getId());
+        self::assertInstanceOf(DateTime::class, $comment->getCreatedAt());
+        self::assertInstanceOf(DateTime::class, $comment->getUpdatedAt());
+        self::assertInstanceOf(TrickInterface::class, $comment->getTrick());
     }
 }

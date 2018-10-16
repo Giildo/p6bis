@@ -2,22 +2,27 @@
 
 namespace App\UI\Responders\Interfaces\Trick;
 
-use App\Domain\Model\Interfaces\TrickInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 interface NewTrickResponderInterface
 {
 
     /**
      * @param bool $redirection
-     * @param TrickInterface|null $trick
      * @param null|FormInterface $form
+     *
      * @return Response
+     *
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
     public function response(
         bool $redirection,
-        ?TrickInterface $trick = null,
         ?FormInterface $form = null
     ): Response;
 }

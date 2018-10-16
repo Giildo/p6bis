@@ -2,141 +2,148 @@
 
 namespace App\Tests\Domain\Repository;
 
+use App\Domain\Model\Interfaces\PictureInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use App\Domain\Model\User;
-use App\Tests\fixtures\LoadFixtures;
+use App\Domain\Repository\UserRepository;
+use App\Tests\Fixtures\Traits\PictureAndVideoFixtures;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\SchemaTool;
+use Exception;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 
 class UserRepositoryTest extends KernelTestCase
 {
-    private $repository;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
 
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
+     * @var TokenGeneratorInterface
+     */
     private $tokenGenerator;
 
     public function setUp()
     {
+        $this->constructPicturesAndVideos();
+
         $kernel = static::bootKernel();
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $this->repository = $entityManager->getRepository(User::class);
+
+        $this->entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $this->userRepository = $this->entityManager->getRepository(User::class);
 
         $this->tokenGenerator = new UriSafeTokenGenerator();
-
-        $schemaTool = new SchemaTool($entityManager);
-        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
-
-        $this->loadFixtures(__DIR__ . '/../../fixtures/user/00.load.yml', $entityManager);
     }
 
-    use LoadFixtures;
+    use PictureAndVideoFixtures;
 
-    public function testSavingAndLoadingUserIntoTheDatabaseIfUserIsUnique()
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function testUserSavingAndUserLoading()
     {
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john.doe@gmail.com',
-            '12345678'
+        $schemaTool = new SchemaTool($this->entityManager);
+        $schemaTool->dropSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+        $schemaTool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+
+        $this->entityManager->persist($this->johnDoe);
+        $this->entityManager->persist($this->pictureProfile);
+        $this->entityManager->flush();
+
+        $userLoaded = $this->userRepository->loadUserByUsername($this->johnDoe->getUsername());
+
+        self::assertInstanceOf(
+            UserInterface::class,
+            $userLoaded
         );
-
-        $this->repository->saveUser($user);
-        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
-
-        self::assertEquals($user, $userLoaded);
     }
 
-    public function testSavingAndLoadingUserIntoTheDatabaseIfUserIsDouble()
-    {
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john.doe@gmail.com',
-            '12345678'
-        );
-
-        $user2 = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john.doe@gmail.com',
-            '12345678'
-        );
-
-        $this->repository->saveUser($user);
-        $this->repository->saveUser($user2);
-        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
-
-        self::assertNull($userLoaded);
-    }
-
-    public function testLoadingUserIfUserIsntInDatabase()
-    {
-        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
-
-        self::assertNull($userLoaded);
-    }
-
+    /**
+     * @depends testUserSavingAndUserLoading
+     *
+     * @return UserInterface
+     *
+     * @throws Exception
+     */
     public function testLoadingUserByToken()
     {
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john.doe@gmail.com',
-            '12345678'
-        );
+        $userLoaded = $this->userRepository->loadUserByUsername($this->johnDoe->getUsername());
 
-        $user->createToken($this->tokenGenerator);
-        $token = $user->getToken();
+        $userLoaded->createToken($this->tokenGenerator);
 
-        $this->repository->saveUser($user);
+        $this->userRepository->saveUser($userLoaded);
 
-        $userLoaded = $this->repository->loadUserByToken($token);
+        $userLoadedByToken = $this->userRepository->loadUserByToken($userLoaded->getToken());
 
-        self::assertEquals($user, $userLoaded);
+        self::assertInstanceOf(UserInterface::class, $userLoadedByToken);
+
+        return $userLoadedByToken;
     }
 
-    public function testLoadingUserByTokenIfUserIsntIntoDatabase()
+    /**
+     * @depends testLoadingUserByToken
+     *
+     * @param UserInterface $user
+     */
+    public function testGettersOfUserModel(UserInterface $user)
     {
-        $userLoaded = $this->repository->loadUserByToken('token_5sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
+        self::assertInternalType('string', $user->getUsername());
+        self::assertInternalType('string', $user->getFirstName());
+        self::assertInternalType('string', $user->getLastName());
+        self::assertInternalType('string', $user->getMail());
+        self::assertInternalType('string', $user->getPassword());
+        self::assertInternalType('array', $user->getRoles());
 
-        self::assertNull($userLoaded);
-    }
+        self::assertInstanceOf(UuidInterface::class, $user->getId());
 
-    public function testLoadingUserByTokenIfUserIsDouble()
-    {
-        $tokenGenerator = $this->createMock(TokenGeneratorInterface::class);
-        $tokenGenerator->method('generateToken')
-                       ->willReturn('token_5sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
+        self::assertEquals('12345678', $user->getPassword());
+        $user->changePassword('87654321');
+        self::assertEquals('87654321', $user->getPassword());
 
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john.doe@gmail.com',
-            '12345678'
+        self::assertEquals(['ROLE_USER'], $user->getRoles());
+        $user->addRole('ROLE_ADMIN');
+        self::assertEquals(['ROLE_USER', 'ROLE_ADMIN'], $user->getRoles());
+        $user->changeRole(['ROLE_OTHER']);
+        self::assertEquals(['ROLE_OTHER'], $user->getRoles());
+
+        self::assertInternalType('string', $user->getToken());
+        self::assertInstanceOf(DateTime::class, $user->getTokenDate());
+        $user->deleteToken();
+        self::assertNull($user->getToken());
+        self::assertNull($user->getTokenDate());
+
+        self::assertInstanceOf(PictureInterface::class, $user->getPicture());
+        self::assertEquals('ProfilePicture123456789', $user->getPicture()->getName());
+        self::assertEquals('John', $user->getFirstName());
+        self::assertEquals('Doe', $user->getLastName());
+        self::assertEquals('john@doe.fr', $user->getMail());
+        $user->updateProfile(
+            'Robert',
+            'Baratheon',
+            'robert@beratheon.got',
+            $this->pictureHead
         );
+        self::assertEquals('HeadPicture123456789', $user->getPicture()->getName());
+        self::assertEquals('Robert', $user->getFirstName());
+        self::assertEquals('Baratheon', $user->getLastName());
+        self::assertEquals('robert@beratheon.got', $user->getMail());
+        $user->deletePicture();
+        self::assertNull($user->getPicture());
 
-        $user2 = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john.doe@gmail.com',
-            '12345678'
-        );
-
-        $user->createToken($tokenGenerator);
-        $user2->createToken($tokenGenerator);
-
-        $this->repository->saveUser($user);
-        $this->repository->saveUser($user2);
-        $userLoaded = $this->repository->loadUserByToken('token_5sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
-
-        self::assertNull($userLoaded);
+        $user->eraseCredentials();
+        self::assertNull($user->getSalt());
     }
 }

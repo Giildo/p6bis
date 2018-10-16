@@ -3,12 +3,10 @@
 namespace App\Tests\Application\Listener\Comment;
 
 use App\Application\Listener\Comment\RoleUserListener;
-use App\Domain\Model\Category;
-use App\Domain\Model\Comment;
 use App\Domain\Model\Interfaces\CommentInterface;
-use App\Domain\Model\Trick;
-use App\Domain\Model\User;
 use App\Domain\Repository\CommentRepository;
+use App\Tests\Fixtures\Traits\CommentFixtures;
+use Doctrine\ORM\NonUniqueResultException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -20,54 +18,43 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class RoleUserListenerTest extends TestCase
 {
+    /**
+     * @var RoleUserListener
+     */
     private $listener;
 
     /**
-     * @var MockObject
+     * @var GetResponseEvent|MockObject
      */
     private $event;
 
     /**
-     * @var MockObject
+     * @var Request|MockObject
      */
     private $request;
 
     /**
-     * @var MockObject
+     * @var CommentRepository|MockObject
      */
     private $commentRepository;
 
     /**
-     * @var CommentInterface
-     */
-    private $comment;
-
-    /**
-     * @var MockObject
+     * @var TokenInterface|MockObject
      */
     private $token;
 
     /**
-     * @var UserInterface
-     */
-    private $goodUser;
-
-    /**
-     * @var UserInterface
-     */
-    private $badUser;
-
-    /**
-     * @var MockObject
+     * @var AuthorizationCheckerInterface|MockObject
      */
     private $authorizationChecker;
 
     protected function setUp()
     {
+        $this->constructComments();
+
         $this->commentRepository = $this->createMock(CommentRepository::class);
 
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
@@ -94,63 +81,29 @@ class RoleUserListenerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $this->request->method('getSession')->willReturn($session);
-
-        $this->goodUser = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john@doe.fr',
-            '12345678'
-        );
-
-        $this->badUser = new User(
-            'JaneDoe',
-            'Jane',
-            'Doe',
-            'jane@doe.fr',
-            '12345678'
-        );
-
-        $category = new Category(
-            'grab',
-            'Grab'
-        );
-
-        $trick = new Trick(
-            'mute',
-            'Mute',
-            'Description de la figure',
-            $category,
-            $this->goodUser
-        );
-
-        $this->comment = new Comment(
-            'Commentaire simulé.',
-            $trick,
-            $this->goodUser
-        );
     }
 
-    public function testConstructor()
-    {
-        self::assertInstanceOf(RoleUserListener::class, $this->listener);
-    }
+    use CommentFixtures;
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function testReturnNullIfNoTrickSlugAttributeInTheRequest()
     {
         $this->request->attributes->method('get')->willReturn(null);
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         $session = $this->request->getSession();
 
         self::assertNull($session->get('comment'));
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function testReturnNullIfTheUriIsWrong()
     {
         $this->request->attributes->method('get')->willReturn('trickSlug');
@@ -158,32 +111,34 @@ class RoleUserListenerTest extends TestCase
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         $session = $this->request->getSession();
 
         self::assertNull($session->get('comment'));
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function testReturnNullIfTheGetDatasIsNotDefined()
     {
         $this->request->attributes->method('get')->willReturn('trickSlug');
         $this->request->method('getUri')->willReturn('/goodUrl');
-        $this->request->query->method('get')->willReturn(null);
+        $this->request->query->method('get')->willReturn('');
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         $session = $this->request->getSession();
 
         self::assertNull($session->get('comment'));
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function testReturnNullIfTheIdInGetDatasIsWrong()
     {
         $this->request->attributes->method('get')->willReturn('trickSlug');
@@ -194,15 +149,16 @@ class RoleUserListenerTest extends TestCase
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         $session = $this->request->getSession();
 
         self::assertNull($session->get('comment'));
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function testReturnNullIfTheUserDoesNotHaveTheRightsToModifyTheComment()
     {
         $this->request->attributes->method('get')->willReturn('trickSlug');
@@ -210,108 +166,110 @@ class RoleUserListenerTest extends TestCase
         $this->request->query->method('get')->willReturn('GETData');
 
         $this->commentRepository->method('loadOneCommentWithHerId')->willReturn(
-            $this->comment
+            $this->comment1
         );
 
         $this->authorizationChecker->method('isGranted')->willReturn(false);
-        $this->token->method('getUser')->willReturn($this->badUser);
+        $this->token->method('getUser')->willReturn($this->janeDoe);
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         $session = $this->request->getSession();
 
         self::assertNull($session->get('comment'));
     }
 
-    public function testReturnNullIfTheCommentIsInTheSessionIfTheUserHasTheRightsToModifyComment()
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function testReturnCommentIfTheCommentIsInTheSessionIfTheUserHasTheRightsToModifyComment()
     {
         $this->request->attributes->method('get')->willReturn('trickSlug');
         $this->request->method('getUri')->willReturn('/goodUrl');
         $this->request->query->method('get')->willReturn('GETData');
 
         $this->commentRepository->method('loadOneCommentWithHerId')->willReturn(
-            $this->comment
+            $this->comment1
         );
 
         $this->authorizationChecker->method('isGranted')->willReturn(true);
-        $this->token->method('getUser')->willReturn($this->badUser);
+        $this->token->method('getUser')->willReturn($this->johnDoe);
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         $session = $this->request->getSession();
 
         self::assertInstanceOf(CommentInterface::class, $session->get('comment'));
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function testReturnNullIfTheIdInTheUriIsWrong()
     {
         $this->request->attributes->method('get')->willReturn('trickSlug');
         $this->request->method('getUri')->willReturn('/goodUrl');
-        $this->request->query->method('get')->willReturn(null);
+        $this->request->query->method('get')->willReturn('');
 
         $this->commentRepository->method('loadOneCommentWithHerId')->willReturn(null);
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         $session = $this->request->getSession();
 
         self::assertNull($session->get('comment'));
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function testReturnNullIfTheUserDoesNotHaveTheRightsToDeleteTheComment()
     {
         $this->request->attributes->method('get')->willReturn('id');
         $this->request->method('getUri')->willReturn('/goodUrl');
-        $this->request->query->method('get')->willReturn(null);
+        $this->request->query->method('get')->willReturn('');
 
         $this->commentRepository->method('loadOneCommentWithHerId')->willReturn(
-            $this->comment
+            $this->comment1
         );
 
         $this->authorizationChecker->method('isGranted')->willReturn(false);
-        $this->token->method('getUser')->willReturn($this->badUser);
+        $this->token->method('getUser')->willReturn($this->janeDoe);
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         $session = $this->request->getSession();
 
         self::assertNull($session->get('comment'));
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function testReturnNullIfTheCommentIsInTheSessionIfTheUserHasTheRightsToDeleteComment()
     {
         $this->request->attributes->method('get')->willReturn('trickSlug');
         $this->request->method('getUri')->willReturn('/goodUrl');
-        $this->request->query->method('get')->willReturn(null);
+        $this->request->query->method('get')->willReturn('');
 
         $this->commentRepository->method('loadOneCommentWithHerId')->willReturn(
-            $this->comment
+            $this->comment1
         );
 
         $this->authorizationChecker->method('isGranted')->willReturn(true);
-        $this->token->method('getUser')->willReturn($this->badUser);
+        $this->token->method('getUser')->willReturn($this->janeDoe);
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $response = $this->listener->onKernelRequest($this->event);
-
-        self::assertNull($response);
+        $this->listener->onKernelRequest($this->event);
 
         $session = $this->request->getSession();
 

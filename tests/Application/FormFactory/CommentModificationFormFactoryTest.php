@@ -3,12 +3,12 @@
 namespace App\Tests\Application\FormFactory;
 
 use App\Application\FormFactory\CommentModificationFormFactory;
+use App\Application\FormFactory\Interfaces\CommentModificationFormFactoryInterface;
 use App\Domain\DTO\Interfaces\Comment\CommentDTOInterface;
-use App\Domain\Model\Category;
-use App\Domain\Model\Comment;
-use App\Domain\Model\Trick;
-use App\Domain\Model\User;
+use App\Tests\Fixtures\Traits\CommentFixtures;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\ToolsException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -16,11 +16,18 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class CommentModificationFormFactoryTest extends KernelTestCase
 {
-    private $comment;
+    /**
+     * @var CommentModificationFormFactoryInterface
+     */
     private $commentModificationFormFactory;
 
+    /**
+     * @throws ORMException
+     * @throws ToolsException
+     */
     protected function setUp()
     {
+        $this->constructComments();
 
         $kernel = self::bootKernel();
 
@@ -30,32 +37,10 @@ class CommentModificationFormFactoryTest extends KernelTestCase
         $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
         $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
 
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john@doe.fr',
-            '12345678'
-        );
-        $entityManager->persist($user);
-
-        $category = new Category(
-            'grab',
-            'Grab'
-        );
-        $entityManager->persist($category);
-
-        $trick = new Trick(
-            'mute',
-            'Mute',
-            'Description de la figure',
-            $category,
-            $user
-        );
-        $entityManager->persist($trick);
-
-        $this->comment = new Comment('Commentaire simulé', $trick, $user);
-        $entityManager->persist($this->comment);
+        $entityManager->persist($this->johnDoe);
+        $entityManager->persist($this->grab);
+        $entityManager->persist($this->mute);
+        $entityManager->persist($this->comment1);
         $entityManager->flush();
 
         $formFactory = $kernel->getContainer()->get('form.factory');
@@ -63,14 +48,16 @@ class CommentModificationFormFactoryTest extends KernelTestCase
         $this->commentModificationFormFactory = new CommentModificationFormFactory($formFactory);
     }
 
+    use CommentFixtures;
+
     public function testIfTheFormIsPrefilledIfRequestWithGetDatasAndCommentIsInTheSession()
     {
         $request = new Request();
         $request->query->set('action', 'modifier');
-        $request->query->set('id', $this->comment->getId()->toString());
+        $request->query->set('id', $this->comment1->getId()->toString());
 
         $session = new Session(new MockArraySessionStorage());
-        $session->set('comment', $this->comment);
+        $session->set('comment', $this->comment1);
         $request->setSession($session);
 
         $form = $this->commentModificationFormFactory->create($request);
@@ -82,10 +69,10 @@ class CommentModificationFormFactoryTest extends KernelTestCase
     public function testIfTheFormIsNotPrefilledIfRequestWithOneGetDatasMissingAndCommentIsInTheSession()
     {
         $request = new Request();
-        $request->query->set('id', $this->comment->getId()->toString());
+        $request->query->set('id', $this->comment1->getId()->toString());
 
         $session = new Session(new MockArraySessionStorage());
-        $session->set('comment', $this->comment);
+        $session->set('comment', $this->comment1);
         $request->setSession($session);
 
         $form = $this->commentModificationFormFactory->create($request);
@@ -97,7 +84,7 @@ class CommentModificationFormFactoryTest extends KernelTestCase
         $request->query->set('action', 'modifier');
 
         $session = new Session(new MockArraySessionStorage());
-        $session->set('comment', $this->comment);
+        $session->set('comment', $this->comment1);
         $request->setSession($session);
 
         $form = $this->commentModificationFormFactory->create($request);
@@ -109,7 +96,7 @@ class CommentModificationFormFactoryTest extends KernelTestCase
     public function testIfTheFormIsNotPrefilledIfRequestWithGetDatasAndCommentIsNotInTheSession()
     {
         $request = new Request();
-        $request->query->set('id', $this->comment->getId()->toString());
+        $request->query->set('id', $this->comment1->getId()->toString());
         $request->query->set('action', 'modifier');
 
         $session = new Session(new MockArraySessionStorage());
@@ -124,7 +111,7 @@ class CommentModificationFormFactoryTest extends KernelTestCase
     public function testIfTheFormIsNotPrefilledIfRequestWithWrongGetDatasAndCommentIsInTheSession()
     {
         $request = new Request();
-        $request->query->set('id', $this->comment->getId()->toString());
+        $request->query->set('id', $this->comment1->getId()->toString());
         $request->query->set('action', 'badAction');
 
         $session = new Session(new MockArraySessionStorage());

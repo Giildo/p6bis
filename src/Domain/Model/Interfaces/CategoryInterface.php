@@ -16,4 +16,9 @@ interface CategoryInterface
      * @return string
      */
     public function getName(): string;
+
+    /**
+     * @return string
+     */
+    public function getSlug(): string;
 }

@@ -3,7 +3,7 @@
 namespace App\Application\Handlers\Forms\Security;
 
 use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForUsernameHandlerInterface;
-use App\Domain\Model\User;
+use App\Domain\Model\Interfaces\UserInterface;
 use App\Domain\Repository\UserRepository;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -34,11 +34,9 @@ class PasswordRecoveryForUsernameHandler implements PasswordRecoveryForUsernameH
     }
 
     /**
-     * @param FormInterface $form
-     * @return User|null
-     * @throws \Doctrine\ORM\ORMException
+     * {@inheritdoc}
      */
-    public function handle(FormInterface $form): ?User
+    public function handle(FormInterface $form): ?UserInterface
     {
         if ($form->isSubmitted() && $form->isValid()) {
             $dto = $form->getData();

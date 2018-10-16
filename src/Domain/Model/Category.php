@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Domain\Model
  *
  * @ORM\Table(name="p6bis_category")
- * @ORM\Entity(repositoryClass="App\Domain\Repository\CategoryRepository")
+ * @ORM\Entity()
  */
 class Category implements CategoryInterface
 {
@@ -42,7 +42,7 @@ class Category implements CategoryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -50,7 +50,7 @@ class Category implements CategoryInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSlug(): string
     {

@@ -10,7 +10,6 @@ use App\Domain\Model\User;
 use App\Domain\Model\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Faker\Factory;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -37,7 +36,6 @@ class TricksFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        $faker = Factory::create('fr_FR');
         $slugger = new SluggerHelper();
 
         $encoder = $this->encoderFactory->getEncoder(User::class);
@@ -47,19 +45,18 @@ class TricksFixtures extends Fixture
             'JohnDoe',
             'John',
             'Doe',
-            'john@doe.com',
-            $password
+            'john@doe.com'
         );
+        $john->changePassword($password);
         $manager->persist($john);
 
         $jane = new User(
             'JaneDoe',
             'Jane',
             'Doe',
-            'jane@doe.com',
-            $password
+            'jane@doe.com'
         );
-
+        $jane->changePassword($password);
         $jane->changeRole(['ROLE_ADMIN']);
 
         $manager->persist($jane);

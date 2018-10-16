@@ -10,6 +10,8 @@ use App\Domain\Repository\CommentRepository;
 use App\Domain\Repository\TrickRepository;
 use App\UI\Responders\Interfaces\Trick\ShowTrickResponderInterface;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,6 +87,8 @@ class ShowTrickAction
      * @return RedirectResponse|Response
      *
      * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function showTrick(Request $request, string $trickSlug, int $paging)
     {

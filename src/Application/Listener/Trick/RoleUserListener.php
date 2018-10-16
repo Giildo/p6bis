@@ -3,6 +3,7 @@
 namespace App\Application\Listener\Trick;
 
 use App\Domain\Repository\TrickRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -50,7 +51,7 @@ class RoleUserListener
     /**
      * @param GetResponseEvent $event
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function onKernelRequest(GetResponseEvent $event)
     {

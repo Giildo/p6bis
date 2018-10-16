@@ -8,17 +8,10 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class UserRegistrationTypeTest extends TypeTestCase
 {
-    private $form;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->form = $this->factory->create(UserRegistrationType::class);
-    }
-
     public function testReturnOfTheFormType()
     {
+        $form = $this->factory->create(UserRegistrationType::class);
+
         $formData = [
             'username'  => 'JohnDoe',
             'firstName' => 'John',
@@ -33,9 +26,9 @@ class UserRegistrationTypeTest extends TypeTestCase
             ],
         ];
 
-        $this->form->submit($formData);
+        $form->submit($formData);
 
-        $dto = $this->form->getData();
+        $dto = $form->getData();
 
         self::assertInstanceOf(UserRegistrationDTOInterface::class, $dto);
     }

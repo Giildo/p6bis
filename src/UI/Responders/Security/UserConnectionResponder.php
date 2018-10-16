@@ -35,24 +35,20 @@ class UserConnectionResponder implements UserConnectionResponderInterface
     }
 
     /**
-     * @param bool|null $redirect
-     * @param null|FormInterface $form
-     * @param AuthenticationException|null $error
-     * @param null|string $lastUserConnected
-     * @return Response|RedirectResponse
+     * {@inheritdoc}
      */
     public function userConnectionResponse(
-        ?bool $redirect = true,
         ?FormInterface $form = null,
         ?AuthenticationException $error = null,
         ?string $lastUserConnected = ''
     ): Response {
-        return $redirect ?
-            new RedirectResponse($this->urlGenerator->generate('Home')) :
-            new Response($this->presenter->userConnectionPresentation(
-                $form,
-                $error,
-                $lastUserConnected
-            ));
+        return (is_null($form)) ?
+            new RedirectResponse($this->urlGenerator->generate('Home')):
+            new Response(
+                $this->presenter->userConnectionPresentation(
+                    $form,
+                    $error
+                )
+            );
     }
 }

@@ -2,16 +2,11 @@
 
 namespace App\Application\Listener\Trick;
 
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ResetSessionTokensListener
 {
-    /**
-     * @var SessionInterface
-     */
-    private $session;
     /**
      * @var UrlGeneratorInterface
      */
@@ -19,14 +14,11 @@ class ResetSessionTokensListener
 
     /**
      * ResetSessionTokensListener constructor.
-     * @param SessionInterface $session
      * @param UrlGeneratorInterface $urlGenerator
      */
     public function __construct(
-        SessionInterface $session,
         UrlGeneratorInterface $urlGenerator
     ) {
-        $this->session = $session;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -50,8 +42,8 @@ class ResetSessionTokensListener
                 }
             }
 
-            if (!empty($this->session->get('tokens'))) {
-                $this->session->set('tokens', []);
+            if (!empty($request->getSession()->get('tokens'))) {
+                $request->getSession()->set('tokens', []);
             }
 
             return;

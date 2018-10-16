@@ -8,24 +8,17 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class PasswordRecoveryForUsernameTypeTest extends TypeTestCase
 {
-    private $form;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->form = $this->factory->create(PasswordRecoveryForUsernameType::class);
-    }
-
     public function testReturnOfTheFormType()
     {
+        $form = $this->factory->create(PasswordRecoveryForUsernameType::class);
+
         $formData = [
             'username'  => 'JohnDoe',
         ];
 
-        $this->form->submit($formData);
+        $form->submit($formData);
 
-        $dto = $this->form->getData();
+        $dto = $form->getData();
 
         self::assertInstanceOf(PasswordRecoveryForUsernameDTOInterface::class, $dto);
     }

@@ -3,8 +3,8 @@
 namespace App\UI\Actions\GCU;
 
 use App\UI\Responders\Interfaces\GCU\GCUResponderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GCUAction
 {

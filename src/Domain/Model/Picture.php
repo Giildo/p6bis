@@ -52,7 +52,7 @@ class Picture implements PictureInterface
     /**
      * @var TrickInterface
      *
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist", "remove"}, inversedBy="pictures")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Trick", cascade={"persist"}, inversedBy="pictures")
      * @ORM\JoinColumn(referencedColumnName="slug", name="trick_slug")
      */
     private $trick;
@@ -114,7 +114,7 @@ class Picture implements PictureInterface
     /**
      * {@inheritdoc}
      */
-    public function getTrick(): TrickInterface
+    public function getTrick(): ?TrickInterface
     {
         return $this->trick;
     }
@@ -122,7 +122,7 @@ class Picture implements PictureInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDeleteToken(): string
+	public function getDeleteToken(): ?string
 	{
 		return $this->deleteToken;
 	}

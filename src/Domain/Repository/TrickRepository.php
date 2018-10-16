@@ -2,6 +2,7 @@
 
 namespace App\Domain\Repository;
 
+use App\Domain\Model\Interfaces\CommentInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\Domain\Repository\Interfaces\RepositoryCounterInterface;
@@ -59,7 +60,7 @@ class TrickRepository extends ServiceEntityRepository implements RepositoryCount
 
     /**
      * @param TrickInterface $trick
-     * @param array $comments
+     * @param CommentInterface[]|array|null $comments
      *
      * @return void
      *
@@ -68,7 +69,7 @@ class TrickRepository extends ServiceEntityRepository implements RepositoryCount
      */
     public function deleteTrick(
         TrickInterface $trick,
-        array $comments
+        ?array $comments = []
     ): void {
         $entityManager = $this->getEntityManager();
 
@@ -77,16 +78,16 @@ class TrickRepository extends ServiceEntityRepository implements RepositoryCount
         if (!empty($pictures)) {
             foreach ($pictures as $picture) {
                 $picturesName[] = "{$picture->getName()}.{$picture->getExtension()}";
-                $entityManager->remove($picture);
+                //$entityManager->remove($picture);
             }
         }
 
-        $videos = $trick->getVideos();
-        if (!empty($videos)) {
-            foreach ($videos as $video) {
-                $entityManager->remove($video);
-            }
-        }
+        //$videos = $trick->getVideos();
+        //if (!empty($videos)) {
+        //    foreach ($videos as $video) {
+        //        $entityManager->remove($video);
+        //    }
+        //}
 
         if (!empty($comments)) {
             foreach ($comments as $comment) {

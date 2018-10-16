@@ -5,11 +5,13 @@ namespace App\UI\Actions\Trick;
 use App\Application\Handlers\Interfaces\Forms\Trick\NewTrickHandlerInterface;
 use App\UI\Forms\Trick\NewTrickType;
 use App\UI\Responders\Interfaces\Trick\NewTrickResponderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 class NewTrickAction
 {
@@ -46,17 +48,22 @@ class NewTrickAction
      * @Route(path="/espace-utilisateur/trick/nouvelle-figure", name="New_trick")
      *
      * @param Request $request
+     *
      * @return Response
+     *
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
     public function newTrick(Request $request): Response
     {
         $form = $this->formFactory->create(NewTrickType::class)
                                   ->handleRequest($request);
 
-        if (!is_null($trick = $this->handler->handle($form))) {
-            return $this->responder->response(true, $trick);
+        if (!is_null($this->handler->handle($form))) {
+            return $this->responder->response(true);
         }
 
-        return $this->responder->response(false, null, $form);
+        return $this->responder->response(false, $form);
     }
 }

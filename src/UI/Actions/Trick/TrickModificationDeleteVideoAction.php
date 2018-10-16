@@ -4,10 +4,9 @@ namespace App\UI\Actions\Trick;
 
 use App\Domain\Repository\VideoRepository;
 use App\UI\Responders\Interfaces\Trick\TrickModificationDeleteVideoOrPictureResponderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class TrickModificationDeleteVideoAction
 {
@@ -19,25 +18,18 @@ class TrickModificationDeleteVideoAction
      * @var VideoRepository
      */
     private $videoRepository;
-    /**
-     * @var SessionInterface
-     */
-    private $session;
 
     /**
      * TrickModificationDeleteVideoAction constructor.
      * @param TrickModificationDeleteVideoOrPictureResponderInterface $responder
      * @param VideoRepository $videoRepository
-     * @param SessionInterface $session
      */
     public function __construct(
         TrickModificationDeleteVideoOrPictureResponderInterface $responder,
-        VideoRepository $videoRepository,
-        SessionInterface $session
+        VideoRepository $videoRepository
     ) {
         $this->responder = $responder;
         $this->videoRepository = $videoRepository;
-        $this->session = $session;
     }
 
     /**
@@ -59,7 +51,7 @@ class TrickModificationDeleteVideoAction
         $video = $this->videoRepository->loadOneVideoWithName($videoName);
         $trickSlug = $video->getTrick()->getSlug();
 
-        $tokens = $this->session->get('tokens');
+        $tokens = $request->getSession()->remove('tokens');
 
         if ($token === $tokens[$videoName]) {
             $this->videoRepository->deleteVideo($video);

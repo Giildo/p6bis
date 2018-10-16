@@ -9,7 +9,7 @@ use DateTime;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class PasswordRecoveryForPasswordHandler implements PasswordRecoveryForPasswordHandlerInterface
 {
@@ -18,21 +18,22 @@ class PasswordRecoveryForPasswordHandler implements PasswordRecoveryForPasswordH
      */
     private $repository;
     /**
-     * @var EncoderFactoryInterface
+     * @var UserPasswordEncoderInterface
      */
-    private $encoderFactory;
+    private $encoder;
 
     /**
      * PasswordRecoveryForPasswordHandler constructor.
      * @param UserRepository $repository
-     * @param EncoderFactoryInterface $encoderFactory
+     * @param UserPasswordEncoderInterface $encoder
      */
     public function __construct(
         UserRepository $repository,
-        EncoderFactoryInterface $encoderFactory
-    ) {
+        UserPasswordEncoderInterface $encoder
+    )
+    {
         $this->repository = $repository;
-        $this->encoderFactory = $encoderFactory;
+        $this->encoder = $encoder;
     }
 
     /**
@@ -43,7 +44,8 @@ class PasswordRecoveryForPasswordHandler implements PasswordRecoveryForPasswordH
         if ($form->isSubmitted() && $form->isValid()) {
             if (is_null($token = $request->query->get('ut'))) {
                 $form->addError(
-                    new FormError('Une erreur est survenue avec le lien renseigné, veuillez réessayer ou refaire une demande de récupération pour votre mot de passe.')
+                    new FormError('Une erreur est survenue avec le lien renseigné,
+                        veuillez réessayer ou refaire une demande de récupération pour votre mot de passe.')
                 );
                 return false;
             }
@@ -53,22 +55,28 @@ class PasswordRecoveryForPasswordHandler implements PasswordRecoveryForPasswordH
 
             if (is_null($user)) {
                 $form->addError(
-                    new FormError('Une erreur est survenue avec le lien renseigné, veuillez réessayer ou refaire une demande de récupération pour votre mot de passe.')
+                    new FormError('Une erreur est survenue avec le lien renseigné,
+                        veuillez réessayer ou refaire une demande de récupération pour votre mot de passe.')
                 );
                 return false;
             }
 
             if ($user->getTokenDate() < new DateTime()) {
                 $form->addError(
-                    new FormError('Vous avez dépassé le délai pour la récupération du mot de passe. Merci de réitérer votre demande.')
+                    new FormError('Vous avez dépassé le délai pour la récupération du mot de passe.
+                        Merci de réitérer votre demande.')
                 );
                 return false;
             }
 
             $dto = $form->getData();
 
-            $encoder = $this->encoderFactory->getEncoder(User::class);
-            $user->changePassword($encoder->encodePassword($dto->password, ''));
+            $user->changePassword(
+                $this->encoder->encodePassword(
+                    $user,
+                    $dto->password
+                )
+            );
             $user->deleteToken();
 
             $this->repository->saveUser($user);
