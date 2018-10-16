@@ -3,12 +3,10 @@
 namespace App\Tests\Application\Listener\Trick;
 
 use App\Application\Listener\Trick\RoleUserListener;
-use App\Domain\Model\Category;
 use App\Domain\Model\Interfaces\TrickInterface;
-use App\Domain\Model\Trick;
-use App\Domain\Model\User;
 use App\Domain\Repository\TrickRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Tests\Fixtures\Traits\TrickAndCategoryFixtures;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,24 +20,40 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class RoleUserListenerTest extends TestCase
 {
+    /**
+     * @var TrickRepository|MockObject
+     */
     private $repository;
 
+    /**
+     * @var UrlGeneratorInterface|MockObject
+     */
     private $urlGenerator;
 
+    /**
+     * @var TokenStorageInterface|MockObject
+     */
     private $tokenStorage;
 
-    private $user;
-
+    /**
+     * @var Request|MockObject
+     */
     private $request;
 
+    /**
+     * @var GetResponseEvent|MockObject
+     */
     private $event;
 
+    /**
+     * @var AuthorizationCheckerInterface|MockObject
+     */
     private $checker;
-
-    private $category;
 
     protected function setUp()
     {
+        $this->constructCategoryAndTrick();
+
         $this->repository = $this->createMock(TrickRepository::class);
 
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
@@ -51,26 +65,15 @@ class RoleUserListenerTest extends TestCase
         $this->request->method('getSession')->willReturn($session);
         $this->event = $this->createMock(GetResponseEvent::class);
 
-        $this->user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john@doe.fr',
-            '12345678'
-        );
-
-        $this->category = new Category(
-            'grab',
-            'Grab'
-        );
-
         $token = $this->createMock(TokenInterface::class);
-        $token->method('getUser')->willReturn($this->user);
+        $token->method('getUser')->willReturn($this->johnDoe);
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->tokenStorage->method('getToken')->willReturn($token);
 
         $this->checker = $this->createMock(AuthorizationCheckerInterface::class);
     }
+
+    use TrickAndCategoryFixtures;
 
     public function testConstructor()
     {
@@ -146,23 +149,8 @@ class RoleUserListenerTest extends TestCase
         $this->request->method('getUri')->willReturn('/goodUrl');
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $user = new User(
-            'JaneDoe',
-            'Jane',
-            'Doe',
-            'jane@doe.fr',
-            '12345678'
-        );
-
-        $trick = new Trick(
-            'mute',
-            'Mute','Description de la figure',
-            $this->category,
-            $user
-        );
-
         $this->repository->method('loadOneTrickWithCategoryAndAuthor')
-                         ->willReturn($trick);
+                         ->willReturn($this->mute);
 
         $listener = new RoleUserListener(
             $this->repository,
@@ -182,25 +170,10 @@ class RoleUserListenerTest extends TestCase
         $this->request->method('getUri')->willReturn('/goodUrl');
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $user = new User(
-            'JaneDoe',
-            'Jane',
-            'Doe',
-            'jane@doe.fr',
-            '12345678'
-        );
-
-        $trick = new Trick(
-            'mute',
-            'Mute','Description de la figure',
-            $this->category,
-            $user
-        );
-
         $this->checker->method('isGranted')->willReturn(true);
 
         $this->repository->method('loadOneTrickWithCategoryAndAuthor')
-            ->willReturn($trick);
+            ->willReturn($this->mute);
 
         $listener = new RoleUserListener(
             $this->repository,
@@ -224,17 +197,10 @@ class RoleUserListenerTest extends TestCase
         $this->request->method('getUri')->willReturn('/goodUrl');
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $trick = new Trick(
-            'mute',
-            'Mute','Description de la figure',
-            $this->category,
-            $this->user
-        );
-
         $this->checker->method('isGranted')->willReturn(true);
 
         $this->repository->method('loadOneTrickWithCategoryAndAuthor')
-            ->willReturn($trick);
+            ->willReturn($this->mute);
 
         $listener = new RoleUserListener(
             $this->repository,

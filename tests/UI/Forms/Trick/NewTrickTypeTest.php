@@ -3,9 +3,9 @@
 namespace App\Tests\UI\Forms\Trick;
 
 use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
-use App\Domain\Model\Category;
 use App\Domain\Model\Interfaces\PictureInterface;
 use App\Domain\Model\Interfaces\VideoInterface;
+use App\Tests\Fixtures\Traits\TrickAndCategoryFixtures;
 use App\UI\Forms\Trick\NewTrickType;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -13,12 +13,12 @@ class NewTrickTypeTest extends KernelTestCase
 {
     public function testReturnOfTheFormType()
     {
+        $this->constructCategoryAndTrick();
+
         $kernel = self::bootKernel();
 
         $factory = $kernel->getContainer()->get('form.factory');
         $form = $factory->create(NewTrickType::class);
-
-        $category = new Category('grab', 'Grab');
 
         $pictures = [];
         $pictures[] = $this->createMock(PictureInterface::class);
@@ -30,7 +30,7 @@ class NewTrickTypeTest extends KernelTestCase
             'name'        => 'Mute',
             'description' => 'Description de la figure',
             'published'   => 0,
-            'category'    => $category,
+            'category'    => $this->grab,
             'pictures'    => $pictures,
             'videos'      => $videos,
         ];
@@ -41,4 +41,6 @@ class NewTrickTypeTest extends KernelTestCase
 
         self::assertInstanceOf(NewTrickDTOInterface::class, $dto);
     }
+
+    use TrickAndCategoryFixtures;
 }

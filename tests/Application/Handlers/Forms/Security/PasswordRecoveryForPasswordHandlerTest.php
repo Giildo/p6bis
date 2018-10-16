@@ -3,152 +3,190 @@
 namespace App\Tests\Application\Handlers\Forms\Security;
 
 use App\Application\Handlers\Forms\Security\PasswordRecoveryForPasswordHandler;
-use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForPasswordHandlerInterface;
 use App\Domain\DTO\Security\PasswordRecoveryForPasswordDTO;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
-use App\Tests\fixtures\LoadFixtures;
+use App\Tests\Fixtures\Traits\UsersFixtures;
 use DateInterval;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\SchemaTool;
+use Exception;
 use PDO;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 
 class PasswordRecoveryForPasswordHandlerTest extends KernelTestCase
 {
-    private $form;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
-    private $request;
-
+    /**
+     * @var PasswordRecoveryForPasswordHandler
+     */
     private $handler;
 
-    private $repository;
+    /**
+     * @var FormInterface|MockObject
+     */
+    private $form;
 
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var PasswordRecoveryForPasswordDTO|MockObject
+     */
+    private $dto;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @throws Exception
+     */
     public function setUp()
     {
         $kernel = self::bootKernel();
 
-        $doctrine = $kernel->getContainer()->get('doctrine');
-        $this->repository = $doctrine->getRepository(User::class);
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $this->entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+
+        $schemaTool = new SchemaTool($this->entityManager);
+        $schemaTool->dropSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+        $schemaTool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+
+        $this->constructUsers();
+
+        $this->johnDoe->createToken(
+            new UriSafeTokenGenerator()
+        );
+
+        $this->entityManager->persist($this->johnDoe);
+        $this->entityManager->flush();
+
+        $this->userRepository = $this->entityManager->getRepository(User::class);
+
+        $encoder = $this->createMock(UserPasswordEncoderInterface::class);
+        $encoder->method('encodePassword')->willReturn('passwordEncoded');
 
         $this->form = $this->createMock(FormInterface::class);
 
         $this->request = new Request();
 
-        $encoder = $this->createMock(PasswordEncoderInterface::class);
-        $encoder->method('encodePassword')
-                ->willReturn('$2y$10$HTXhRibKaaSTNsj2xvXfQO1fDkLODML0NGn9ds/.Z/l7bRHTbV83K');
-        $encoderFactory = $this->createMock(EncoderFactoryInterface::class);
-        $encoderFactory->method('getEncoder')->willReturn($encoder);
+        $this->dto = new PasswordRecoveryForPasswordDTO('123456789');
 
-        $this->handler = new PasswordRecoveryForPasswordHandler($this->repository, $encoderFactory);
-
-        $schemaTool = new SchemaTool($entityManager);
-        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
-
-        $this->loadFixtures(__DIR__ . '/../../../../fixtures/user/02.specific_user.yml', $entityManager);
-
-        $tokenGenerator = $this->createMock(TokenGeneratorInterface::class);
-        $tokenGenerator->method('generateToken')
-                       ->willReturn('8_Me185sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
-        $user = $this->repository->loadUserByUsername('JohnDoe');
-        $user->createToken($tokenGenerator);
-        $this->repository->saveUser($user);
-        $entityManager->detach($user);
+        $this->handler = new PasswordRecoveryForPasswordHandler(
+            $this->userRepository,
+            $encoder
+        );
     }
 
-    use LoadFixtures;
+    use UsersFixtures;
 
-    public function testConstructor()
-    {
-        self::assertInstanceOf(PasswordRecoveryForPasswordHandlerInterface::class, $this->handler);
-    }
-
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function testFalseReturnIfFormIsntSubmitted()
     {
         $this->form->method('isSubmitted')->willReturn(false);
 
-        $response = $this->handler->handle($this->form, $this->request);
-
-        self::assertFalse($response);
+        self::assertFalse($this->handler->handle($this->form, $this->request));
     }
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function testFalseReturnIfFormIsSubmittedButIsntValid()
     {
         $this->form->method('isSubmitted')->willReturn(true);
         $this->form->method('isValid')->willReturn(false);
 
-        $response = $this->handler->handle($this->form, $this->request);
-
-        self::assertFalse($response);
+        self::assertFalse($this->handler->handle($this->form, $this->request));
     }
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function testFalseIfTokenIsNull()
     {
         $this->form->method('isSubmitted')->willReturn(true);
         $this->form->method('isValid')->willReturn(true);
 
-        $response = $this->handler->handle($this->form, $this->request);
-
-        self::assertFalse($response);
+        self::assertFalse($this->handler->handle($this->form, $this->request));
     }
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function testFalseReturnIfBadToken()
     {
         $this->form->method('isSubmitted')->willReturn(true);
         $this->form->method('isValid')->willReturn(true);
 
-        $this->request->query->set('ut', 'token_5sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
+        $this->request->query->set('ut', 'badToken');
 
-        $response = $this->handler->handle($this->form, $this->request);
-
-        self::assertFalse($response);
+        self::assertFalse($this->handler->handle($this->form, $this->request));
     }
 
-    public function testTrueReturnIfGoodTokenAndTokenIsDeleted()
-    {
-        $this->form->method('isSubmitted')->willReturn(true);
-        $this->form->method('isValid')->willReturn(true);
-
-        $this->request->query->set('ut', '8_Me185sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
-
-        $dto = new PasswordRecoveryForPasswordDTO('87654321');
-        $this->form->method('getData')->willReturn($dto);
-
-        $response = $this->handler->handle($this->form, $this->request);
-
-        self::assertTrue($response);
-
-        $userLoaded = $this->repository->loadUserByUsername('JohnDoe');
-
-        self::assertNull($userLoaded->getToken());
-    }
-
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws Exception
+     */
     public function testFalseReturnIfDateTokenHasPassed()
     {
         $this->form->method('isSubmitted')->willReturn(true);
         $this->form->method('isValid')->willReturn(true);
 
-        $this->request->query->set('ut', '8_Me185sEUfrS9W3bcsCJzEyUlyLDTg6Dn1Ul3xF0EQ');
+        $this->request->query->set('ut', $this->johnDoe->getToken());
+        $id = $this->johnDoe->getId();
+        $this->entityManager->detach($this->johnDoe);
+
+        $this->form->method('getData')->willReturn($this->dto);
 
         $date = (new DateTime())->sub(
-            new DateInterval('PT1H')
+            new DateInterval('PT2H')
         );
         $dbPath = __DIR__ . '/../../../../../var/data.db';
         $pdo = new PDO("sqlite:{$dbPath}");
-        $prepare = $pdo->prepare("UPDATE p6bis_user SET token_date=:date");
-        $prepare->bindValue(':date', $date->format('Y-m-d H:i:s'));
-        $prepare->execute();
+        $prepare = $pdo->prepare("UPDATE p6bis_user SET token_date = :newDate WHERE id = :id");
+        $prepare->execute([
+            'newDate' => $date->format('Y-m-d H:i:s'),
+            'id'      => $id,
+        ]);
 
-        $response = $this->handler->handle($this->form, $this->request);
+        self::assertFalse($this->handler->handle($this->form, $this->request));
+    }
 
-        self::assertFalse($response);
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function testTrueReturnIfGoodTokenAndTokenIsDeleted()
+    {
+        $this->form->method('isSubmitted')->willReturn(true);
+        $this->form->method('isValid')->willReturn(true);
+
+        $this->request->query->set('ut', $this->johnDoe->getToken());
+
+        $this->form->method('getData')->willReturn($this->dto);
+
+        self::assertTrue($this->handler->handle($this->form, $this->request));
     }
 }

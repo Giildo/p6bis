@@ -33,7 +33,7 @@ class CommentModificationFormFactory implements CommentModificationFormFactoryIn
     public function create(Request $request): FormInterface
     {
         if (!is_null($request->query->get('action')) && !is_null($request->query->get('id'))) {
-            $comment = $request->getSession()->get('comment');
+            $comment = $request->getSession()->remove('comment');
 
             if (!is_null($comment)) {
                 if ($request->query->get('action') == 'modifier') {

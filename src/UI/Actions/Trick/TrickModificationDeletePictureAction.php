@@ -2,12 +2,13 @@
 
 namespace App\UI\Actions\Trick;
 
-use App\Domain\Model\Picture;
 use App\Domain\Repository\PictureRepository;
 use App\UI\Responders\Interfaces\Trick\TrickModificationDeleteVideoOrPictureResponderInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TrickModificationDeletePictureAction
@@ -20,26 +21,19 @@ class TrickModificationDeletePictureAction
 	 * @var PictureRepository
 	 */
 	private $pictureRepository;
-    /**
-     * @var SessionInterface
-     */
-    private $session;
 
     /**
      * TrickModificationDeletePictureAction constructor.
      *
      * @param TrickModificationDeleteVideoOrPictureResponderInterface $responder
      * @param PictureRepository $pictureRepository
-     * @param SessionInterface $session
      */
 	public function __construct(
 	    TrickModificationDeleteVideoOrPictureResponderInterface $responder,
-        PictureRepository $pictureRepository,
-        SessionInterface $session
+        PictureRepository $pictureRepository
 	) {
         $this->responder = $responder;
 		$this->pictureRepository = $pictureRepository;
-        $this->session = $session;
     }
 
     /**
@@ -49,21 +43,20 @@ class TrickModificationDeletePictureAction
      *
      * @return RedirectResponse
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
 	public function deletePicture(Request $request): RedirectResponse
 	{
 		$pictureName = $request->query->get('s');
 		$token = $request->query->get('t');
 
-		/** @var Picture $picture */
 		$picture = $this->pictureRepository->loadOnePictureWithName($pictureName);
 		$trickSlug = $picture->getTrick()->getSlug();
 		$pictureExtension = $picture->getExtension();
 
-		$tokens = $this->session->get('tokens');
+		$tokens = $request->getSession()->remove('tokens');
 
 		if ($token === $tokens[$picture->getName()]) {
 			$this->pictureRepository->deletePicture($picture);

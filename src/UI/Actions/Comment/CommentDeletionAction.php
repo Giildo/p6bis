@@ -4,9 +4,9 @@ namespace App\UI\Actions\Comment;
 
 use App\Domain\Repository\CommentRepository;
 use App\UI\Responders\Interfaces\Comment\CommentDeletionResponderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CommentDeletionAction
 {
@@ -49,7 +49,7 @@ class CommentDeletionAction
      */
     public function commentDeletion(Request $request, string $trickSlug): RedirectResponse
     {
-        $comment = $request->getSession()->get('comment');
+        $comment = $request->getSession()->remove('comment');
 
         if (is_null($comment)) {
             return $this->responder->response($trickSlug);

@@ -3,70 +3,58 @@
 namespace App\Tests\Application\Handlers\Forms\Trick;
 
 use App\Application\Handlers\Forms\Trick\NewTrickHandler;
-use App\Application\Handlers\Interfaces\Forms\Trick\NewTrickHandlerInterface;
 use App\Application\Helpers\PictureSaveHelper;
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Builders\Interfaces\PictureBuilderInterface;
 use App\Domain\Builders\Interfaces\VideoBuilderInterface;
 use App\Domain\Builders\TrickBuilder;
+use App\Domain\DTO\Interfaces\Trick\PictureDTOInterface;
+use App\Domain\DTO\Interfaces\Trick\VideoDTOInterface;
 use App\Domain\DTO\Trick\NewTrickDTO;
 use App\Domain\DTO\Trick\NewPictureDTO;
 use App\Domain\DTO\Trick\NewVideoDTO;
-use App\Domain\Model\Category;
 use App\Domain\Model\Interfaces\TrickInterface;
-use App\Domain\Model\Picture;
-use App\Domain\Model\Trick;
-use App\Domain\Model\User;
-use App\Domain\Model\Video;
-use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Tests\Fixtures\Traits\PictureAndVideoFixtures;
+use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class NewTrickHandlerTest extends KernelTestCase
+class NewTrickHandlerTest extends TestCase
 {
+    /**
+     * @var NewTrickHandler
+     */
     private $handler;
 
+    /**
+     * @var FormInterface|MockObject
+     */
     private $form;
 
-    private $trick;
-
+    /**
+     * @var TrickBuilder
+     */
     private $trickBuilder;
+
+    /**
+     * @var PictureDTOInterface
+     */
+    private $pictureDTO;
+
+    /**
+     * @var VideoDTOInterface
+     */
+    private $videoDTO;
 
     protected function setUp()
     {
-        $kernel = self::bootKernel();
-
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-
-        $schemaTool = new SchemaTool($entityManager);
-        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
+        $this->constructPicturesAndVideos();
 
         $slugger = new SluggerHelper();
-
-        $category = new Category(
-            $slugger->slugify('Grabs'),
-            'Grabs'
-        );
-
-        $user = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john@doe.fr',
-            '12345678'
-        );
-
-        $this->trick = new Trick(
-            $slugger->slugify('Mute'),
-            'Mute',
-            'Description de la figure',
-            $category,
-            $user
-        );
 
         $pictureDTO = new NewPictureDTO(
             'Description de l\'image',
@@ -79,13 +67,17 @@ class NewTrickHandlerTest extends KernelTestCase
             'Indy',
             'Description de la figure',
             false,
-            $category,
+            $this->grab,
             [$pictureDTO],
-            [$videoDTO]
+            [$videoDTO],
+            $pictureDTO
         );
 
+        $this->form = $this->createMock(FormInterface::class);
+        $this->form->method('getData')->willReturn($trickDTO);
+
         $tokenInterface = $this->createMock(TokenInterface::class);
-        $tokenInterface->method('getUser')->willReturn($user);
+        $tokenInterface->method('getUser')->willReturn($this->johnDoe);
         $tokenStorage = $this->createMock(TokenStorageInterface::class);
         $tokenStorage->method('getToken')->willReturn($tokenInterface);
 
@@ -94,22 +86,17 @@ class NewTrickHandlerTest extends KernelTestCase
             $tokenStorage
         );
 
-        $picture = new Picture(
-            'mute20180802_1',
-            'Description de l\'image',
-            'jpeg',
-            false,
-            $this->trick
-        );
-
         $pictureBuilder = $this->createMock(PictureBuilderInterface::class);
-        $pictureBuilder->method('build')->willReturn($picture);
-        $video = new Video('jXM-2FvU0f0', $this->trick);
+        $pictureBuilder->method('build')->willReturnSelf();
+        $pictureBuilder->method('getPicture')->willReturn($this->pictureNoHead);
 
         $videoBuilder = $this->createMock(VideoBuilderInterface::class);
-        $videoBuilder->method('build')->willReturn($video);
+        $videoBuilder->method('build')->willReturnSelf();
+        $videoBuilder->method('getVideo')->willReturn($this->videoTrick);
 
         $pictureSave = new PictureSaveHelper();
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->handler = new NewTrickHandler(
             $this->trickBuilder,
@@ -118,23 +105,15 @@ class NewTrickHandlerTest extends KernelTestCase
             $entityManager,
             $pictureSave
         );
-
-        $this->form = $this->createMock(FormInterface::class);
-        $this->form->method('getData')->willReturn($trickDTO);
     }
 
-    public function testConstructor()
-    {
-        self::assertInstanceOf(NewTrickHandlerInterface::class, $this->handler);
-    }
+    use PictureAndVideoFixtures;
 
     public function testNullIfTheFormIsntSubmitted()
     {
         $this->form->method('isSubmitted')->willReturn(false);
 
-        $response = $this->handler->handle($this->form);
-
-        self::assertNull($response);
+        self::assertNull($this->handler->handle($this->form));
     }
 
     public function testNullIfTheFormIsSubmittedAndIsntValid()
@@ -142,18 +121,14 @@ class NewTrickHandlerTest extends KernelTestCase
         $this->form->method('isSubmitted')->willReturn(true);
         $this->form->method('isValid')->willReturn(false);
 
-        $response = $this->handler->handle($this->form);
-
-        self::assertNull($response);
+        self::assertNull($this->handler->handle($this->form));
     }
 
-    public function testNullIfTheTrickBuilderReturnNull()
+    public function testBuilderReturnTrick()
     {
         $this->form->method('isSubmitted')->willReturn(true);
         $this->form->method('isValid')->willReturn(true);
 
-        $response = $this->handler->handle($this->form);
-
-        self::assertInstanceOf(TrickInterface::class, $response);
+        self::assertInstanceOf(TrickInterface::class, $this->handler->handle($this->form));
     }
 }

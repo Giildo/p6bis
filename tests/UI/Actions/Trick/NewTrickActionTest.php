@@ -3,10 +3,11 @@
 namespace App\Tests\UI\Actions\Trick;
 
 use App\Application\Handlers\Interfaces\Forms\Trick\NewTrickHandlerInterface;
-use App\Domain\Model\Interfaces\TrickInterface;
+use App\Tests\Fixtures\Traits\TrickAndCategoryFixtures;
 use App\UI\Actions\Trick\NewTrickAction;
-use App\UI\Presenters\Interfaces\Trick\NewTrickPresenterInterface;
+use App\UI\Presenters\Trick\NewTrickPresenter;
 use App\UI\Responders\Trick\NewTrickResponder;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -14,23 +15,38 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 class NewTrickActionTest extends TestCase
 {
+    /**
+     * @var NewTrickAction
+     */
     private $action;
 
+    /**
+     * @var NewTrickHandlerInterface|MockObject
+     */
     private $handler;
 
+    /**
+     * @var Request
+     */
     private $request;
 
     protected function setUp()
     {
-        $presenter = $this->createMock(NewTrickPresenterInterface::class);
-        $presenter->method('newTrickPresentation')->willReturn('vue de la page');
+        $this->constructCategoryAndTrick();
 
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $urlGenerator->method('generate')->willReturn('url');
+        $urlGenerator->method('generate')->willReturn('/url');
 
+        $twig = $this->createMock(Environment::class);
+        $twig->method('render')->willReturn('vue de la page');
+        $presenter = new NewTrickPresenter($twig);
         $responder = new NewTrickResponder($presenter, $urlGenerator);
 
         $form = $this->createMock(FormInterface::class);
@@ -40,28 +56,37 @@ class NewTrickActionTest extends TestCase
 
         $this->handler = $this->createMock(NewTrickHandlerInterface::class);
 
-        $this->action = new NewTrickAction($responder, $formFactory, $this->handler);
+        $this->request = new Request();
 
-        $this->request = $this->createMock(Request::class);
+        $this->action = new NewTrickAction(
+            $responder,
+            $formFactory,
+            $this->handler
+        );
     }
 
-    public function testConstructor()
-    {
-        self::assertInstanceOf(NewTrickAction::class, $this->action);
-    }
+    use TrickAndCategoryFixtures;
 
+    /**
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
+     */
     public function testRedirectionResponseIfHandlerReturnTrick()
     {
-        $trick = $this->createMock(TrickInterface::class);
-        $trick->method('getSlug')->willReturn('slug');
+        $this->handler->method('handle')->willReturn($this->mute);
 
-        $this->handler->method('handle')->willReturn($trick);
-
-        $response = $this->action->newTrick($this->request);
-
-        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertInstanceOf(
+            RedirectResponse::class,
+            $this->action->newTrick($this->request)
+        );
     }
 
+    /**
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
+     */
     public function testResponseIfHandlerReturnNull()
     {
         $this->handler->method('handle')->willReturn(null);

@@ -98,20 +98,18 @@ class User implements UserInterface
      * @param string $firstName
      * @param string $lastName
      * @param string $mail
-     * @param string $password
-s     */
+     */
     public function __construct(
         string $username,
         string $firstName,
         string $lastName,
-        string $mail,
-        string $password
+        string $mail
     ) {
         $this->username = $username;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->mail = $mail;
-        $this->password = $password;
+        $this->password = null;
         $this->roles[] = 'ROLE_USER';
     }
 
@@ -200,7 +198,7 @@ s     */
      */
     public function getSalt()
     {
-        // TODO: Implement getSalt() method.
+        return null;
     }
 
     /**
@@ -208,7 +206,6 @@ s     */
      */
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
     }
 
     /**

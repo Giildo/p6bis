@@ -21,22 +21,6 @@ class SluggerHelper implements SluggerHelperInterface
     }
 
     /**
-     * @return string
-     */
-    public function getSpaceCharacter(): string
-    {
-        return $this->spaceCharacter;
-    }
-
-    /**
-     * @param string $spaceCharacter
-     */
-    public function setSpaceCharacter(string $spaceCharacter): void
-    {
-        $this->spaceCharacter = $spaceCharacter;
-    }
-
-    /**
      * @param string $text
      *
      * @return string

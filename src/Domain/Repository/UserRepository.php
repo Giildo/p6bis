@@ -7,7 +7,7 @@ use App\Domain\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 
@@ -24,7 +24,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
      * @return void
      *
      * @throws ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws OptimisticLockException
      */
     public function saveUser(UserInterface $user): void
     {
@@ -40,42 +40,33 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
      * @param string $username The username
      *
      * @return UserInterface|null
+     *
+     * @throws NonUniqueResultException
      */
     public function loadUserByUsername($username): ?UserInterface
     {
-        $queryBuilder = $this->createQueryBuilder('u')
+        return $this->createQueryBuilder('u')
             ->leftJoin('u.picture', 'picture')
             ->addSelect('picture')
             ->where('u.username = :username')
             ->setParameter('username', $username)
-            ->getQuery();
-
-        try {
-            $user = $queryBuilder->getSingleResult();
-        } catch (NoResultException | NonUniqueResultException $e) {
-            return null;
-        }
-
-        return $user;
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /**
      * @param string $token
+     *
      * @return UserInterface|null
+     *
+     * @throws NonUniqueResultException
      */
     public function loadUserByToken(string $token): ?UserInterface
     {
-        $queryBuilder = $this->createQueryBuilder('u')
+        return $this->createQueryBuilder('u')
             ->where('u.token = :token')
             ->setParameter('token', $token)
-            ->getQuery();
-
-        try {
-            $user = $queryBuilder->getSingleResult();
-        } catch (NoResultException | NonUniqueResultException $e) {
-            return null;
-        }
-
-        return $user;
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

@@ -54,7 +54,7 @@ class TrickDeletionAction
     /**
      * @Route(
      *     path="/espace-utilisateur/trick/suppression/{trickSlug}",
-     *     requirements={"trickSlug"="\w+"},
+     *     requirements={"trickSlug"="[a-zA-Z0-9-]+"},
      *     name="Trick_deletion"
      * )
      *
@@ -68,13 +68,11 @@ class TrickDeletionAction
     public function delete(Request $request): RedirectResponse
     {
         /** @var TrickInterface $trick */
-        $trick = $request->getSession()->get('trick');
+        $trick = $request->getSession()->remove('trick');
 
         $comments = $this->commentRepository->loadAllCommentsOfATrick($trick->getSlug());
 
         $this->trickRepository->deleteTrick($trick, $comments);
-
-        $request->getSession()->clear();
 
         $this->flashBag->set('messageFlash', 'La figure a été supprimée avec succès.');
 

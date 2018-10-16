@@ -3,6 +3,7 @@
 namespace App\Domain\Model\Interfaces;
 
 use DateTime;
+use Exception;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface as UserInterfaceSymfony;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
@@ -93,7 +94,7 @@ interface UserInterface extends UserInterfaceSymfony
     /**
      * @param TokenGeneratorInterface $tokenGenerator
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function createToken(TokenGeneratorInterface $tokenGenerator): void;
 

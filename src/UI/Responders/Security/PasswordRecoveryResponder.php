@@ -47,14 +47,8 @@ class PasswordRecoveryResponder implements PasswordRecoveryResponderInterface
         ?FormInterface $form = null,
         ?string $typeName = ''
     ): Response {
-        $mailerSuccess = false;
-
-        if (is_null($form)) {
-            $mailerSuccess = true;
-        }
-
         return $redirection ?
             new RedirectResponse($this->urlGenerator->generate('Home')) :
-            new Response($this->presenter->passwordRecoveryPresentation($form, $typeName, $mailerSuccess));
+            new Response($this->presenter->passwordRecoveryPresentation($form, $typeName));
     }
 }

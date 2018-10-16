@@ -5,6 +5,7 @@ namespace App\Application\Handlers\Forms\User;
 use App\Application\Handlers\Interfaces\Forms\User\ProfilePictureHandlerInterface;
 use App\Application\Helpers\PictureSaveHelper;
 use App\Domain\Builders\Interfaces\PictureBuilderInterface;
+use App\Domain\DTO\Trick\NewPictureDTO;
 use App\Domain\DTO\User\ProfilePictureDTO;
 use App\Domain\Model\Interfaces\UserInterface;
 use App\Domain\Repository\UserRepository;
@@ -50,19 +51,18 @@ class ProfilePictureHandler implements ProfilePictureHandlerInterface
             /** @var ProfilePictureDTO $dto */
             $dto = $form->getData();
 
-            $picture = null;
+            $picture = $user->getPicture();
 
+            /** @var NewPictureDTO $dto->profilePicture */
             if (!is_null($dto->profilePicture->picture)) {
                 $picture = $this->builder->build($dto->profilePicture, null, 0, true, $user)
-                    ->getPicture();
+                                         ->getPicture();
 
                 if (!is_null($user->getPicture())) {
                     $picture = $user->getPicture();
                     $name = "{$picture->getName()}.{$picture->getExtension()}";
                     unlink(__DIR__ . '/../../../../../public/pic/users/' . $name);
                 }
-            } elseif (!is_null($user->getPicture())) {
-                $picture = $user->getPicture();
             }
 
             $user->updateProfile(

@@ -24,20 +24,12 @@ class UserConnectionPresenter implements UserConnectionPresenterInterface
     }
 
     /**
-     * @param FormInterface $form
-     * @param AuthenticationException|null $error
-     * @param null|string $lastUserConnected
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function userConnectionPresentation(
         FormInterface $form,
-        ?AuthenticationException $error = null,
-        ?string $lastUserConnected = ''
-    ): string
-    {
+        ?AuthenticationException $error = null
+    ): string {
         return $this->twig->render('Security/connection.html.twig', [
             'form' => $form->createView(),
             'error' => $error

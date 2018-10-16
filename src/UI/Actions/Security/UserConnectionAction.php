@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 /**
  * @Route(name="Authentication_")
@@ -48,6 +51,10 @@ class UserConnectionAction
      * @param AuthenticationUtils $utils
      *
      * @return Response
+     *
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
     public function connection(Request $request, AuthenticationUtils $utils): Response
     {
@@ -59,10 +66,7 @@ class UserConnectionAction
                                   ->handleRequest($request);
 
         return $this->responder->userConnectionResponse(
-            false,
-            $form,
-            $errors,
-            $lastUserConnected
+            $form, $errors, $lastUserConnected
         );
     }
 }

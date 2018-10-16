@@ -8,11 +8,12 @@ use App\Domain\DTO\User\ProfilePictureDTO;
 use App\Domain\Model\Interfaces\UserInterface;
 use App\UI\Forms\User\ProfilePictureType;
 use App\UI\Responders\Interfaces\User\ProfilePictureResponderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
@@ -38,10 +39,6 @@ class ProfilePictureAction
      * @var TokenGeneratorInterface
      */
     private $tokenGenerator;
-    /**
-     * @var SessionInterface
-     */
-    private $session;
 
     /**
      * ProfilePictureAction constructor.
@@ -50,22 +47,19 @@ class ProfilePictureAction
      * @param TokenStorageInterface $tokenStorage
      * @param ProfilePictureHandlerInterface $handler
      * @param TokenGeneratorInterface $tokenGenerator
-     * @param SessionInterface $session
      */
     public function __construct(
         ProfilePictureResponderInterface $responder,
         FormFactoryInterface $formFactory,
         TokenStorageInterface $tokenStorage,
         ProfilePictureHandlerInterface $handler,
-        TokenGeneratorInterface $tokenGenerator,
-        SessionInterface $session
+        TokenGeneratorInterface $tokenGenerator
     ) {
         $this->responder = $responder;
         $this->formFactory = $formFactory;
         $this->tokenStorage = $tokenStorage;
         $this->handler = $handler;
         $this->tokenGenerator = $tokenGenerator;
-        $this->session = $session;
     }
 
     /**
@@ -74,6 +68,9 @@ class ProfilePictureAction
      * @param Request $request
      *
      * @return Response
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function profilePicture(Request $request): Response
     {
@@ -95,7 +92,7 @@ class ProfilePictureAction
         if (!is_null($picture = $user->getPicture())) {
             $picture->createToken($this->tokenGenerator->generateToken());
 
-            $this->session->set('tokenProfilePicture', $picture->getDeleteToken());
+            $request->getSession()->set('tokenProfilePicture', $picture->getDeleteToken());
         }
 
         return $this->responder->response($form, $user);

@@ -2,9 +2,6 @@
 
 namespace App\Domain\Model\Interfaces;
 use App\Domain\Model\Picture;
-use App\Domain\Model\Trick;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
-
 
 /**
  * Class Picture
@@ -36,9 +33,9 @@ interface PictureInterface
     public function isHeadPicture(): bool;
 
 	/**
-	 * @return TrickInterface
+	 * @return TrickInterface|null
 	 */
-	public function getTrick(): TrickInterface;
+	public function getTrick(): ?TrickInterface;
 
 	/**
 	 * @param string $description
@@ -59,7 +56,7 @@ interface PictureInterface
 	public function createToken(string $token): void;
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getDeleteToken(): string;
+	public function getDeleteToken(): ?string;
 }

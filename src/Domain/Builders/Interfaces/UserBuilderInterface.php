@@ -4,7 +4,7 @@ namespace App\Domain\Builders\Interfaces;
 
 use App\Domain\Builders\UserBuilder;
 use App\Domain\DTO\Security\UserRegistrationDTO;
-use App\Domain\Model\User;
+use App\Domain\Model\Interfaces\UserInterface;
 
 interface UserBuilderInterface
 {
@@ -18,7 +18,7 @@ interface UserBuilderInterface
     ): UserBuilder;
 
     /**
-     * @return User
+     * @return UserInterface
      */
-    public function getUser(): User;
+    public function getUser(): UserInterface;
 }

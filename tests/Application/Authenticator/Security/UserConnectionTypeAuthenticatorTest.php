@@ -8,11 +8,19 @@ use App\Application\Handlers\Interfaces\Forms\Security\UserConnectionHandlerInte
 use App\Domain\DTO\Interfaces\Security\UserConnectionDTOInterface;
 use App\Domain\DTO\Security\UserConnectionDTO;
 use App\Domain\Model\User;
-use App\Tests\fixtures\LoadFixtures;
+use App\Domain\Repository\UserRepository;
+use App\Tests\Fixtures\Traits\UsersFixtures;
 use App\UI\Presenters\Security\UserConnectionPresenter;
 use App\UI\Responders\Security\UserConnectionResponder;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\ToolsException;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -27,32 +35,76 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class UserConnectionTypeAuthenticatorTest extends KernelTestCase
 {
+    /**
+     * @var UserConnectionTypeAuthenticatorInterface
+     */
     private $authenticator;
 
+    /**
+     * @var Request
+     */
     private $request;
 
+    /**
+     * @var UserConnectionHandlerInterface|MockObject
+     */
     private $userConnectionHandler;
 
+    /**
+     * @var UserProviderInterface|MockObject
+     */
     private $userProvider;
 
+    /**
+     * @var UserConnectionDTOInterface
+     */
     private $userDTO;
 
-    private $repository;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
+    /**
+     * @var UserInterface
+     */
     private $user;
 
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var PasswordEncoderInterface|MockObject
+     */
+    private $passwordEncoder;
+
+    /**
+     * @var EncoderFactoryInterface|MockObject
+     */
+    private $encoderFactory;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @throws ToolsException
+     */
     protected function setUp()
     {
+        $this->constructUsers();
+
         $kernel = static::bootKernel();
-        $entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $this->repository = $entityManager->getRepository(User::class);
-        $this->user = $this->repository->loadUserByUsername('JohnDoe');
 
-        $schemaTool = new SchemaTool($entityManager);
-        $schemaTool->dropSchema($entityManager->getMetadataFactory()->getAllMetadata());
-        $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
+        $this->entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $this->userRepository = $this->entityManager->getRepository(User::class);
 
-        $this->loadFixtures(__DIR__ . '/../../../fixtures/user/02.specific_user.yml', $entityManager);
+        $schemaTool = new SchemaTool($this->entityManager);
+        $schemaTool->dropSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+        $schemaTool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
 
         $this->userDTO = new UserConnectionDTO('JohnDoe', '12345678');
         $formInterface = $this->createMock(FormInterface::class);
@@ -62,10 +114,8 @@ class UserConnectionTypeAuthenticatorTest extends KernelTestCase
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $formFactory->method('create')->willReturn($formInterface);
 
-        $passwordEncoder = $this->createMock(PasswordEncoderInterface::class);
-        $passwordEncoder->method('isPasswordValid')->willReturn(true);
-        $encoderFactory = $this->createMock(EncoderFactoryInterface::class);
-        $encoderFactory->method('getEncoder')->willReturn($passwordEncoder);
+        $this->passwordEncoder = $this->createMock(PasswordEncoderInterface::class);
+        $this->encoderFactory = $this->createMock(EncoderFactoryInterface::class);
 
         $this->userConnectionHandler = $this->createMock(
             UserConnectionHandlerInterface::class
@@ -81,27 +131,22 @@ class UserConnectionTypeAuthenticatorTest extends KernelTestCase
         $this->request = new Request();
         $this->request->attributes = $attributes;
 
+        $this->eventDispatcher = new EventDispatcher();
+
         $this->authenticator = new UserConnectionTypeAuthenticator(
             $formFactory,
-            $this->repository,
-            $encoderFactory,
+            $this->userRepository,
+            $this->encoderFactory,
             $this->userConnectionHandler,
             $userConnectionResponder,
-            $urlGenerator
+            $urlGenerator,
+            $this->eventDispatcher
         );
 
         $this->userProvider = $this->createMock(UserProviderInterface::class);
     }
 
-    use LoadFixtures;
-
-    public function testConstructor()
-    {
-        self::assertInstanceOf(
-            UserConnectionTypeAuthenticatorInterface::class,
-            $this->authenticator
-        );
-    }
+    use UsersFixtures;
 
     public function testTheReturnOfGetLoginUrlMethod()
     {
@@ -177,8 +222,23 @@ class UserConnectionTypeAuthenticatorTest extends KernelTestCase
         self::assertNull($response);
     }
 
+    public function testTheReturnOfGetUserMethodIfCredentialsIsError()
+    {
+        $credentials = new FormErrorIterator(
+            $this->createMock(FormInterface::class),
+            [new FormError('error 1'), new FormError('error 2')]
+        );
+
+        $response = $this->authenticator->getUser($credentials, $this->userProvider);
+
+        self::assertNull($response);
+    }
+
     public function testTheReturnOfGetUserMethodIfTheReturnOfCredentialIsDTO()
     {
+        $this->entityManager->persist($this->johnDoe);
+        $this->entityManager->flush();
+
         $credentials = $this->userDTO;
 
         $response = $this->authenticator->getUser($credentials, $this->userProvider);
@@ -190,16 +250,31 @@ class UserConnectionTypeAuthenticatorTest extends KernelTestCase
     {
         $credentials = [];
 
-        $response = $this->authenticator->checkCredentials($credentials, $this->user);
+        $response = $this->authenticator->checkCredentials($credentials, $this->johnDoe);
 
         self::assertFalse($response);
     }
 
-    public function testTheReturnOfCheckCredentialsMethodIfCredentialsIsGood()
+    public function testTheReturnOfCheckCredentialsMethodIfCredentialsIsGoodAndPasswordNotValid()
     {
         $credentials = $this->userDTO;
 
-        $response = $this->authenticator->checkCredentials($credentials, $this->user);
+        $this->passwordEncoder->method('isPasswordValid')->willReturn(false);
+        $this->encoderFactory->method('getEncoder')->willReturn($this->passwordEncoder);
+
+        $response = $this->authenticator->checkCredentials($credentials, $this->johnDoe);
+
+        self::assertFalse($response);
+    }
+
+    public function testTheReturnOfCheckCredentialsMethodIfCredentialsIsGoodAndPasswordIsValid()
+    {
+        $credentials = $this->userDTO;
+
+        $this->passwordEncoder->method('isPasswordValid')->willReturn(true);
+        $this->encoderFactory->method('getEncoder')->willReturn($this->passwordEncoder);
+
+        $response = $this->authenticator->checkCredentials($credentials, $this->johnDoe);
 
         self::assertTrue($response);
     }

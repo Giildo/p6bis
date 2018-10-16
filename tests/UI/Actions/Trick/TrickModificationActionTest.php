@@ -5,9 +5,11 @@ namespace App\Tests\UI\Actions\Trick;
 use App\Application\Handlers\Interfaces\Forms\Trick\TrickModificationHandlerInterface;
 use App\Application\Helpers\PictureAndVideoTokenManager;
 use App\Domain\Model\Interfaces\TrickInterface;
+use App\Tests\Fixtures\Traits\TrickAndCategoryFixtures;
 use App\UI\Actions\Trick\TrickModificationAction;
 use App\UI\Presenters\Trick\TrickModificationPresenter;
 use App\UI\Responders\Trick\TrickModificationResponder;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -22,20 +24,40 @@ use Twig\Environment;
 
 class TrickModificationActionTest extends TestCase
 {
+    /**
+     * @var Request
+     */
     private $request;
 
+    /**
+     * @var TrickModificationHandlerInterface|MockObject
+     */
     private $handler;
 
+    /**
+     * @var FormFactoryInterface|MockObject
+     */
     private $formFactory;
 
+    /**
+     * @var TrickModificationResponder
+     */
     private $responder;
 
+    /**
+     * @var PictureAndVideoTokenManager
+     */
     private $tokenManager;
 
+    /**
+     * @var TrickModificationAction
+     */
     private $action;
 
     protected function setUp()
     {
+        $this->constructCategoryAndTrick();
+
         $form = $this->createMock(FormInterface::class);
         $form->method('handleRequest')->willReturnSelf();
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
@@ -57,9 +79,11 @@ class TrickModificationActionTest extends TestCase
         $this->tokenManager = new PictureAndVideoTokenManager($tokenGenerator);
 
         $trick = $this->createMock(TrickInterface::class);
+        $trick->method('getDescription')->willReturn('Description de la figure');
+        $trick->method('isPublished')->willReturn(true);
+        $trick->method('getCategory')->willReturn($this->grab);
         $trick->method('getPictures')->willReturn([]);
         $trick->method('getVideos')->willReturn([]);
-        $trick->method('getSlug')->willReturn('goodSlug');
         $session = new Session(new MockArraySessionStorage());
         $this->request = new Request();
         $this->request->setSession($session);
@@ -73,41 +97,28 @@ class TrickModificationActionTest extends TestCase
         );
     }
 
-    public function testConstructor()
+    use TrickAndCategoryFixtures;
+
+    /**
+     *
+     */
+    public function testRedirectResponseIfHandlerReturnTrue()
     {
-        self::assertInstanceOf(TrickModificationAction::class, $this->action);
+        $this->handler->method('handle')->willReturn(true);
+
+        self::assertInstanceOf(
+            RedirectResponse::class,
+            $this->action->modification($this->request)
+        );
     }
 
     public function testResponseIfHandlerReturnFalse()
     {
         $this->handler->method('handle')->willReturn(false);
 
-        $this->action = new TrickModificationAction(
-            $this->formFactory,
-            $this->responder,
-            $this->handler,
-            $this->tokenManager
-        );
-
-        $response = $this->action->modification($this->request, 'goodSlug');
+        $response = $this->action->modification($this->request);
 
         self::assertInstanceOf(Response::class, $response);
         self::assertNotInstanceOf(RedirectResponse::class, $response);
-    }
-
-    public function testRedirectResponseIfHandlerReturnTrue()
-    {
-        $this->handler->method('handle')->willReturn(true);
-
-        $this->action = new TrickModificationAction(
-            $this->formFactory,
-            $this->responder,
-            $this->handler,
-            $this->tokenManager
-        );
-
-        $response = $this->action->modification($this->request, 'goodSlug');
-
-        self::assertInstanceOf(RedirectResponse::class, $response);
     }
 }

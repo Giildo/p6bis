@@ -10,7 +10,6 @@ function addTagForm(divParent, labelName) {
     let divInner = document.createElement("div");
     divInner.innerHTML = newForm;
     let label = divInner.getElementsByTagName("label")[0];
-    label.textContent = labelName + index;
 
     divParent.setAttribute("data-index", index);
 

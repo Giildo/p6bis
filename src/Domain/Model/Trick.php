@@ -81,14 +81,14 @@ class Trick implements TrickInterface, EntityPaginerInterface
     /**
      * @var PersistentCollection
      *
-     * @ORM\OneToMany(targetEntity="App\Domain\Model\Picture", mappedBy="trick")
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Picture", mappedBy="trick", cascade={"persist", "remove"})
      */
     private $pictures;
 
     /**
      * @var PersistentCollection
      *
-     * @ORM\OneToMany(targetEntity="App\Domain\Model\Video", mappedBy="trick")
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Video", mappedBy="trick", cascade={"persist", "remove"})
      */
     private $videos;
 
@@ -188,7 +188,9 @@ class Trick implements TrickInterface, EntityPaginerInterface
      */
     public function getPictures(): ?array
     {
-        return $this->pictures->toArray();
+        return (!is_null($this->pictures)) ?
+            $this->pictures->toArray():
+            null;
     }
 
     /**
@@ -196,7 +198,9 @@ class Trick implements TrickInterface, EntityPaginerInterface
      */
     public function getVideos(): ?array
     {
-        return $this->videos->toArray();
+        return (!is_null($this->videos)) ?
+            $this->videos->toArray():
+            null;
     }
 
 	/**

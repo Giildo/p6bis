@@ -27,7 +27,6 @@ class PictureBuilder implements PictureBuilderInterface
         ?bool $headPicture = false,
         ?UserInterface $user = null
     ): self {
-
         $name = (!is_null($trick)) ?
             $trick->getSlug() . (new DateTime())->format('YmdHis') . '_' . $counter :
             $user->getUsername() . (new DateTime())->format('YmdHis');

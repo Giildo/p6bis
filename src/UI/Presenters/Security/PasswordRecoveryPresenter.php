@@ -23,37 +23,28 @@ class PasswordRecoveryPresenter implements PasswordRecoveryPresenterInterface
     }
 
     /**
-     * @param null|FormInterface $form
-     * @param null|string $typeName
-     * @param bool|null $mailerSuccess
-     * @return string | null
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function passwordRecoveryPresentation(
         ?FormInterface $form = null,
-        ?string $typeName = '',
-        ?bool $mailerSuccess = false
-    ): ?string {
+        ?string $typeName = ''
+    ): string {
         if (!is_null($form)) {
-            if ($typeName === 'forPassword') {
-                return $this->twig->render('Security/passwordRecovery/forPassword.html.twig', [
-                    'form' => $form->createView(),
-                ]);
-            }
+            switch ($typeName) {
+                case 'forPassword':
+                    return $this->twig->render('Security/passwordRecovery/forPassword.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
+                    break;
 
-            if ($typeName === 'forUsername') {
-                return $this->twig->render('Security/passwordRecovery/forUsername.html.twig', [
-                    'form' => $form->createView(),
-                ]);
+                case 'forUsername':
+                    return $this->twig->render('Security/passwordRecovery/forUsername.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
+                    break;
             }
         }
 
-        if ($mailerSuccess) {
-            return $this->twig->render('Security/passwordRecovery/mailSuccess.html.twig');
-        }
-
-        return null;
+        return $this->twig->render('Security/passwordRecovery/mailSuccess.html.twig');
     }
 }

@@ -3,10 +3,10 @@
 namespace App\UI\Actions\Trick;
 
 use App\Application\Helpers\Interfaces\PaginationHelperInterface;
-use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\Domain\Repository\TrickRepository;
 use App\UI\Responders\Interfaces\Trick\HomePageResponderInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -44,9 +44,9 @@ class HomePageAction
     /**
      * @Route(path="/accueil",name="Home")
      *
-     * @param int $paging
-     *
      * @return Response
+     *
+     * @throws NonUniqueResultException
      */
     public function homePage(): Response
     {

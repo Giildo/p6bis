@@ -3,6 +3,7 @@
 namespace App\Application\Helpers\Interfaces;
 
 use App\Domain\Repository\Interfaces\RepositoryCounterInterface;
+use Doctrine\ORM\NonUniqueResultException;
 
 interface PaginationHelperInterface
 {
@@ -13,6 +14,8 @@ interface PaginationHelperInterface
      * @param null|string $identifier
      *
      * @return int|null
+     *
+     * @throws NonUniqueResultException
      */
     public function pagination(
         RepositoryCounterInterface $repository,

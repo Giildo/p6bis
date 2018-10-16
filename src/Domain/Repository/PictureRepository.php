@@ -3,6 +3,7 @@
 namespace App\Domain\Repository;
 
 use App\Domain\Model\Interfaces\PictureInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use App\Domain\Model\Picture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -34,17 +35,24 @@ class PictureRepository extends ServiceEntityRepository
 
     /**
      * @param PictureInterface $picture
+     * @param UserInterface|null $user
      *
      * @return void
      *
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function deletePicture(PictureInterface $picture): void
+    public function deletePicture(PictureInterface $picture, ?UserInterface $user = null): void
     {
         $entityManager = $this->getEntityManager();
 
         $entityManager->remove($picture);
+
+        if (!is_null($user)) {
+            $user->deletePicture();
+            $entityManager->persist($user);
+        }
+
         $entityManager->flush();
 	}
 }

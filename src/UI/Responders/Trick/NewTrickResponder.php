@@ -2,8 +2,6 @@
 
 namespace App\UI\Responders\Trick;
 
-use App\Domain\Model\Interfaces\TrickInterface;
-use App\Domain\Model\Trick;
 use App\UI\Presenters\Interfaces\Trick\NewTrickPresenterInterface;
 use App\UI\Responders\Interfaces\Trick\NewTrickResponderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -41,7 +39,6 @@ class NewTrickResponder implements NewTrickResponderInterface
      */
     public function response(
         bool $redirection,
-        ?TrickInterface $trick = null,
         ?FormInterface $form = null
     ): Response {
         return ($redirection) ?

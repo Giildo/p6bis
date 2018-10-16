@@ -9,8 +9,14 @@ use Symfony\Component\Form\FormInterface;
 
 class UserConnectionHandlerTest extends TestCase
 {
+    /**
+     * @var FormInterface|MockObject
+     */
     private $form;
 
+    /**
+     * @var UserConnectionHandler
+     */
     private $handler;
 
     protected function setUp()
@@ -24,9 +30,7 @@ class UserConnectionHandlerTest extends TestCase
     {
         $this->form->method('isSubmitted')->willReturn(false);
 
-        $response = $this->handler->handle($this->form);
-
-        self::assertFalse($response);
+        self::assertFalse($this->handler->handle($this->form));
     }
 
     public function testHandlerIfFormIsSubmittedAndNotValid()
@@ -34,9 +38,7 @@ class UserConnectionHandlerTest extends TestCase
         $this->form->method('isSubmitted')->willReturn(true);
         $this->form->method('isValid')->willReturn(false);
 
-        $response = $this->handler->handle($this->form);
-
-        self::assertFalse($response);
+        self::assertFalse($this->handler->handle($this->form));
     }
 
     public function testHandlerIfFormIsSubmittedAndIsValid()
@@ -44,8 +46,6 @@ class UserConnectionHandlerTest extends TestCase
         $this->form->method('isSubmitted')->willReturn(true);
         $this->form->method('isValid')->willReturn(true);
 
-        $response = $this->handler->handle($this->form);
-
-        self::assertTrue($response);
+        self::assertTrue($this->handler->handle($this->form));
     }
 }

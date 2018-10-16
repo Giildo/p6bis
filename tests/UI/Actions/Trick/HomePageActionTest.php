@@ -2,40 +2,72 @@
 
 namespace App\Tests\UI\Actions\Trick;
 
+use App\Application\Helpers\Interfaces\PaginationHelperInterface;
 use App\Domain\Repository\TrickRepository;
 use App\UI\Actions\Trick\HomePageAction;
-use App\UI\Presenters\Interfaces\Trick\HomePagePresenterInterface;
+use App\UI\Presenters\Trick\HomePagePresenter;
 use App\UI\Responders\Trick\HomePageResponder;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 class HomePageActionTest extends TestCase
 {
+    /**
+     * @var HomePageAction
+     */
     private $action;
+
+    /**
+     * @var PaginationHelperInterface|MockObject
+     */
+    private $paginationHelper;
 
     public function setUp()
     {
-        $presenter = $this->createMock(HomePagePresenterInterface::class);
-        $presenter->method('homePagePresentation')->willReturn('Vue de la page');
-        $responder = new HomePageResponder($presenter);
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method('generate')->willReturn('/url');
+        $twig = $this->createMock(Environment::class);
+        $twig->method('render')->willReturn('vue de la page');
+        $presenter = new HomePagePresenter($twig);
+        $responder = new HomePageResponder($urlGenerator, $presenter);
 
         $repository = $this->createMock(TrickRepository::class);
         $repository->method('loadTricksWithPaging')->willReturn([]);
 
-        $this->action = new HomePageAction($repository, $responder);
+        $this->paginationHelper = $this->createMock(PaginationHelperInterface::class);
+
+        $this->action = new HomePageAction(
+            $repository,
+            $responder,
+            $this->paginationHelper
+        );
     }
 
-    public function testConstructor()
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function testTheRedirectResponseIfPageNumberIsFalse()
     {
-        self::assertInstanceOf(HomePageAction::class, $this->action);
+        $this->paginationHelper->method('pagination')->willReturn(null);
+
+        self::assertInstanceOf(RedirectResponse::class, $this->action->homePage());
     }
 
-    public function testTheReturnOfActionIsResponse()
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function testResponseIfPageNumberIsTrue()
     {
-        $request = $this->createMock(Request::class);
+        $this->paginationHelper->method('pagination')->willReturn(1);
 
-        self::assertInstanceOf(Response::class, $this->action->homePage($request));
+        $response = $this->action->homePage();
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertNotInstanceOf(RedirectResponse::class, $response);
     }
 }
