@@ -5,8 +5,11 @@
             {% for picture in trick.pictures %}
                 {% if picture.headPicture == true %}
                     <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}">
-                        <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
-                             alt="{{ picture.description }}" class="img-fluid"/>
+                        <img
+                                src="{{ asset(
+                                    'pic/tricks/' ~ picture.name ~ '.' ~ picture.extension
+                                ) }}" alt="{{ picture.description }}"
+                                class="img-fluid"/>
                     </a>
                     {% set picturePresent = true %}
                 {% endif %}
@@ -14,7 +17,8 @@
 
             {% if picturePresent == false %}
                 <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}">
-                    <img src="/pic/general/head_picture.jpg" alt="Image montrant un snowboarder."
+                    <img src="{{ asset('pic/general/head_picture.jpg') }}"
+                         alt="Image montrant un snowboarder."
                          class="img-fluid"/>
                 </a>
             {% endif %}
@@ -39,7 +43,8 @@
         </section>
 
         <footer>
-            <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}" class="btn">
+            <a href="{{ path('Trick_show', {'trickSlug': trick.slug}) }}"
+               class="btn">
                 <button>Voir la figure</button>
             </a>
         </footer>

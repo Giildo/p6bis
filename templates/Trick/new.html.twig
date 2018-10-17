@@ -3,7 +3,7 @@
 {% block title %}{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="/build/css/trick/new.css"/>
+    <link rel="stylesheet" href="{{ asset('build/css/trick/new.css') }}"/>
 {% endblock %}
 
 {% block body %}
@@ -16,5 +16,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="/build/js/collectionTypeNewTrick.js"></script>
+    <script type="text/javascript" src="{{ asset('build/js/collectionTypeNewTrick.js') }}"></script>
 {% endblock %}

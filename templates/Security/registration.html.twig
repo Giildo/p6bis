@@ -3,13 +3,17 @@
 {% block title %}Enregistrement d'un nouvel utilisateur{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="/build/css/security/formFrame.css"/>
+    <link rel="stylesheet" href="{{ asset('build/css/security/formFrame.css') }}"/>
 {% endblock %}
 
 {% block body %}
     <div id="group-button-form">
         <div id="group-button">
-            <button class="button-security"><a href="/connexion">Connexion</a></button>
+            <button class="button-security">
+                <a href="{{ path('Authentication_user_connection') }}">
+                    Connexion
+                </a>
+            </button>
             <button class="button-security active">Enregistrement</button>
         </div>
 

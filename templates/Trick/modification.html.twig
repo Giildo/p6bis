@@ -3,7 +3,8 @@
 {% block title %}{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="/build/css/trick/modification.css"/>
+    <link rel="stylesheet"
+          href="{{ asset('build/css/trick/modification.css') }}"/>
 {% endblock %}
 
 {% block body %}
@@ -13,13 +14,14 @@
         {% form_theme form 'Form/trick_modification.html.twig' %}
         {{ form(form) }}
 
-
         <aside id="elements">
             {% if trick.pictures is not empty %}
                 {% for picture in trick.pictures %}
                     <div class="entityElements">
-                        <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}" alt="{{ picture.description }}" class="img-fluid"/>
-                        <a href="/espace-utilisateur/trick/image-suppression?s={{ picture.name }}&t={{ picture.DeleteToken }}"
+                        <img src="{{ asset('/pic/tricks/' ~ picture.name ~ '.' ~ picture.extension) }}"
+                             alt="{{ picture.description }}"
+                             class="img-fluid"/>
+                        <a href="{{ path('Trick_modification_delete_picture') }}?s={{ picture.name }}&t={{ picture.DeleteToken }}"
                            class="btn-delete material-icons">delete</a>
                     </div>
                 {% endfor %}
@@ -28,9 +30,13 @@
             {% if trick.videos is not empty %}
                 {% for video in trick.videos %}
                     <div class="entityElements">
-                        <iframe src="https://www.youtube.com/embed/{{ video.name }}" frameborder="0"
-                                allow="autoplay; encrypted-media" allowfullscreen class="img-fluid"></iframe>
-                        <a href="/espace-utilisateur/trick/video-suppression?s={{ video.name }}&t={{ video.DeleteToken }}"
+                        <iframe src="https://www.youtube.com/embed/{{ video.name }}"
+                                frameborder="0"
+                                allow="autoplay; encrypted-media"
+                                allowfullscreen class="img-fluid"></iframe>
+                        <a href="{{ path('Trick_modification_delete_video') }}?s={{ video.name }}&t={{
+                        video
+                        .DeleteToken }}"
                            class="btn-delete material-icons">delete</a>
                     </div>
                 {% endfor %}
@@ -40,5 +46,6 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="/build/js/collectionTypeTrickModification.js"></script>
+    <script type="text/javascript"
+            src="{{ asset('build/js/collectionTypeTrickModification.js') }}"></script>
 {% endblock %}
