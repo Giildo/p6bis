@@ -1,2 +1,9 @@
 logout:
     path: /deconnexion
+
+Homepage_redirection:
+    path: /
+    controller: App\UI\Actions\Trick\HomePageAction::homePage
+    defaults:
+        path: /accueil
+        permanent: true
