@@ -3,7 +3,7 @@
 {% block title %}Snowtricks{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="/build/css/trick/home.css"/>
+    <link rel="stylesheet" href="{{ asset('build/css/trick/home.css') }}"/>
 {% endblock %}
 
 {% block body %}
@@ -42,7 +42,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="/build/js/homeAddTricks.js"></script>
-    <script type="text/javascript" src="/build/js/upButton.js"></script>
-    <script type="text/javascript" src="/build/js/modalWindow.js"></script>
+    <script type="text/javascript" src="{{ asset('build/js/homeAddTricks.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('build/js/upButton.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('build/js/modalWindow.js') }}"></script>
 {% endblock %}

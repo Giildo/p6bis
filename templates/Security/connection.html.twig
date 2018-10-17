@@ -3,14 +3,18 @@
 {% block title %}Page de connexion{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="/build/css/security/formFrame.css">
+    <link rel="stylesheet" href="{{ asset('build/css/security/formFrame.css') }}">
 {% endblock %}
 
 {% block body %}
     <div id="group-button-form">
         <div id="group-button">
             <button class="button-security active">Connexion</button>
-            <button class="button-security"><a href="/enregistrement">Enregistrement</a></button>
+            <button class="button-security">
+                <a href="{{ path('Authentication_user_registration') }}">
+                    Enregistrement
+                </a>
+            </button>
         </div>
 
         <h1>Connexion à votre compte utilisateur</h1>
@@ -19,7 +23,11 @@
         {% form_theme form 'Form/security_user_connection.html.twig' %}
         {{ form(form) }}
 
-        <p><a href="/recuperation">Mot de passe oublié ?</a></p>
+        <p>
+            <a href="{{ path('Authentication_password_recovery_username')}}">
+                Mot de passe oublié ?
+            </a>
+        </p>
     </div>
 {% endblock %}
 

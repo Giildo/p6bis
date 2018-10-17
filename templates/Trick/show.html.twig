@@ -3,7 +3,7 @@
 {% block title %}{{ trick.name }}{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="/build/css/trick/show.css"/>
+    <link rel="stylesheet" href="{{ asset('build/css/trick/show.css') }}"/>
 {% endblock %}
 
 {% block body %}
@@ -13,7 +13,7 @@
             {% if trick.pictures is not empty %}
                 {% for picture in trick.pictures %}
                     {% if picture.headPicture == true %}
-                        <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
+                        <img src="{{ asset('/pic/tricks/' ~ picture.name ~ '.' ~ picture.extension) }}"
                              alt="{{ picture.description }}" class="img-fluid"/>
                         {% set headPicture = true %}
                     {% endif %}
@@ -21,7 +21,8 @@
             {% endif %}
 
             {% if headPicture == false %}
-                <img src="/pic/general/head_picture.jpg" alt="Photo par défaut" class="img-fluid"/>
+                <img src="{{ asset('pic/general/head_picture.jpg') }}"
+                     alt="Photo par défaut" class="img-fluid"/>
             {% endif %}
             <h1>&laquo; {{ trick.name }} &raquo;</h1>
         </header>
@@ -43,7 +44,8 @@
                     {% for picture in trick.pictures %}
                         <div class="thumbnail-pic">
                             <span class="helper"></span>
-                            <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
+                            <img src="{{ asset('pic/tricks/' ~ picture.name ~
+                                '.' ~ picture.extension) }}"
                                  alt="{{ picture.description }}"/>
                         </div>
                     {% endfor %}
@@ -67,13 +69,19 @@
         </article>
 
         <footer>
-            <div><span class="label">Catégorie</span> {{ trick.category.name }}</div>
-            <div><span class="label">Auteur</span> {{ trick.author.username }}</div>
-            <div><span class="label">Crée le</span> {{ trick.createdAt | date('Y-m-d H:i:s') }}</div>
+            <div><span class="label">Catégorie</span> {{ trick.category.name }}
+            </div>
+            <div><span class="label">Auteur</span> {{ trick.author.username }}
+            </div>
+            <div>
+                <span class="label">Crée le</span> {{ trick.createdAt | date('Y-m-d H:i:s') }}
+            </div>
 
 
             {% if trick.updatedAt != trick.createdAt %}
-                <div><span class="label">Modifiée le</span> {{ trick.updatedAt | date('Y-m-d H:i:s') }}</div>
+                <div>
+                    <span class="label">Modifiée le</span> {{ trick.updatedAt | date('Y-m-d H:i:s') }}
+                </div>
             {% endif %}
         </footer>
     </section>
@@ -94,11 +102,11 @@
                         <div class="comment">
                             <header>
                                 {% if comment.author.picture is not null %}
-                                    <img src="/pic/users/{{ comment.author.picture.name }}.{{ comment.author.picture.extension }}"
+                                    <img src="{{ asset('/pic/users/' ~ comment.author.picture.name ~ '.' ~ comment.author.picture.extension) }}"
                                          alt="{{ comment.author.picture.description }}"
                                          style="width: auto;height: 40px;margin: 1px;">
                                 {% else %}
-                                    <img src="/pic/users/default.gif"
+                                    <img src="{{ asset('pic/users/default.gif') }}"
                                          alt="Image par défaut des utilisateurs"
                                          style="width: auto;height: 40px;margin: 1px;">
                                 {% endif %}
@@ -108,9 +116,11 @@
                                 <p>{{ comment.comment }}</p>
                             </section>
                             <footer>
-                                <p>Publié le {{ comment.createdAt | date('Y-m-d H:i:s') }}</p>
+                                <p>Publié
+                                    le {{ comment.createdAt | date('Y-m-d H:i:s') }}</p>
                                 {% if comment.updatedAt != comment.createdAt %}
-                                    <p>Modifié le {{ comment.updatedAt | date('Y-m-d H:i:s') }}</p>
+                                    <p>Modifié
+                                        le {{ comment.updatedAt | date('Y-m-d H:i:s') }}</p>
                                 {% endif %}
                                 {% if app.user is not null and (is_granted('ROLE_ADMIN') or app.user == comment.author) %}
                                     <div>
@@ -145,8 +155,10 @@
                 <div id="display-picture">
                     {% for picture in trick.pictures %}
                         <div class="slide" data-index="{{ loop.index }}">
-                            <div class="number">{{ loop.index }}/{{ loop.length }}</div>
-                            <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
+                            <div class="number">{{ loop.index }}
+                                /{{ loop.length }}</div>
+                            <img src="{{ asset('pic/tricks/' ~ picture.name ~
+                                '.' ~ picture.extension) }}"
                                  alt="{{ picture.description }}"/>
                         </div>
                     {% endfor %}
@@ -161,8 +173,10 @@
                     {% for picture in trick.pictures %}
                         <div class="thumbnail">
                             <span class="helper"></span>
-                            <img src="/pic/tricks/{{ picture.name }}.{{ picture.extension }}"
-                                 alt="{{ picture.description }}" data-index="{{ loop.index }}"/>
+                            <img src="{{ asset('pic/tricks/' ~ picture.name ~
+                                '.' ~ picture.extension) }}"
+                                 alt="{{ picture.description }}"
+                                 data-index="{{ loop.index }}"/>
                         </div>
                     {% endfor %}
                 </div>
@@ -187,7 +201,10 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="/build/js/tricks/modal.js"></script>
-    <script type="text/javascript" src="/build/js/tricks/commentButton.js"></script>
-    <script type="text/javascript" src="/build/js/modalWindow.js"></script>
+    <script type="text/javascript"
+            src="{{ asset('build/js/tricks/modal.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('build/js/tricks/commentButton.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('build/js/modalWindow.js') }}"></script>
 {% endblock %}

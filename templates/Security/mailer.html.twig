@@ -9,13 +9,16 @@
 </head>
 <body style="margin: 0;padding: 0 30%;">
 <header style="display: flex; align-items: center; width: 100%;background-color:#404852;">
-    <img src="{{ logo }}" alt="Logo du site SnowTrick représentant un snowboarder qui fait un figure"
+    <img src="{{ asset(logo) }}" alt="Logo du site SnowTrick représentant un
+    snowboarder qui fait un figure"
          id="logo" style="height: 60px;margin: 0 10px;"/>
     <h1 style="margin: 0;">SnowTrick</h1>
 </header>
 <section>
     <header style="position: relative;">
-        <img src="{{ header }}" alt="Photo d'une montagne enneigée" style="width: 100%;height: auto;"/>
+        <img src="{{ asset(header) }}" alt="Photo d'une montagne enneigée"
+             style="width:
+        100%;height: auto;"/>
         <canvas id="canvas" width="1000" height="300"
                 style="position: absolute;bottom: 0;left: 0;width: 100%;height: auto;"></canvas>
     </header>
@@ -23,18 +26,23 @@
     <article style="position: relative;top: -100px;">
         <h2 style="text-align: center;">Votre mot de passe SnowTrick</h2>
         <h3>Bonjour {{ user.firstName }},</h3>
-        <p>Vous souhaitez modifier votre mot de passe d'accès à votre compte.</p>
+        <p>Vous souhaitez modifier votre mot de passe d'accès à votre
+            compte.</p>
 
-        <p>Pour cela, rien de plus simple : cliquez sur le bouton ci-dessous et saisissez le mot de passe de votre choix
-            (en respectant quelques règles pour garantir la sécurité de vos données).</p>
+        <p>Pour cela, rien de plus simple : cliquez sur le bouton ci-dessous et
+            saisissez le mot de passe de votre choix
+            (en respectant quelques règles pour garantir la sécurité de vos
+            données).</p>
 
         <p>
-            <a href="http://localhost:8000/recuperation/mot-de-passe?ut={{ user.token }}" style="">
+            <a href="http://localhost:8000/recuperation/mot-de-passe?ut={{ user.token }}"
+               style="">
                 Modifier mon mot de passe
             </a>
         </p>
 
-        <p>A la réception de cet email, vous avez 1H pour modifier votre mot de passe.</p>
+        <p>A la réception de cet email, vous avez 1H pour modifier votre mot de
+            passe.</p>
     </article>
 </section>
 </body>

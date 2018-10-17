@@ -8,30 +8,37 @@
     <title>{% block title %}Snowtricks{% endblock %}</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/build/css/global.css"/>
-    <link rel="stylesheet" href="/build/css/form.css"/>
+    <link rel="stylesheet" href="{{ asset('build/css/global.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('build/css/form.css') }}"/>
     {% block stylesheets %}{% endblock %}
 
     <!--GoogleIcons-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"/>
 
     <!--GoogleFont-->
-    <link href="https://fonts.googleapis.com/css?family=Jura|Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Jura|Raleway"
+          rel="stylesheet">
 </head>
 <body>
 
 <nav id="navbar">
     <a href="{{ path('Home') }}" id="logo-link">
-        <img src="/pic/general/logo.png" alt="Logo du site SnowTrick représentant un snowboarder qui fait un figure"
+        <img src="{{ asset('pic/general/logo.png') }}" alt="Logo du site SnowTrick représentant un
+        snowboarder
+        qui fait un figure"
              id="logo"/>
     </a>
-    <a href="{{ path('Home') }}" id="a_scrollspy" class="nav-link material-icons">home</a>
+    <a href="{{ path('Home') }}" id="a_scrollspy"
+       class="nav-link material-icons">home</a>
     {% if app.user is null %}
         <a class="nav-link" href="{{ path('Authentication_user_connection') }}">Connexion</a>
-        <a class="nav-link" href="{{ path('Authentication_user_registration') }}">S'enregistrer</a>
+        <a class="nav-link"
+           href="{{ path('Authentication_user_registration') }}">S'enregistrer</a>
     {% else %}
         <a href="{{ path('New_trick') }}" class="nav-link">Nouvelle trick</a>
-        <a href="{{ path('Profile_picture') }}" class="nav-link">Modifier profil</a>
+        <a href="{{ path('Profile_picture') }}" class="nav-link">Modifier
+            profil</a>
         <a class="nav-link" href="/deconnexion">Déconnexion</a>
     {% endif %}
 </nav>
@@ -46,23 +53,29 @@
 <footer id="footer">
     <div class="div-footer">
         <p>Tous droits réservés à Snowtricks &copy; 2018</p>
-        <p>Site développé par <a href="http://www.jojotique.fr" target="_blank">Jojotique</a></p>
+        <p>Site développé par <a href="http://www.jojotique.fr" target="_blank">Jojotique</a>
+        </p>
         <br/>
-        <p><a href="{{ path('GCU') }}">Conditions générales d'utilisation</a></p>
+        <p><a href="{{ path('GCU') }}">Conditions générales d'utilisation</a>
+        </p>
     </div>
     <div class="div-footer">
         <div class="subDiv-footer">
             <p>Suivez nous sur les réseaux sociaux</p>
         </div>
         <div class="subDiv-footer">
-            <img src="/pic/general/twitter.svg" alt="Icône de twitter"/>
-            <img src="/pic/general/facebook.svg" alt="Icône de Facebook"/>
-            <img src="/pic/general/linkedin.svg" alt="Icône de LinkedIn"/>
+            <img src="{{ asset('pic/general/twitter.svg') }}" alt="Icône de
+            twitter"/>
+            <img src="{{ asset('pic/general/facebook.svg') }}" alt="Icône de
+            Facebook"/>
+            <img src="{{ asset('pic/general/linkedin.svg') }}" alt="Icône de
+            LinkedIn"/>
         </div>
     </div>
 </footer>
 
-<script type="text/javascript" src="/build/js/menuButton.js"></script>
+<script type="text/javascript"
+        src="{{ asset('build/js/menuButton.js') }}"></script>
 {% block javascripts %}{% endblock %}
 </body>
 </html>
