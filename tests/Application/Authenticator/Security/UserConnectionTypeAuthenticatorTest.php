@@ -64,11 +64,6 @@ class UserConnectionTypeAuthenticatorTest extends KernelTestCase
     private $userRepository;
 
     /**
-     * @var UserInterface
-     */
-    private $user;
-
-    /**
      * @var EntityManagerInterface
      */
     private $entityManager;

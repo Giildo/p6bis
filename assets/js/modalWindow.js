@@ -35,7 +35,7 @@ modalElement.addEventListener("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (e.target == modalElement) {
+    if (e.target === modalElement) {
         let deleteButton = document.getElementById("modal-delete");
         modalElement.style.display = "none";
         modalWindowFooter.removeChild(deleteButton);

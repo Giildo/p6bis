@@ -8,8 +8,6 @@ use App\Application\Helpers\SluggerHelper;
 use App\Domain\Builders\Interfaces\PictureBuilderInterface;
 use App\Domain\Builders\Interfaces\VideoBuilderInterface;
 use App\Domain\Builders\TrickBuilder;
-use App\Domain\DTO\Interfaces\Trick\PictureDTOInterface;
-use App\Domain\DTO\Interfaces\Trick\VideoDTOInterface;
 use App\Domain\DTO\Trick\NewTrickDTO;
 use App\Domain\DTO\Trick\NewPictureDTO;
 use App\Domain\DTO\Trick\NewVideoDTO;
@@ -39,16 +37,6 @@ class NewTrickHandlerTest extends TestCase
      * @var TrickBuilder
      */
     private $trickBuilder;
-
-    /**
-     * @var PictureDTOInterface
-     */
-    private $pictureDTO;
-
-    /**
-     * @var VideoDTOInterface
-     */
-    private $videoDTO;
 
     protected function setUp()
     {
