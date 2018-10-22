@@ -29,7 +29,9 @@ class CommentDeletionResponder implements CommentDeletionResponderInterface
     public function response(string $trickSlug): RedirectResponse
     {
         return new RedirectResponse(
-            $this->urlGenerator->generate('Trick_show', ['trickSlug' => $trickSlug])
+            $this->urlGenerator->generate(
+                'Trick_show', ['trickSlug' => $trickSlug]
+            )
         );
     }
 }

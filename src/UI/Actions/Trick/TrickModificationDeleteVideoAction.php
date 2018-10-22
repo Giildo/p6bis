@@ -4,6 +4,9 @@ namespace App\UI\Actions\Trick;
 
 use App\Domain\Repository\VideoRepository;
 use App\UI\Responders\Interfaces\Trick\TrickModificationDeleteVideoOrPictureResponderInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,9 +42,9 @@ class TrickModificationDeleteVideoAction
      *
      * @return RedirectResponse
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function deleteVideo(Request $request): RedirectResponse
     {
@@ -49,9 +52,13 @@ class TrickModificationDeleteVideoAction
         $token = $request->query->get('t');
 
         $video = $this->videoRepository->loadOneVideoWithName($videoName);
-        $trickSlug = $video->getTrick()->getSlug();
+        $trickSlug = $video->getTrick()
+                           ->getSlug()
+        ;
 
-        $tokens = $request->getSession()->remove('tokens');
+        $tokens = $request->getSession()
+                          ->remove('tokens')
+        ;
 
         if ($token === $tokens[$videoName]) {
             $this->videoRepository->deleteVideo($video);

@@ -14,8 +14,8 @@ interface ShowTrickPresenterInterface
     /**
      * @param TrickInterface $trick
      * @param FormInterface $formComment
-     * @param CommentInterface[] $comments
      * @param int $pageNumber
+     * @param CommentInterface[] $comments
      * @param int|null $currentPage
      *
      * @return string
@@ -27,8 +27,8 @@ interface ShowTrickPresenterInterface
     public function showTrickPresentation(
         TrickInterface $trick,
         FormInterface $formComment,
-        array $comments,
         int $pageNumber,
+        ?array $comments = [],
         ?int $currentPage = 0
     ): string;
 }

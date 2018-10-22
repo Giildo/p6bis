@@ -11,7 +11,8 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 
-class CommentRepository extends ServiceEntityRepository implements RepositoryCounterInterface
+class CommentRepository extends ServiceEntityRepository
+    implements RepositoryCounterInterface
 {
     /**
      * CommentRepository constructor.
@@ -32,8 +33,8 @@ class CommentRepository extends ServiceEntityRepository implements RepositoryCou
      */
     public function saveComment(CommentInterface $comment): void
     {
-        $this->getEntityManager()->persist($comment);
-        $this->getEntityManager()->flush();
+        $this->_em->persist($comment);
+        $this->_em->flush();
     }
 
     /**
@@ -46,30 +47,34 @@ class CommentRepository extends ServiceEntityRepository implements RepositoryCou
     public function loadOneCommentWithHerId(string $id): ?CommentInterface
     {
         return $this->createQueryBuilder('comment')
-            ->where('comment.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult();
+                    ->where('comment.id = :id')
+                    ->setParameter('id', $id)
+                    ->getQuery()
+                    ->getOneOrNullResult()
+            ;
     }
 
     /**
      * @param string $trickSlug
      * @param int|null $paging
      *
-     * @return CommentInterface[]
+     * @return CommentInterface[]|null
      */
-    public function loadCommentsWithPagination(string $trickSlug, ?int $paging = null): array
-    {
-        $first = ($paging - 1) * Comment::NUMBER_OF_ITEMS;
-
+    public function loadCommentsWithPagination(
+        string $trickSlug,
+        ?int $paging = null
+    ): ?array {
         return $this->createQueryBuilder('comment')
-            ->where('comment.trick = :trickSlug')
-            ->setParameter('trickSlug', $trickSlug)
-            ->setMaxResults(Comment::NUMBER_OF_ITEMS)
-            ->setFirstResult($first)
-            ->orderBy('comment.updatedAt', 'DESC')
-            ->getQuery()
-            ->execute();
+                    ->where('comment.trick = :trickSlug')
+                    ->setParameter('trickSlug', $trickSlug)
+                    ->setMaxResults(Comment::NUMBER_OF_ITEMS)
+                    ->setFirstResult(
+                        ($paging - 1) * Comment::NUMBER_OF_ITEMS
+                    )
+                    ->orderBy('comment.updatedAt', 'DESC')
+                    ->getQuery()
+                    ->execute()
+            ;
     }
 
     /**
@@ -80,10 +85,11 @@ class CommentRepository extends ServiceEntityRepository implements RepositoryCou
     public function loadAllCommentsOfATrick(string $trickSlug): ?array
     {
         return $this->createQueryBuilder('comment')
-            ->where('comment.trick = :trickSlug')
-            ->setParameter('trickSlug', $trickSlug)
-            ->getQuery()
-            ->execute();
+                    ->where('comment.trick = :trickSlug')
+                    ->setParameter('trickSlug', $trickSlug)
+                    ->getQuery()
+                    ->execute()
+            ;
     }
 
     /**
@@ -96,8 +102,8 @@ class CommentRepository extends ServiceEntityRepository implements RepositoryCou
      */
     public function deleteComment(CommentInterface $comment): void
     {
-        $this->getEntityManager()->remove($comment);
-        $this->getEntityManager()->flush();
+        $this->_em->remove($comment);
+        $this->_em->flush();
     }
 
     /**
@@ -106,10 +112,11 @@ class CommentRepository extends ServiceEntityRepository implements RepositoryCou
     public function countEntries(?string $identifier = null): int
     {
         return (int)$this->createQueryBuilder('comment')
-            ->select('count(comment.id)')
-            ->where('comment.trick = :trickSlug')
-            ->setParameter('trickSlug', $identifier)
-            ->getQuery()
-            ->getSingleScalarResult();
+                         ->select('count(comment.id)')
+                         ->where('comment.trick = :trickSlug')
+                         ->setParameter('trickSlug', $identifier)
+                         ->getQuery()
+                         ->getSingleScalarResult()
+            ;
     }
 }

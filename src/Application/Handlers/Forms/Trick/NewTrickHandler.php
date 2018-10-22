@@ -79,7 +79,7 @@ class NewTrickHandler implements NewTrickHandlerInterface
             }
 
             $headPicture = null;
-            if (!is_null($datas->headPicture)) {
+            if (!is_null($datas->headPicture->picture)) {
                 $headPicture = $this->pictureBuilder->build($datas->headPicture, $trick, 0, true)
                                                     ->getPicture();
 

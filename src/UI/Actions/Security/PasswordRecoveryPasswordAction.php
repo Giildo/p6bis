@@ -5,11 +5,16 @@ namespace App\UI\Actions\Security;
 use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForPasswordHandlerInterface;
 use App\UI\Forms\Security\PasswordRecoveryForPasswordType;
 use App\UI\Responders\Interfaces\Security\PasswordRecoveryResponderInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 /**
  * @Route(name="Authentication_")
@@ -56,14 +61,21 @@ class PasswordRecoveryPasswordAction
      * @param FlashBagInterface $flashBag
      * @return Response
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function passwordRecovery(Request $request, FlashBagInterface $flashBag): Response
-    {
-        $form = $this->formFactory->create(PasswordRecoveryForPasswordType::class)
-                                  ->handleRequest($request);
+    public function passwordRecovery(
+        Request $request,
+        FlashBagInterface $flashBag
+    ): Response {
+        $form = $this->formFactory->create(
+            PasswordRecoveryForPasswordType::class
+        )
+                                  ->handleRequest($request)
+        ;
 
         if ($this->forPasswordHandler->handle($form, $request)) {
             $flashBag->add(
@@ -73,6 +85,8 @@ class PasswordRecoveryPasswordAction
             return $this->responder->passwordRecoveryResponse();
         }
 
-        return $this->responder->passwordRecoveryResponse(false, $form, 'forPassword');
+        return $this->responder->passwordRecoveryResponse(
+            false, $form, 'forPassword'
+        );
     }
 }

@@ -14,7 +14,11 @@
             {% include 'Trick/home_load.html.twig' %}
         </section>
 
-        <button id="moreTricks" data-pagingmax="{{ pageNumber }}">Plus de tricks</button>
+        {% if pageNumber > currentPage %}
+            <button id="moreTricks" data-pagingmax="{{ pageNumber }}">
+                Plus de tricks
+            </button>
+        {% endif %}
     {% else %}
         <h2>Désolé, aucune figure n'a été crée ou n'a été publiée.</h2>
     {% endif %}
@@ -42,7 +46,10 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="{{ asset('build/js/homeAddTricks.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/upButton.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/modalWindow.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('build/js/homeAddTricks.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('build/js/upButton.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('build/js/modalWindow.js') }}"></script>
 {% endblock %}

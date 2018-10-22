@@ -5,10 +5,8 @@ namespace App\UI\Responders\Security;
 use App\UI\Presenters\Interfaces\Security\UserConnectionPresenterInterface;
 use App\UI\Responders\Interfaces\Security\UserConnectionResponderInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class UserConnectionResponder implements UserConnectionResponderInterface
 {
@@ -38,17 +36,12 @@ class UserConnectionResponder implements UserConnectionResponderInterface
      * {@inheritdoc}
      */
     public function userConnectionResponse(
-        ?FormInterface $form = null,
-        ?AuthenticationException $error = null,
-        ?string $lastUserConnected = ''
+        FormInterface $form
     ): Response {
-        return (is_null($form)) ?
-            new RedirectResponse($this->urlGenerator->generate('Home')):
-            new Response(
-                $this->presenter->userConnectionPresentation(
-                    $form,
-                    $error
-                )
-            );
+        return new Response(
+            $this->presenter->userConnectionPresentation(
+                $form
+            )
+        );
     }
 }

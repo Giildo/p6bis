@@ -32,19 +32,23 @@ class PasswordRecoveryPresenter implements PasswordRecoveryPresenterInterface
         if (!is_null($form)) {
             switch ($typeName) {
                 case 'forPassword':
-                    return $this->twig->render('Security/passwordRecovery/forPassword.html.twig', [
+                    return $this->twig->render(
+                        'Security/passwordRecovery/forPassword.html.twig', [
                         'form' => $form->createView(),
                     ]);
                     break;
 
                 case 'forUsername':
-                    return $this->twig->render('Security/passwordRecovery/forUsername.html.twig', [
+                    return $this->twig->render(
+                        'Security/passwordRecovery/forUsername.html.twig', [
                         'form' => $form->createView(),
                     ]);
                     break;
             }
         }
 
-        return $this->twig->render('Security/passwordRecovery/mailSuccess.html.twig');
+        return $this->twig->render(
+            'Security/passwordRecovery/mailSuccess.html.twig'
+        );
     }
 }

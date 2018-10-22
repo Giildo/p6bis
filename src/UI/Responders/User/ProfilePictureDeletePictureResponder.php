@@ -6,7 +6,8 @@ use App\UI\Responders\Interfaces\User\ProfilePictureDeletePictureResponderInterf
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ProfilePictureDeletePictureResponder implements ProfilePictureDeletePictureResponderInterface
+class ProfilePictureDeletePictureResponder
+    implements ProfilePictureDeletePictureResponderInterface
 {
     /**
      * @var UrlGeneratorInterface
@@ -22,8 +23,13 @@ class ProfilePictureDeletePictureResponder implements ProfilePictureDeletePictur
         $this->urlGenerator = $urlGenerator;
     }
 
+    /**
+     * @return RedirectResponse
+     */
     public function response(): RedirectResponse
     {
-        return new RedirectResponse($this->urlGenerator->generate('Profile_picture'));
+        return new RedirectResponse(
+            $this->urlGenerator->generate('Profile_picture')
+        );
     }
 }

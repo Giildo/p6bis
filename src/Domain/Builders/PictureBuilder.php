@@ -26,10 +26,11 @@ class PictureBuilder implements PictureBuilderInterface
         ?int $counter = 0,
         ?bool $headPicture = false,
         ?UserInterface $user = null
-    ): self {
+    ): PictureBuilderInterface {
+        $date = new DateTime();
         $name = (!is_null($trick)) ?
-            $trick->getSlug() . (new DateTime())->format('YmdHis') . '_' . $counter :
-            $user->getUsername() . (new DateTime())->format('YmdHis');
+            $trick->getSlug() . $date->format('YmdHis') . '_' . $counter :
+            $user->getUsername() . $date->format('YmdHis');
 
         $this->picture = new Picture(
             $name,

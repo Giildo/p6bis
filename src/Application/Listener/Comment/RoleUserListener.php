@@ -76,20 +76,28 @@ class RoleUserListener
                             !is_null($request->query->get('action')) && !is_null($request->query->get('id'))
                         )
                     ) {
-                        $comment = $this->commentRepository->loadOneCommentWithHerId($request->query->get('id'));
+                        $comment = $this->commentRepository->loadOneCommentWithHerId(
+                            $request->query->get('id')
+                        );
 
                         if (is_null($comment)) {
                             $event->setResponse(new RedirectResponse($uri));
                             return;
                         }
 
-                        if ($this->authorizationChecker->isGranted('ROLE_ADMIN') ||
-                            (
-                                $comment->getAuthor() === $this->tokenStorage->getToken()->getUser() &&
-                                $this->authorizationChecker->isGranted('ROLE_USER')
+                        if ($this->authorizationChecker->isGranted(
+                                'ROLE_ADMIN'
+                            ) || (
+                                $comment->getAuthor() ===
+                                $this->tokenStorage->getToken()
+                                                   ->getUser() && $this->authorizationChecker->isGranted(
+                                    'ROLE_USER'
+                                )
                             )
                         ) {
-                            $request->getSession()->set('comment', $comment);
+                            $request->getSession()
+                                    ->set('comment', $comment)
+                            ;
                             return;
                         }
 

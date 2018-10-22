@@ -82,11 +82,7 @@ class PasswordRecoveryUsernameActionTest extends TestCase
         $this->flashBag = new FlashBag();
 
         $this->action = new PasswordRecoveryUsernameAction(
-            $formFactory,
-            $this->forUsernameHandler,
-            $this->forPasswordHandler,
-            $responder,
-            $this->mailer
+            $formFactory, $this->forUsernameHandler, $responder, $this->mailer
         );
     }
 

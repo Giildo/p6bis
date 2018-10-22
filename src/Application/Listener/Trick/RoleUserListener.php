@@ -59,30 +59,52 @@ class RoleUserListener
 
         if (!is_null($trickSlug = $request->attributes->get('trickSlug'))) {
             $secureURIs = [
-                $this->urlGenerator->generate('Trick_modification', ['trickSlug' => $trickSlug]),
-                $this->urlGenerator->generate('Trick_deletion', ['trickSlug' => $trickSlug]),
+                $this->urlGenerator->generate(
+                    'Trick_modification',
+                    ['trickSlug' => $trickSlug]
+                ),
+                $this->urlGenerator->generate(
+                    'Trick_deletion',
+                    ['trickSlug' => $trickSlug]
+                ),
             ];
 
             foreach ($secureURIs as $uri) {
                 if (preg_match("#{$uri}#", $request->getUri())) {
-                    $trick = $this->trickRepository->loadOneTrickWithCategoryAndAuthor($trickSlug);
+                    $trick = $this->trickRepository->loadOneTrickWithCategoryAndAuthor(
+                        $trickSlug
+                    );
 
                     if (is_null($trick)) {
-                        $event->setResponse(new RedirectResponse($this->urlGenerator->generate('Home')));
+                        $event->setResponse(
+                            new RedirectResponse(
+                                $this->urlGenerator->generate('Home')
+                            )
+                        );
                         return;
                     }
 
-                    $userConnected = $this->tokenStorage->getToken()->getUser();
+                    $userConnected = $this->tokenStorage->getToken()
+                                                        ->getUser()
+                    ;
 
                     if (
-                        ($this->checker->isGranted('ROLE_USER') && $trick->getAuthor() === $userConnected) ||
+                        ($this->checker->isGranted(
+                                'ROLE_USER'
+                            ) && $trick->getAuthor() === $userConnected) ||
                         ($this->checker->isGranted('ROLE_ADMIN'))
                     ) {
-                        $request->getSession()->set('trick', $trick);
+                        $request->getSession()
+                                ->set('trick', $trick)
+                        ;
                         return;
                     }
 
-                    $event->setResponse(new RedirectResponse($this->urlGenerator->generate('Home')));
+                    $event->setResponse(
+                        new RedirectResponse(
+                            $this->urlGenerator->generate('Home')
+                        )
+                    );
                     return;
                 }
             }

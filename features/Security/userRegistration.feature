@@ -4,7 +4,7 @@
 Feature: As an anonymous user, I need to be able to registration on application.
 
   Scenario: [Fail] The User is redirected if he is already logged in.
-    Given I load following file "/user/01.specific_user.yml"
+    Given I load a specific user
     And I am logged with username "JohnDoe" and with password "12345678"
     And I am on "/enregistrement"
     Then I should be on "/accueil"
@@ -55,7 +55,7 @@ Feature: As an anonymous user, I need to be able to registration on application.
     Then I should see "n'est pas une adresse mail valide."
     And I should be on "/enregistrement"
 
-  Scenario: [Success] The User is registered as successfully
+  Scenario: [Fail] The User don't valides the terms of service
     Given I am on "/enregistrement"
     When I fill in the following:
       | user_registration_username        | JohnDoe     |
@@ -66,4 +66,19 @@ Feature: As an anonymous user, I need to be able to registration on application.
       | user_registration_password_first  | 12345678    |
       | user_registration_password_second | 12345678    |
     And I press "S'enregistrer"
-    Then I should be on "/accueil"
+    And I should be on "/enregistrement"
+    And I should see "Vous devez lire et valider les conditions générales d'utilisation"
+
+  Scenario: [Success] The User is registered as successfully
+    Given I am on "/enregistrement"
+    When I fill in the following:
+      | user_registration_username        | JohnDoe     |
+      | user_registration_firstName       | John        |
+      | user_registration_lastName        | Doe         |
+      | user_registration_mail_first      | john@doe.fr |
+      | user_registration_mail_second     | john@doe.fr |
+      | user_registration_password_first  | 12345678    |
+      | user_registration_password_second | 12345678    |
+    And I check "user_registration_gcuValidation"
+    And I press "S'enregistrer"
+    Then I should be on "/connexion"

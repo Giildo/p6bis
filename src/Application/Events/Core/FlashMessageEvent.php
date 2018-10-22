@@ -8,17 +8,20 @@ use Symfony\Component\EventDispatcher\Event;
 class FlashMessageEvent extends Event implements FlashMessageEventInterface
 {
     /**
-     * @var bool
+     * @var bool Defines if the message event is a
+     * - 'success' => true
+     * - 'error'=> false
      */
     private $type;
 
     /**
-     * @var string
+     * @var string The content of message event
      */
     private $message;
 
     /**
      * FlashMessageEvent constructor.
+     *
      * @param bool $type
      * @param string $message
      */
@@ -31,7 +34,7 @@ class FlashMessageEvent extends Event implements FlashMessageEventInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function getType(): bool
     {
@@ -39,7 +42,7 @@ class FlashMessageEvent extends Event implements FlashMessageEventInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getMessage(): string
     {

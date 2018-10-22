@@ -4,16 +4,10 @@ namespace App\UI\Responders\Trick;
 
 use App\UI\Presenters\Interfaces\Trick\HomePagePresenterInterface;
 use App\UI\Responders\Interfaces\Trick\HomePageResponderInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class HomePageResponder implements HomePageResponderInterface
 {
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
     /**
      * @var HomePagePresenterInterface
      */
@@ -21,14 +15,10 @@ class HomePageResponder implements HomePageResponderInterface
 
     /**
      * HomePageResponder constructor.
-     * @param UrlGeneratorInterface $urlGenerator
      * @param HomePagePresenterInterface $presenter
      */
-    public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        HomePagePresenterInterface $presenter
-    ) {
-        $this->urlGenerator = $urlGenerator;
+    public function __construct(HomePagePresenterInterface $presenter)
+    {
         $this->presenter = $presenter;
     }
 
@@ -37,12 +27,15 @@ class HomePageResponder implements HomePageResponderInterface
      */
     public function homePageResponse(
         ?array $tricks = [],
-        ?bool $redirect = false,
         ?int $numberPage = 0,
         ?int $currentPage = 0
     ): Response {
-        return ($redirect) ?
-            new RedirectResponse($this->urlGenerator->generate('Home')) :
-            new Response($this->presenter->homePagePresentation($tricks, $numberPage, $currentPage));
+        return new Response(
+            $this->presenter->homePagePresentation(
+                $tricks,
+                $currentPage,
+                $numberPage
+            )
+        );
     }
 }

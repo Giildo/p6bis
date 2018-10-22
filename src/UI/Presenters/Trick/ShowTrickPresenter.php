@@ -3,7 +3,6 @@
 namespace App\UI\Presenters\Trick;
 
 use App\Domain\Model\Interfaces\TrickInterface;
-use App\Domain\Model\Trick;
 use App\UI\Presenters\Interfaces\Trick\ShowTrickPresenterInterface;
 use Symfony\Component\Form\FormInterface;
 use Twig\Environment;
@@ -30,11 +29,12 @@ class ShowTrickPresenter implements ShowTrickPresenterInterface
     public function showTrickPresentation(
         TrickInterface $trick,
         FormInterface $formComment,
-        array $comments,
         int $pageNumber,
+        ?array $comments = [],
         ?int $currentPage = 0
     ): string {
-        return $this->twig->render('Trick/show.html.twig', [
+        return $this->twig->render(
+            'Trick/show.html.twig', [
             'trick'       => $trick,
             'formComment' => $formComment->createView(),
             'comments'    => $comments,

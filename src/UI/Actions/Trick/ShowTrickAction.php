@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 class ShowTrickAction
 {
@@ -89,11 +92,18 @@ class ShowTrickAction
      * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
-    public function showTrick(Request $request, string $trickSlug, int $paging)
-    {
-        $trick = $this->trickRepository
-            ->loadOneTrickWithCategoryAndAuthor($trickSlug);
+    public function showTrick(
+        Request $request,
+        string $trickSlug,
+        int $paging
+    ) {
+        $trick = $this->trickRepository->loadOneTrickWithCategoryAndAuthor(
+            $trickSlug
+        );
 
         if (is_null($trick)) {
             return $this->responder->showTrickResponse();
@@ -124,7 +134,9 @@ class ShowTrickAction
             );
         }
 
-        $comments = $this->commentRepository->loadCommentsWithPagination($trickSlug, $paging);
+        $comments = $this->commentRepository->loadCommentsWithPagination(
+            $trickSlug, $paging
+        );
 
         return $this->responder->showTrickResponse(
             false,

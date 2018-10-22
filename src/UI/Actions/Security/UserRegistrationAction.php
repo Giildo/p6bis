@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 /**
  * @Route(name="Authentication_")
@@ -56,11 +59,15 @@ class UserRegistrationAction
      *
      * @param Request $request
      * @return Response|RedirectResponse
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
     public function registration(Request $request)
     {
         $form = $this->formFactory->create(UserRegistrationType::class)
-                                  ->handleRequest($request);
+                                  ->handleRequest($request)
+        ;
 
         if ($this->handler->handle($form)) {
             return $this->responder->userRegistrationResponse();

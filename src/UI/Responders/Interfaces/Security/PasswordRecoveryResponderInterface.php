@@ -4,6 +4,9 @@ namespace App\UI\Responders\Interfaces\Security;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 interface PasswordRecoveryResponderInterface
 {
@@ -11,10 +14,12 @@ interface PasswordRecoveryResponderInterface
      * @param bool|null $redirection
      * @param null|FormInterface $form
      * @param null|string $typeName
+     *
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     *
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
     public function passwordRecoveryResponse(
         ?bool $redirection = true,

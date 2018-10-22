@@ -8,7 +8,8 @@ use Twig_Error_Loader;
 use Twig_Error_Runtime;
 use Twig_Error_Syntax;
 
-interface TrickModificationPresenterInterface {
+interface TrickModificationPresenterInterface
+{
     /**
      * @param FormInterface $form
      * @param TrickInterface $trick
@@ -19,8 +20,8 @@ interface TrickModificationPresenterInterface {
      * @throws Twig_Error_Runtime
      * @throws Twig_Error_Syntax
      */
-	public function trickModificationPresentation(
-		FormInterface $form,
-		TrickInterface $trick
-	): string;
+    public function trickModificationPresentation(
+        FormInterface $form,
+        TrickInterface $trick
+    ): string;
 }

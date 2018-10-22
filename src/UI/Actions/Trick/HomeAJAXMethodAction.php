@@ -5,7 +5,7 @@ namespace App\UI\Actions\Trick;
 use App\Application\Helpers\Interfaces\PaginationHelperInterface;
 use App\Domain\Model\Trick;
 use App\Domain\Repository\TrickRepository;
-use App\UI\Responders\Interfaces\Trick\HomePageResponderInterface;
+use App\UI\Responders\Interfaces\Trick\HomeAJAXMethodResponderInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,68 +13,67 @@ use Twig_Error_Loader;
 use Twig_Error_Runtime;
 use Twig_Error_Syntax;
 
-class HomePageAction
+class HomeAJAXMethodAction
 {
     /**
-     * @var TrickRepository
+     * @var HomeAJAXMethodResponderInterface
      */
-    private $trickRepository;
-    /**
-     * @var HomePageResponderInterface
-     */
-    private $homePageResponder;
+    private $responder;
     /**
      * @var PaginationHelperInterface
      */
     private $paginationHelper;
+    /**
+     * @var TrickRepository
+     */
+    private $trickRepository;
 
     /**
-     * HomePageAction constructor.
-     * @param TrickRepository $trickRepository
-     * @param HomePageResponderInterface $homePageResponder
+     * HomeAJAXMethodAction constructor.
+     * @param HomeAJAXMethodResponderInterface $responder
      * @param PaginationHelperInterface $paginationHelper
+     * @param TrickRepository $trickRepository
      */
     public function __construct(
-        TrickRepository $trickRepository,
-        HomePageResponderInterface $homePageResponder,
-        PaginationHelperInterface $paginationHelper
+        HomeAJAXMethodResponderInterface $responder,
+        PaginationHelperInterface $paginationHelper,
+        TrickRepository $trickRepository
     ) {
-        $this->trickRepository = $trickRepository;
-        $this->homePageResponder = $homePageResponder;
+        $this->responder = $responder;
         $this->paginationHelper = $paginationHelper;
+        $this->trickRepository = $trickRepository;
     }
 
     /**
-     * Returns the list of tricks.
-     * @uses PaginationHelperInterface for pagination. The following tricks
-     * are called by AJAX method.
-     *
      * @Route(
-     *     path="/accueil",
-     *     name="Home"
+     *     name="Home_AJAX_Loading",
+     *     path="/tricks/{paging}",
+     *     requirements={"paging": "\d+"}
      * )
      *
-     * @return Response
+     * @param int $paging
+     *
+     * @return Response|null
      *
      * @throws NonUniqueResultException
      * @throws Twig_Error_Loader
      * @throws Twig_Error_Runtime
      * @throws Twig_Error_Syntax
      */
-    public function homePage(): Response
+    public function ajaxMethod(int $paging): ?Response
     {
-        $paging = 1;
-
         $numberPage = $this->paginationHelper->pagination(
             $this->trickRepository,
             Trick::NUMBER_OF_ITEMS,
             $paging
         );
 
+        if (is_null($numberPage)) {
+            return $this->responder->response();
+        }
+
         $tricks = $this->trickRepository->loadTricksWithPaging($paging);
 
-        return $this->homePageResponder->homePageResponse(
-            $tricks, $numberPage, $paging
-        );
+        return $this->responder->response($tricks);
     }
 }

@@ -10,7 +10,8 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class CommentModificationFormFactory implements CommentModificationFormFactoryInterface
+class CommentModificationFormFactory
+    implements CommentModificationFormFactoryInterface
 {
     /**
      * @var FormFactoryInterface
@@ -19,11 +20,11 @@ class CommentModificationFormFactory implements CommentModificationFormFactoryIn
 
     /**
      * CommentModificationFormFactory constructor.
+     *
      * @param FormFactoryInterface $formFactory
      */
-    public function __construct(
-        FormFactoryInterface $formFactory
-    ) {
+    public function __construct(FormFactoryInterface $formFactory)
+    {
         $this->formFactory = $formFactory;
     }
 
@@ -32,20 +33,30 @@ class CommentModificationFormFactory implements CommentModificationFormFactoryIn
      */
     public function create(Request $request): FormInterface
     {
-        if (!is_null($request->query->get('action')) && !is_null($request->query->get('id'))) {
-            $comment = $request->getSession()->remove('comment');
+        if (
+            !is_null($request->query->get('action')) &&
+            !is_null($request->query->get('id'))
+        ) {
+            $comment = $request->getSession()
+                               ->get('comment')
+            ;
 
             if (!is_null($comment)) {
-                if ($request->query->get('action') == 'modifier') {
+                if ($request->query->get('action') === 'modifier') {
                     $dto = new CommentModificationDTO($comment->getComment());
 
-                    return $this->formFactory->create(CommentModificationType::class, $dto)
-                                             ->handleRequest($request);
+                    return $this->formFactory->create(
+                        CommentModificationType::class,
+                        $dto
+                    )
+                                             ->handleRequest($request)
+                        ;
                 }
             }
         }
 
         return $this->formFactory->create(AddCommentType::class)
-                                 ->handleRequest($request);
+                                 ->handleRequest($request)
+            ;
     }
 }

@@ -178,6 +178,16 @@ class TricksFixtures extends Fixture
             false
         );
         $manager->persist($truckDriver);
+
+        $truckDriver = new Trick(
+            $slugger->slugify('Font flips'),
+            'Font flips',
+            'Le snowboarder fait des rotations vers l\'avant. Cette technique peut être associée à des figures de type grab.',
+            $flips,
+            $john,
+            true
+        );
+        $manager->persist($truckDriver);
         $manager->flush();
 
         $v180 = new Video(
