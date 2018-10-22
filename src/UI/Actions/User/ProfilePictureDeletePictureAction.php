@@ -57,14 +57,20 @@ class ProfilePictureDeletePictureAction
     {
         $pictureName = $request->query->get('s');
         $token = $request->query->get('t');
-        $tokenSession = $request->getSession()->remove('tokenProfilePicture');
+        $tokenSession = $request->getSession()
+                                ->remove('tokenProfilePicture')
+        ;
 
         if ($token === $tokenSession) {
-            $picture = $this->pictureRepository->loadOnePictureWithName($pictureName);
+            $picture = $this->pictureRepository->loadOnePictureWithName(
+                $pictureName
+            );
             $namePicture = "{$picture->getName()}.{$picture->getExtension()}";
 
             /** @var UserInterface $user */
-            $user = $this->tokenStorage->getToken()->getUser();
+            $user = $this->tokenStorage->getToken()
+                                       ->getUser()
+            ;
             $user->deletePicture();
 
             $this->pictureRepository->deletePicture($picture, $user);

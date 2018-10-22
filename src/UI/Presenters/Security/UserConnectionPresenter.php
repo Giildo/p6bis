@@ -4,7 +4,6 @@ namespace App\UI\Presenters\Security;
 
 use App\UI\Presenters\Interfaces\Security\UserConnectionPresenterInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Twig\Environment;
 
 class UserConnectionPresenter implements UserConnectionPresenterInterface
@@ -27,12 +26,11 @@ class UserConnectionPresenter implements UserConnectionPresenterInterface
      * {@inheritdoc}
      */
     public function userConnectionPresentation(
-        FormInterface $form,
-        ?AuthenticationException $error = null
+        FormInterface $form
     ): string {
-        return $this->twig->render('Security/connection.html.twig', [
+        return $this->twig->render(
+            'Security/connection.html.twig', [
             'form' => $form->createView(),
-            'error' => $error
         ]);
     }
 }

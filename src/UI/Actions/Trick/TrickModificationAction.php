@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 class TrickModificationAction
 {
@@ -62,11 +65,17 @@ class TrickModificationAction
      * @param Request $request
      *
      * @return Response
+     *
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
-    public function modification(Request $request)
+    public function modification(Request $request): Response
     {
         /** @var TrickInterface $trick */
-        $trick = $request->getSession()->remove('trick');
+        $trick = $request->getSession()
+                         ->remove('trick')
+        ;
 
         $dto = new TrickModificationDTO(
             $trick->getDescription(),
@@ -77,7 +86,8 @@ class TrickModificationAction
         );
 
         $form = $this->formFactory->create(TrickModificationType::class, $dto)
-                                  ->handleRequest($request);
+                                  ->handleRequest($request)
+        ;
 
         if ($this->handler->handle($form, $trick)) {
             return $this->responder->trickModificationResponse(
@@ -87,10 +97,16 @@ class TrickModificationAction
             );
         }
 
-        $tokens = $this->tokenManager->createTokens($trick->getPictures(), $trick->getVideos());
+        $tokens = $this->tokenManager->createTokens(
+            $trick->getPictures(), $trick->getVideos()
+        );
 
-        $request->getSession()->set('tokens', $tokens);
+        $request->getSession()
+                ->set('tokens', $tokens)
+        ;
 
-        return $this->responder->trickModificationResponse(false, '', [], $form, $trick);
+        return $this->responder->trickModificationResponse(
+            false, '', [], $form, $trick
+        );
     }
 }

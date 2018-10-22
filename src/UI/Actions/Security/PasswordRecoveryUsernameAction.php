@@ -2,16 +2,19 @@
 
 namespace App\UI\Actions\Security;
 
-use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForPasswordHandlerInterface;
 use App\Application\Handlers\Interfaces\Forms\Security\PasswordRecoveryForUsernameHandlerInterface;
 use App\Application\Mailers\Interfaces\Security\PasswordRecoveryMailerInterface;
 use App\UI\Forms\Security\PasswordRecoveryForUsernameType;
 use App\UI\Responders\Interfaces\Security\PasswordRecoveryResponderInterface;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 /**
  * @Route(name="Authentication_")
@@ -30,10 +33,6 @@ class PasswordRecoveryUsernameAction
      */
     private $forUsernameHandler;
     /**
-     * @var PasswordRecoveryForPasswordHandlerInterface
-     */
-    private $forPasswordHandler;
-    /**
      * @var PasswordRecoveryResponderInterface
      */
     private $responder;
@@ -46,21 +45,17 @@ class PasswordRecoveryUsernameAction
      * PasswordRecoveryActionUsername constructor.
      * @param FormFactoryInterface $formFactory
      * @param PasswordRecoveryForUsernameHandlerInterface $forUsernameHandler
-     * @param PasswordRecoveryForPasswordHandlerInterface $forPasswordHandler
      * @param PasswordRecoveryResponderInterface $responder
      * @param PasswordRecoveryMailerInterface $recoveryMailer
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         PasswordRecoveryForUsernameHandlerInterface $forUsernameHandler,
-        PasswordRecoveryForPasswordHandlerInterface $forPasswordHandler,
         PasswordRecoveryResponderInterface $responder,
         PasswordRecoveryMailerInterface $recoveryMailer
-    )
-    {
+    ) {
         $this->formFactory = $formFactory;
         $this->forUsernameHandler = $forUsernameHandler;
-        $this->forPasswordHandler = $forPasswordHandler;
         $this->responder = $responder;
         $this->recoveryMailer = $recoveryMailer;
     }
@@ -72,30 +67,41 @@ class PasswordRecoveryUsernameAction
      *
      * @return Response
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws ORMException
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
     public function passwordRecovery(Request $request): Response
     {
-        $form = $this->formFactory->create(PasswordRecoveryForUsernameType::class)
-            ->handleRequest($request);
+        $form = $this->formFactory->create(
+            PasswordRecoveryForUsernameType::class
+        )
+                                  ->handleRequest($request)
+        ;
 
-        $user = $this->forUsernameHandler->handle($form);
-
-        if (is_null($user)) {
-            return $this->responder->passwordRecoveryResponse(false, $form, 'forUsername');
+        if (is_null($user = $this->forUsernameHandler->handle($form))) {
+            return $this->responder->passwordRecoveryResponse(
+                false, $form, 'forUsername'
+            );
         }
 
         if ($this->recoveryMailer->message($user)) {
-            return $this->responder->passwordRecoveryResponse(false, null, '');
+            return $this->responder->passwordRecoveryResponse(
+                false,
+                null,
+                ''
+            );
         }
 
-        $form->addError(new FormError(
-            'Une erreur est survenue lors de l\'envoie du mail veuillez réessayer ou nous contacter.'
-        ));
+        $form->addError(
+            new FormError(
+                'Une erreur est survenue lors de l\'envoie du mail veuillez réessayer ou nous contacter.'
+            )
+        );
 
-        return $this->responder->passwordRecoveryResponse(false, $form, 'forUsername');
+        return $this->responder->passwordRecoveryResponse(
+            false, $form, 'forUsername'
+        );
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Domain\Modifier;
 
-use App\Domain\DTO\Interfaces\Trick\TrickModificationDTOInterface;
+use App\Domain\DTO\Trick\TrickModificationDTO;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Modifier\Interfaces\TrickModifierInterface;
 
@@ -17,8 +17,8 @@ class TrickModifier implements TrickModifierInterface {
 	 */
 	public function modify(
 		TrickInterface $trick,
-		TrickModificationDTOInterface $DTO
-	): self {
+        TrickModificationDTO $DTO
+	): TrickModifierInterface {
 		$this->trick = $trick->update(
 			$DTO->description,
 			$DTO->published,

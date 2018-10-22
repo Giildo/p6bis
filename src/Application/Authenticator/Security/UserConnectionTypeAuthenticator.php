@@ -5,14 +5,15 @@ namespace App\Application\Authenticator\Security;
 use App\Application\Authenticator\Interfaces\Security\UserConnectionTypeAuthenticatorInterface;
 use App\Application\Events\Core\FlashMessageEvent;
 use App\Application\Handlers\Interfaces\Forms\Security\UserConnectionHandlerInterface;
+use App\Domain\DTO\Interfaces\Security\UserConnectionDTOInterface;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
 use App\UI\Forms\Security\UserConnectionType;
-use App\UI\Responders\Interfaces\Security\UserConnectionResponderInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -20,10 +21,15 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
-use Twig_Error_Loader;
-use Twig_Error_Runtime;
-use Twig_Error_Syntax;
 
+/**
+ * Class UserConnectionTypeAuthenticator
+ *
+ * Class for user authentication.
+ * Based on Guard Authenticator.
+ *
+ * @package App\Application\Authenticator\Security
+ */
 class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
     implements UserConnectionTypeAuthenticatorInterface
 {
@@ -44,10 +50,6 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      */
     private $handler;
     /**
-     * @var UserConnectionResponderInterface
-     */
-    private $responder;
-    /**
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
@@ -62,7 +64,6 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
      * @param UserRepository $repository
      * @param EncoderFactoryInterface $encoderFactory
      * @param UserConnectionHandlerInterface $handler
-     * @param UserConnectionResponderInterface $responder
      * @param UrlGeneratorInterface $urlGenerator
      * @param EventDispatcherInterface $eventDispatcher
      */
@@ -71,7 +72,6 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
         UserRepository $repository,
         EncoderFactoryInterface $encoderFactory,
         UserConnectionHandlerInterface $handler,
-        UserConnectionResponderInterface $responder,
         UrlGeneratorInterface $urlGenerator,
         EventDispatcherInterface $eventDispatcher
     ) {
@@ -79,7 +79,6 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
         $this->repository = $repository;
         $this->encoderFactory = $encoderFactory;
         $this->handler = $handler;
-        $this->responder = $responder;
         $this->urlGenerator = $urlGenerator;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -87,7 +86,7 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
     /**
      * {@inheritdoc}
      */
-    public function getLoginUrl()
+    public function getLoginUrl(): string
     {
         return $this->urlGenerator->generate('Authentication_user_connection');
     }
@@ -106,7 +105,11 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * {@inheritdoc=
+     * {@inheritdoc}
+     *
+     * In case of errors in form, this method returns the errors to 'getUser'.
+     *
+     * @return FormErrorIterator|UserConnectionDTOInterface
      */
     public function getCredentials(Request $request)
     {
@@ -123,6 +126,9 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
 
     /**
      * {@inheritdoc}
+     *
+     * If errors are returned since 'getCredentials' this method @uses
+     * EventDispatcherInterface for adds a flash message in session.
      *
      * @throws NonUniqueResultException
      */
@@ -161,8 +167,6 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
                     FlashMessageEvent::FLASH_MESSAGE,
                     $flashMessage
                 );
-
-                return null;
             }
 
             return $user;
@@ -173,6 +177,9 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
 
     /**
      * {@inheritdoc}
+     *
+     * If the password is invalid, this method @uses EventDispatcherInterface
+     * for adds a flash message in session.
      */
     public function checkCredentials(
         $credentials,
@@ -207,15 +214,14 @@ class UserConnectionTypeAuthenticator extends AbstractFormLoginAuthenticator
 
     /**
      * {@inheritdoc}
-     * @throws Twig_Error_Loader
-     * @throws Twig_Error_Runtime
-     * @throws Twig_Error_Syntax
      */
     public function onAuthenticationSuccess(
         Request $request,
         TokenInterface $token,
         $providerKey
     ) {
-        return $this->responder->userConnectionResponse();
+        return new RedirectResponse(
+            $this->urlGenerator->generate('Home')
+        );
     }
 }

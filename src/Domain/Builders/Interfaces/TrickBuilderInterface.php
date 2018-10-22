@@ -2,17 +2,17 @@
 
 namespace App\Domain\Builders\Interfaces;
 
-use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
+use App\Domain\DTO\Trick\NewTrickDTO;
 use App\Domain\Model\Trick;
 
 interface TrickBuilderInterface
 {
 
     /**
-     * @param NewTrickDTOInterface $datas
+     * @param NewTrickDTO $datas
      * @return TrickBuilderInterface
      */
-    public function build(NewTrickDTOInterface $datas);
+    public function build(NewTrickDTO $datas): self;
 
     /**
      * @return Trick

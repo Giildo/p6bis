@@ -144,6 +144,6 @@ class UserRepositoryTest extends KernelTestCase
         self::assertNull($user->getPicture());
 
         $user->eraseCredentials();
-        self::assertNull($user->getSalt());
+        self::assertEquals('', $user->getSalt());
     }
 }

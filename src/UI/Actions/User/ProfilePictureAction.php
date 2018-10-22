@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 class ProfilePictureAction
 {
@@ -71,11 +74,16 @@ class ProfilePictureAction
      *
      * @throws ORMException
      * @throws OptimisticLockException
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
     public function profilePicture(Request $request): Response
     {
         /** @var UserInterface $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $this->tokenStorage->getToken()
+                                   ->getUser()
+        ;
 
         $dto = new ProfilePictureDTO(
             $user->getFirstName(),
@@ -85,14 +93,17 @@ class ProfilePictureAction
         );
 
         $form = $this->formFactory->create(ProfilePictureType::class, $dto)
-                                  ->handleRequest($request);
+                                  ->handleRequest($request)
+        ;
 
         $this->handler->handle($form, $user);
 
         if (!is_null($picture = $user->getPicture())) {
             $picture->createToken($this->tokenGenerator->generateToken());
 
-            $request->getSession()->set('tokenProfilePicture', $picture->getDeleteToken());
+            $request->getSession()
+                    ->set('tokenProfilePicture', $picture->getDeleteToken())
+            ;
         }
 
         return $this->responder->response($form, $user);

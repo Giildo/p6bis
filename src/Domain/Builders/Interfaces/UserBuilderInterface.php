@@ -2,7 +2,6 @@
 
 namespace App\Domain\Builders\Interfaces;
 
-use App\Domain\Builders\UserBuilder;
 use App\Domain\DTO\Security\UserRegistrationDTO;
 use App\Domain\Model\Interfaces\UserInterface;
 
@@ -11,11 +10,11 @@ interface UserBuilderInterface
     /**
      * @param UserRegistrationDTO $dto
      *
-     * @return UserBuilder
+     * @return UserBuilderInterface
      */
-    public function createUser(
+    public function build(
         UserRegistrationDTO $dto
-    ): UserBuilder;
+    ): self;
 
     /**
      * @return UserInterface

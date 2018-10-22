@@ -2,23 +2,23 @@
 
 namespace App\Domain\Modifier\Interfaces;
 
-use App\Domain\DTO\Interfaces\Trick\TrickModificationDTOInterface;
+use App\Domain\DTO\Trick\TrickModificationDTO;
 use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Modifier\TrickModifier;
 
 interface TrickModifierInterface {
-	/**
-	 * @param TrickInterface $trick
-	 * @param TrickModificationDTOInterface $DTO
-	 *
-	 * @return TrickModifier
-	 */
+    /**
+     * @param TrickInterface $trick
+     * @param TrickModificationDTO $DTO
+     *
+     * @return TrickModifier
+     */
 	public function modify(
 		TrickInterface $trick,
-		TrickModificationDTOInterface $DTO
-	);
+		TrickModificationDTO $DTO
+    ):self;
 
-	/**
+    /**
 	 * @return TrickInterface
 	 */
 	public function getTrick(): TrickInterface;

@@ -34,20 +34,18 @@ class UserRegistrationResponder implements UserRegistrationResponderInterface
     }
 
     /**
-     * @param bool|null $redirection
-     * @param FormInterface|null $form
-     * @return Response|RedirectResponse
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function userRegistrationResponse(
         ?bool $redirection = true,
         ?FormInterface $form = null
     ): Response {
         return $redirection ?
-            new RedirectResponse($this->urlGenerator->generate('Authentication_user_connection')) :
+            new RedirectResponse(
+                $this->urlGenerator->generate(
+                    'Authentication_user_connection'
+                )
+            ) :
             new Response($this->presenter->userRegistrationPresentation($form));
     }
 }

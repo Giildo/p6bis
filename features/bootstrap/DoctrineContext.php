@@ -3,13 +3,14 @@
 use App\Application\Helpers\SluggerHelper;
 use App\Domain\Model\Category;
 use App\Domain\Model\Comment;
+use App\Domain\Model\Interfaces\TrickInterface;
+use App\Domain\Model\Interfaces\UserInterface;
 use App\Domain\Model\Trick;
 use App\Domain\Model\User;
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\MinkContext;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
-use Faker\Factory;
 use Nelmio\Alice\Loader\NativeLoader;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -25,6 +26,21 @@ class DoctrineContext extends MinkContext implements Context
     private $passwordEncoder;
 
     /**
+     * @var UserInterface
+     */
+    private $user1;
+
+    /**
+     * @var UserInterface
+     */
+    private $user2;
+
+    /**
+     * @var TrickInterface
+     */
+    private $trick1;
+
+    /**
      * DoctrineContext constructor.
      *
      * @param EntityManagerInterface $entityManager
@@ -33,7 +49,8 @@ class DoctrineContext extends MinkContext implements Context
     public function __construct(
         EntityManagerInterface $entityManager,
         UserPasswordEncoderInterface $passwordEncoder
-    ) {
+    )
+    {
         $this->entityManager = $entityManager;
         $this->passwordEncoder = $passwordEncoder;
     }
@@ -76,6 +93,18 @@ class DoctrineContext extends MinkContext implements Context
         $this->visit('/connexion');
         $this->fillField('user_connection_username', $username);
         $this->fillField('user_connection_password', $password);
+        $this->pressButton('Se connecter');
+    }
+
+    /**
+     * @Given /^I am on the second step of recovery password processus$/
+     */
+    public function iAmOnTheSecondStepOfRecoveryPasswordProcessus()
+    {
+        $this->iLoadASpecificUser();
+
+        $this->visit('/recuperation');
+        $this->fillField('password_recovery_for_username_username', 'JohnDoe');
         $this->pressButton('Valider');
     }
 
@@ -85,30 +114,65 @@ class DoctrineContext extends MinkContext implements Context
     public function iLoadFollowingFileWithRecoveryToken($path)
     {
         $this->iLoadFollowingFile($path);
-
-        $this->visit('/recuperation');
-        $this->fillField('password_recovery_for_username_username', 'JohnDoe');
-        $this->pressButton('Valider');
     }
 
     /**
-     * @Given I am on :uri with bad token and with prefix :prefix
+     * @Given I am on recuperation uri with bad token and with queries datas
      */
-    public function iAmOnWithBadTokenAndWithPrefix($uri, $prefix)
+    public function iAmOnWithBadTokenAndWithPrefix()
     {
-        $this->visit("{$uri}?{$prefix}=token");
+        $this->visit("/recuperation/mot-de-passe?ut=token");
     }
 
     /**
-     * @Given I am on :uri with token and with prefix :prefix
+     * @Given I am on recuperation uri with token and with queries datas
      */
-    public function iAmOnWithTokenAndWithPrefix($uri, $prefix)
+    public function iAmOnWithTokenAndWithPrefix()
     {
-        $repository = $this->entityManager->getRepository(User::class);
-        $user = $repository->loadUserByUsername('JohnDoe');
-        $token = $user->getToken();
+        $token = $this->entityManager->getRepository(User::class)
+                                     ->loadUserByUsername('JohnDoe')
+                                     ->getToken();
 
-        $this->visit("{$uri}?{$prefix}={$token}");
+        $this->visit("/recuperation/mot-de-passe?ut={$token}");
+    }
+
+    /**
+     * @Given I load a specific user
+     */
+    public function iLoadASpecificUser()
+    {
+        $this->user1 = new User(
+            'JohnDoe',
+            'John',
+            'Doe',
+            'john@doe.com'
+        );
+
+        $this->user2 = new User(
+            'JaneDoe',
+            'Jane',
+            'Doe',
+            'jane@doe.com'
+        );
+
+        $this->user2->changeRole(['ROLE_ADMIN']);
+
+        $this->user1->changePassword(
+            $this->passwordEncoder->encodePassword(
+                $this->user1,
+                '12345678'
+            )
+        );
+        $this->user2->changePassword($this->passwordEncoder->encodePassword(
+            $this->user2,
+            '12345678'
+        )
+        );
+
+        $this->entityManager->persist($this->user1);
+        $this->entityManager->persist($this->user2);
+
+        $this->entityManager->flush();
     }
 
     /**
@@ -116,85 +180,164 @@ class DoctrineContext extends MinkContext implements Context
      */
     public function iLoadTheTricksWithCategoryAndUser()
     {
-        $faker = Factory::create('fr_FR');
-
-        $user1 = new User(
-            'JohnDoe',
-            'John',
-            'Doe',
-            'john@doe.com',
-            '12345678'
-        );
-
-        $user2 = new User(
-            'JaneDoe',
-            'Jane',
-            'Doe',
-            'jane@doe.com',
-            '12345678'
-        );
-
-        $user2->changeRole(['ROLE_ADMIN']);
-
-        $user1->changePassword($this->passwordEncoder->encodePassword($user1, $user1->getPassword()));
-        $user2->changePassword($this->passwordEncoder->encodePassword($user2, $user2->getPassword()));
+        $this->iLoadASpecificUser();
 
         $slugger = new SluggerHelper();
 
-        $category1 = new Category($slugger->slugify('Grabs'), 'Grabs');
-        $category2 = new Category($slugger->slugify('Rotations'), 'Rotations');
+        $grabs = new Category($slugger->slugify('Grabs'), 'Grabs');
+        $rotations = new Category($slugger->slugify('Rotations'), 'Rotations');
+        $flips = new Category($slugger->slugify('Flips'), 'Flips');
 
-        $trick = new Trick(
+        $mute = new Trick(
             $slugger->slugify('Mute'),
             'Mute',
-            $faker->text,
-            $category1,
-            $user1
+            'Le snowboarder saisit la carre frontside de la planche entre les deux pieds avec la main avant.',
+            $grabs,
+            $this->user1,
+            true
+        );
+        $this->entityManager->persist($mute);
+        $this->trick1 = $mute;
+
+        $melancholie = new Trick(
+            $slugger->slugify('Melancholie'),
+            'Melancholie',
+            'Le snowboarder saisit la carre backside de la planche, entre les deux pieds, avec la main avant.',
+            $grabs,
+            $this->user1,
+            true
+        );
+        $this->entityManager->persist($melancholie);
+
+        $indy = new Trick(
+            $slugger->slugify('Indy'),
+            'Indy',
+            'Le snowboarder saisit la carre frontside de la planche, entre les deux pieds, avec la main arrière.',
+            $grabs,
+            $this->user1,
+            true
+        );
+        $this->entityManager->persist($indy);
+
+        $r180 = new Trick(
+            $slugger->slugify('180'),
+            '180',
+            'Le snowboarder fait un demi tour et change de pied d\'appuie.',
+            $rotations,
+            $this->user2,
+            true
+        );
+        $this->entityManager->persist($r180);
+
+        $stalefish = new Trick(
+            $slugger->slugify('Stalefish'),
+            'Stalefish',
+            'Le snowboarder saisit la carre backside de la planche entre les deux pieds avec la main arrière.',
+            $grabs,
+            $this->user2,
+            true
+        );
+        $this->entityManager->persist($stalefish);
+
+        $tail = new Trick(
+            $slugger->slugify('Tail'),
+            'Tail',
+            'Le snowboarder saisit la partie arrière de la planche, avec la main arrière.',
+            $grabs,
+            $this->user1,
+            true
+        );
+        $this->entityManager->persist($tail);
+
+        $nose = new Trick(
+            $slugger->slugify('Nose'),
+            'Nose',
+            'Le snowboarder saisit la partie avant de la planche, avec la main avant.',
+            $grabs,
+            $this->user1,
+            true
+        );
+        $this->entityManager->persist($nose);
+
+        $r360 = new Trick(
+            $slugger->slugify('360'),
+            '360',
+            'Le snowboarder fait un complet et ne change donc pas de pied d\'appuie.',
+            $rotations,
+            $this->user2,
+            true
+        );
+        $this->entityManager->persist($r360);
+
+        $japan = new Trick(
+            $slugger->slugify('Japan'),
+            'Japan',
+            'Le snowboarder saisit l\'avant de la planche, avec la main avant, du côté de la carre frontside.',
+            $grabs,
+            $this->user1,
+            true
+        );
+        $this->entityManager->persist($japan);
+
+        $seatBelt = new Trick(
+            $slugger->slugify('Seat belt'),
+            'Seat belt',
+            'Le snowboarder saisit la carre frontside à l\'arrière avec la main avant.',
+            $grabs,
+            $this->user2,
+            true
+        );
+        $this->entityManager->persist($seatBelt);
+
+        $truckDriver = new Trick(
+            $slugger->slugify('Truck driver'),
+            'Truck driver',
+            'Le snowboarder saisit la carre avant et carre arrière avec chaque main (comme pour tenir un volant de voiture).',
+            $grabs,
+            $this->user1,
+            false
+        );
+        $this->entityManager->persist($truckDriver);
+
+        $truckDriver = new Trick(
+            $slugger->slugify('Font flips'),
+            'Font flips',
+            'Le snowboarder fait des rotations vers l\'avant. Cette technique peut être associée à des figures de type grab.',
+            $flips,
+            $this->user1,
+            true
+        );
+        $this->entityManager->persist($truckDriver);
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @Given /^I load the tricks with category and user with simulated comment$/
+     */
+    public function iLoadTheTricksWithCategoryAndUserWithSimulatedComment()
+    {
+        $this->iLoadTheTricksWithCategoryAndUser();
+
+        $comment = new Comment(
+            'Commentaire simulé.',
+            $this->trick1,
+            $this->user1
         );
 
-        $trick->publish();
-
-        $this->entityManager->persist($trick);
-
-        for ($i = 0 ; $i < 8 ; $i++) {
-            $name = $faker->unique()->word;
-            $trick = new Trick(
-                $slugger->slugify($name),
-                $name,
-                $faker->text,
-                $category2,
-                $user2
-            );
-
-            $trick->publish();
-
-            $this->entityManager->persist($trick);
-        }
-
-        $trick = new Trick(
-            $slugger->slugify('Truck'),
-            'Truck',
-            $faker->text,
-            $category1,
-            $user1
-        );
-
-        $trick->publish();
-
-        $this->entityManager->persist($trick);
-
+        $this->entityManager->persist($comment);
         $this->entityManager->flush();
     }
 
 
     /**
-     * @Then I should see :text :number times
+     * @Then I should see :text :number times in element :selector
      */
-    public function iShouldSeeTimes($text, $number)
+    public function iShouldSeeTimes($text, $number, $selector)
     {
         $this->assertSession()->elementsCount(
             'named',
-            ['button', $text],
+            [$selector, $text],
             $number
         );
     }
@@ -204,21 +347,10 @@ class DoctrineContext extends MinkContext implements Context
      */
     public function iAmOnWithGetDatasInformation($uri)
     {
-        $user = $this->entityManager->getRepository(User::class)->loadUserByUsername('JohnDoe');
-        $trick = $this->entityManager->getRepository(Trick::class)->loadOneTrickWithCategoryAndAuthor(
-            'mute'
-        );
+        $comment = $this->entityManager->getRepository(Comment::class)
+                                       ->loadAllCommentsOfATrick('mute');
 
-        $comment = new Comment(
-            'Commentaire simulé.',
-            $trick,
-            $user
-        );
-
-        $this->entityManager->persist($comment);
-        $this->entityManager->flush();
-
-        $this->visit("{$uri}?action=modifier&id={$comment->getId()}");
+        $this->visit("{$uri}?action=modifier&id={$comment[0]->getId()}");
     }
 
     /**
@@ -226,21 +358,10 @@ class DoctrineContext extends MinkContext implements Context
      */
     public function iAmOnTheDeletionPage()
     {
-        $user = $this->entityManager->getRepository(User::class)->loadUserByUsername('JohnDoe');
-        $trick = $this->entityManager->getRepository(Trick::class)->loadOneTrickWithCategoryAndAuthor(
-            'mute'
-        );
+        $comment = $this->entityManager->getRepository(Comment::class)
+                                       ->loadAllCommentsOfATrick('mute');
 
-        $comment = new Comment(
-            'Commentaire simulé.',
-            $trick,
-            $user
-        );
-
-        $this->entityManager->persist($comment);
-        $this->entityManager->flush();
-
-        $this->visit("/trick/mute/suppression-commentaire/{$comment->getId()}");
+        $this->visit("/trick/mute/suppression-commentaire?action=suppression&id={$comment[0]->getId()}");
     }
 
 }

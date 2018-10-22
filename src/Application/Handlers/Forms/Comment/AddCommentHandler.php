@@ -35,10 +35,6 @@ class AddCommentHandler implements AddCommentHandlerInterface
     }
 
     /**
-     * The listener tests if the comment is already in the database:
-     * - if it's in the database, we update the comment
-     * - if not, we create the comment
-     *
      * {@inheritdoc}
      */
     public function handle(
@@ -50,11 +46,14 @@ class AddCommentHandler implements AddCommentHandlerInterface
             $dto = $form->getData();
 
             /** @var CommentInterface $comment */
-            $comment = $request->getSession()->remove('comment');
+            $comment = $request->getSession()
+                               ->remove('comment')
+            ;
 
             if (is_null($comment)) {
                 $comment = $this->builder->build($dto, $trick)
-                                         ->getComment();
+                                         ->getComment()
+                ;
 
                 $this->commentRepository->saveComment($comment);
 

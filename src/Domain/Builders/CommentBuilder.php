@@ -36,9 +36,11 @@ class CommentBuilder implements CommentBuilderInterface
     public function build(
         CommentDTOInterface $DTO,
         TrickInterface $trick
-    ): self {
+    ): CommentBuilderInterface {
         /** @var UserInterface $author */
-        $author = $this->tokenStorage->getToken()->getUser();
+        $author = $this->tokenStorage->getToken()
+                                     ->getUser()
+        ;
 
         $this->comment = new Comment(
             $DTO->comment,

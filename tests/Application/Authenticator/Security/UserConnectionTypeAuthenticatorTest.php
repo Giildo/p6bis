@@ -10,8 +10,6 @@ use App\Domain\DTO\Security\UserConnectionDTO;
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepository;
 use App\Tests\Fixtures\Traits\UsersFixtures;
-use App\UI\Presenters\Security\UserConnectionPresenter;
-use App\UI\Responders\Security\UserConnectionResponder;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
@@ -124,9 +122,6 @@ class UserConnectionTypeAuthenticatorTest extends KernelTestCase
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $urlGenerator->method('generate')->willReturn('/connexion');
 
-        $presenter = $this->createMock(UserConnectionPresenter::class);
-        $userConnectionResponder = new UserConnectionResponder($presenter, $urlGenerator);
-
         $attributes = $this->createMock(ParameterBag::class);
         $this->request = new Request();
         $this->request->attributes = $attributes;
@@ -134,13 +129,8 @@ class UserConnectionTypeAuthenticatorTest extends KernelTestCase
         $this->eventDispatcher = new EventDispatcher();
 
         $this->authenticator = new UserConnectionTypeAuthenticator(
-            $formFactory,
-            $this->userRepository,
-            $this->encoderFactory,
-            $this->userConnectionHandler,
-            $userConnectionResponder,
-            $urlGenerator,
-            $this->eventDispatcher
+            $formFactory, $this->userRepository, $this->encoderFactory,
+            $this->userConnectionHandler, $urlGenerator, $this->eventDispatcher
         );
 
         $this->userProvider = $this->createMock(UserProviderInterface::class);

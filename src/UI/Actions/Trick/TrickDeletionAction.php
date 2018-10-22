@@ -68,13 +68,19 @@ class TrickDeletionAction
     public function delete(Request $request): RedirectResponse
     {
         /** @var TrickInterface $trick */
-        $trick = $request->getSession()->remove('trick');
+        $trick = $request->getSession()
+                         ->remove('trick')
+        ;
 
-        $comments = $this->commentRepository->loadAllCommentsOfATrick($trick->getSlug());
+        $comments = $this->commentRepository->loadAllCommentsOfATrick(
+            $trick->getSlug()
+        );
 
         $this->trickRepository->deleteTrick($trick, $comments);
 
-        $this->flashBag->set('messageFlash', 'La figure a été supprimée avec succès.');
+        $this->flashBag->set(
+            'messageFlash', 'La figure a été supprimée avec succès.'
+        );
 
         return $this->responder->response();
     }

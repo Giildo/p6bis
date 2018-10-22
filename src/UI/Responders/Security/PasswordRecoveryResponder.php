@@ -34,13 +34,7 @@ class PasswordRecoveryResponder implements PasswordRecoveryResponderInterface
     }
 
     /**
-     * @param bool|null $redirection
-     * @param null|FormInterface $form
-     * @param null|string $typeName
-     * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * {@inheritdoc}
      */
     public function passwordRecoveryResponse(
         ?bool $redirection = true,
@@ -49,6 +43,8 @@ class PasswordRecoveryResponder implements PasswordRecoveryResponderInterface
     ): Response {
         return $redirection ?
             new RedirectResponse($this->urlGenerator->generate('Home')) :
-            new Response($this->presenter->passwordRecoveryPresentation($form, $typeName));
+            new Response(
+                $this->presenter->passwordRecoveryPresentation($form, $typeName)
+            );
     }
 }

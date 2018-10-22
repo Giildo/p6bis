@@ -5,7 +5,6 @@ namespace App\Tests\UI\Actions\Security;
 use App\UI\Actions\Security\UserConnectionAction;
 use App\UI\Presenters\Security\UserConnectionPresenter;
 use App\UI\Responders\Security\UserConnectionResponder;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\WebProfilerBundle\Tests\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -13,7 +12,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Twig\Environment;
 use Twig_Error_Loader;
 use Twig_Error_Runtime;
@@ -27,23 +25,12 @@ class UserConnectionActionTest extends TestCase
     private $userRegistrationAction;
 
     /**
-     * @var AuthenticationUtils|MockObject
-     */
-    private $authenticationUtils;
-
-    /**
      * @var Request
      */
     private $request;
 
     protected function setUp()
     {
-        $this->authenticationUtils = $this->createMock(AuthenticationUtils::class);
-        $this->authenticationUtils->method('getLastAuthenticationError')
-                                  ->willReturn(null);
-        $this->authenticationUtils->method('getLastUsername')
-                                  ->willReturn('');
-
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $formInterface = $this->createMock(FormInterface::class);
         $formFactory->method('create')->willReturn($formInterface);
@@ -72,7 +59,7 @@ class UserConnectionActionTest extends TestCase
      */
     public function testNoRedirectionIfUserIsntConnected()
     {
-        $response = $this->userRegistrationAction->connection($this->request, $this->authenticationUtils);
+        $response = $this->userRegistrationAction->connection($this->request);
 
         self::assertInstanceOf(Response::class, $response);
         self::assertNotInstanceOf(RedirectResponse::class, $response);

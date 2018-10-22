@@ -4,6 +4,8 @@ namespace App\UI\Actions\Comment;
 
 use App\Domain\Repository\CommentRepository;
 use App\UI\Responders\Interfaces\Comment\CommentDeletionResponderInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,12 +46,16 @@ class CommentDeletionAction
      *
      * @return RedirectResponse
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function commentDeletion(Request $request, string $trickSlug): RedirectResponse
-    {
-        $comment = $request->getSession()->remove('comment');
+    public function commentDeletion(
+        Request $request,
+        string $trickSlug
+    ): RedirectResponse {
+        $comment = $request->getSession()
+                           ->remove('comment')
+        ;
 
         if (is_null($comment)) {
             return $this->responder->response($trickSlug);

@@ -51,7 +51,7 @@ class UserRegistrationHandler implements UserRegistrationHandlerInterface
     public function handle(FormInterface $form): bool
     {
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->builder->createUser($form->getData())
+            $user = $this->builder->build($form->getData())
                                   ->getUser();
 
             $this->repository->saveUser($user);

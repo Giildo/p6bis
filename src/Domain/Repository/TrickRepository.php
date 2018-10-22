@@ -78,16 +78,16 @@ class TrickRepository extends ServiceEntityRepository implements RepositoryCount
         if (!empty($pictures)) {
             foreach ($pictures as $picture) {
                 $picturesName[] = "{$picture->getName()}.{$picture->getExtension()}";
-                //$entityManager->remove($picture);
+                $entityManager->remove($picture);
             }
         }
 
-        //$videos = $trick->getVideos();
-        //if (!empty($videos)) {
-        //    foreach ($videos as $video) {
-        //        $entityManager->remove($video);
-        //    }
-        //}
+        $videos = $trick->getVideos();
+        if (!empty($videos)) {
+            foreach ($videos as $video) {
+                $entityManager->remove($video);
+            }
+        }
 
         if (!empty($comments)) {
             foreach ($comments as $comment) {

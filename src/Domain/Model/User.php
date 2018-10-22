@@ -198,7 +198,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        return null;
+        return '';
     }
 
     /**

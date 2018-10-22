@@ -16,7 +16,7 @@ interface VideoBuilderInterface
     public function build(
         VideoDTOInterface $dto,
         TrickInterface $trick
-    );
+    ): self;
 
     /**
      * @return VideoInterface

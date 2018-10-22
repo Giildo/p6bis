@@ -2,9 +2,7 @@
 
 namespace App\UI\Responders\Trick;
 
-use App\Domain\Model\Interfaces\CommentInterface;
 use App\Domain\Model\Interfaces\TrickInterface;
-use App\Domain\Model\Trick;
 use App\UI\Presenters\Interfaces\Trick\ShowTrickPresenterInterface;
 use App\UI\Responders\Interfaces\Trick\ShowTrickResponderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -50,13 +48,13 @@ class ShowTrickResponder implements ShowTrickResponderInterface
         ?int $paging = 0
     ) {
         return $redirect ?
-            new RedirectResponse($this->urlGenerator->generate($path, $parameters)) :
-            new Response($this->presenter->showTrickPresentation(
-                $trick,
-                $formComment,
-                $comments,
-                $numberPage,
-                $paging
-            ));
+            new RedirectResponse(
+                $this->urlGenerator->generate($path, $parameters)
+            ) :
+            new Response(
+                $this->presenter->showTrickPresentation(
+                    $trick, $formComment, $numberPage, $comments, $paging
+                )
+            );
     }
 }

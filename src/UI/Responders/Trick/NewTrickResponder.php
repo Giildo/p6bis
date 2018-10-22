@@ -28,8 +28,7 @@ class NewTrickResponder implements NewTrickResponderInterface
     public function __construct(
         NewTrickPresenterInterface $presenter,
         UrlGeneratorInterface $urlGenerator
-    )
-    {
+    ) {
         $this->presenter = $presenter;
         $this->urlGenerator = $urlGenerator;
     }

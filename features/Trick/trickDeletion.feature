@@ -10,7 +10,7 @@ Feature: As an visitor connected, I need to be able to update the details of a t
     Then I should be on "/connexion"
 
   Scenario: [Fail] The user is redirected if the slug in URI is wrong.
-    Given I load following file "/user/01.specific_user.yml"
+    Given I load a specific user
     And I am logged with username "JohnDoe" and with password "12345678"
     And I am on "/espace-utilisateur/trick/suppression/badSlug"
     Then I should be on "/accueil"
@@ -20,4 +20,3 @@ Feature: As an visitor connected, I need to be able to update the details of a t
     And I am logged with username "JohnDoe" and with password "12345678"
     And I am on "/espace-utilisateur/trick/suppression/mute"
     Then I should be on "/accueil"
-    And I should see "La figure a été supprimée avec succès."

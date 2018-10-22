@@ -34,7 +34,7 @@ class TrickModificationHandler implements TrickModificationHandlerInterface
     /**
      * @var PictureSaveHelperInterface
      */
-    private $pictureSave;
+    private $saveHelper;
 
     /**
      * TrickModificationHandler constructor.
@@ -43,20 +43,20 @@ class TrickModificationHandler implements TrickModificationHandlerInterface
      * @param TrickModifierInterface $trickModifier
      * @param PictureBuilderInterface $pictureBuilder
      * @param VideoBuilderInterface $videoBuilder
-     * @param PictureSaveHelperInterface $pictureSave
+     * @param PictureSaveHelperInterface $saveHelper
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         TrickModifierInterface $trickModifier,
         PictureBuilderInterface $pictureBuilder,
         VideoBuilderInterface $videoBuilder,
-        PictureSaveHelperInterface $pictureSave
+        PictureSaveHelperInterface $saveHelper
     ) {
         $this->entityManager = $entityManager;
         $this->trickModifier = $trickModifier;
         $this->pictureBuilder = $pictureBuilder;
         $this->videoBuilder = $videoBuilder;
-        $this->pictureSave = $pictureSave;
+        $this->saveHelper = $saveHelper;
     }
 
     /**
@@ -104,7 +104,7 @@ class TrickModificationHandler implements TrickModificationHandlerInterface
             $this->entityManager->flush();
 
             if (!empty($newPictures)) {
-                $this->pictureSave->save($newPictures);
+                $this->saveHelper->save($newPictures);
             }
 
             return true;

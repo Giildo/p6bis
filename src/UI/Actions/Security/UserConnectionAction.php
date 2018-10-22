@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Twig_Error_Loader;
 use Twig_Error_Runtime;
 use Twig_Error_Syntax;
@@ -38,8 +37,7 @@ class UserConnectionAction
     public function __construct(
         UserConnectionResponderInterface $responder,
         FormFactoryInterface $formFactory
-    )
-    {
+    ) {
         $this->responder = $responder;
         $this->formFactory = $formFactory;
     }
@@ -48,7 +46,6 @@ class UserConnectionAction
      * @Route(path="/connexion", name="user_connection")
      *
      * @param Request $request
-     * @param AuthenticationUtils $utils
      *
      * @return Response
      *
@@ -56,17 +53,14 @@ class UserConnectionAction
      * @throws Twig_Error_Runtime
      * @throws Twig_Error_Syntax
      */
-    public function connection(Request $request, AuthenticationUtils $utils): Response
+    public function connection(Request $request): Response
     {
-        $errors = $utils->getLastAuthenticationError();
-
-        $lastUserConnected = $utils->getLastUsername();
-
         $form = $this->formFactory->create(UserConnectionType::class)
-                                  ->handleRequest($request);
+                                  ->handleRequest($request)
+        ;
 
         return $this->responder->userConnectionResponse(
-            $form, $errors, $lastUserConnected
+            $form
         );
     }
 }

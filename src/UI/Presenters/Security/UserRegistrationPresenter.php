@@ -27,7 +27,8 @@ class UserRegistrationPresenter implements UserRegistrationPresenterInterface
      */
     public function userRegistrationPresentation(FormInterface $form): string
     {
-        return $this->twig->render('Security/registration.html.twig', [
+        return $this->twig->render(
+            'Security/registration.html.twig', [
             'form' => $form->createView(),
         ]);
     }

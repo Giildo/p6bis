@@ -11,6 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 interface AddCommentHandlerInterface
 {
     /**
+     * The listener tests if the comment is already in the database:
+     * - if it's in the database, we update the comment
+     * - if not, we create the comment
+     *
      * @param FormInterface $form
      * @param TrickInterface $trick
      * @param Request $request

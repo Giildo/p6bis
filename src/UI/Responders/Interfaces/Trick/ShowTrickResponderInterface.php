@@ -7,6 +7,9 @@ use App\Domain\Model\Interfaces\TrickInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Twig_Error_Loader;
+use Twig_Error_Runtime;
+use Twig_Error_Syntax;
 
 interface ShowTrickResponderInterface
 {
@@ -21,6 +24,10 @@ interface ShowTrickResponderInterface
      * @param int|null $paging
      *
      * @return RedirectResponse|Response
+     *
+     * @throws Twig_Error_Loader
+     * @throws Twig_Error_Runtime
+     * @throws Twig_Error_Syntax
      */
     public function showTrickResponse(
         ?bool $redirect = true,

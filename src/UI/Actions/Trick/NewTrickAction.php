@@ -58,7 +58,8 @@ class NewTrickAction
     public function newTrick(Request $request): Response
     {
         $form = $this->formFactory->create(NewTrickType::class)
-                                  ->handleRequest($request);
+                                  ->handleRequest($request)
+        ;
 
         if (!is_null($this->handler->handle($form))) {
             return $this->responder->response(true);

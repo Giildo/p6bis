@@ -27,10 +27,11 @@ class HomePagePresenter implements HomePagePresenterInterface
      */
     public function homePagePresentation(
         array $tricks,
-        int $pageNumber,
-        int $currentPage
+        int $currentPage,
+        ?int $pageNumber = 0
     ): string {
-        return $this->twig->render('Trick/home.html.twig', [
+        return $this->twig->render(
+            'Trick/home.html.twig', [
             'tricks'      => $tricks,
             'pageNumber'  => $pageNumber,
             'currentPage' => $currentPage,

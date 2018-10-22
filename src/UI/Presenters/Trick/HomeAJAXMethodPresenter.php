@@ -2,11 +2,10 @@
 
 namespace App\UI\Presenters\Trick;
 
-use App\UI\Presenters\Interfaces\Trick\NewTrickPresenterInterface;
-use Symfony\Component\Form\FormInterface;
+use App\UI\Presenters\Interfaces\Trick\HomeAJAXMethodPresenterInterface;
 use Twig\Environment;
 
-class NewTrickPresenter implements NewTrickPresenterInterface
+class HomeAJAXMethodPresenter implements HomeAJAXMethodPresenterInterface
 {
     /**
      * @var Environment
@@ -14,7 +13,7 @@ class NewTrickPresenter implements NewTrickPresenterInterface
     private $twig;
 
     /**
-     * NewTrickPresenter constructor.
+     * HomeAJAXMethodPresenter constructor.
      * @param Environment $twig
      */
     public function __construct(Environment $twig)
@@ -25,11 +24,11 @@ class NewTrickPresenter implements NewTrickPresenterInterface
     /**
      * {@inheritdoc}
      */
-    public function newTrickPresentation(FormInterface $form): string
+    public function presentation(array $tricks)
     {
         return $this->twig->render(
-            'Trick/new.html.twig', [
-            'form' => $form->createView(),
+            'Trick/home_load.html.twig', [
+            'tricks' => $tricks
         ]);
     }
 }

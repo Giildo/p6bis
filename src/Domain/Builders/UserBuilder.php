@@ -28,9 +28,12 @@ class UserBuilder implements UserBuilderInterface
         $this->encoder = $encoder;
     }
 
-    public function createUser(
+    /**
+     * {@inheritdoc}
+     */
+    public function build(
         UserRegistrationDTO $dto
-    ): self {
+    ): UserBuilderInterface {
         $this->user = new User(
             $dto->username,
             $dto->firstName,

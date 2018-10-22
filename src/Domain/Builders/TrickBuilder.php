@@ -4,7 +4,7 @@ namespace App\Domain\Builders;
 
 use App\Application\Helpers\Interfaces\SluggerHelperInterface;
 use App\Domain\Builders\Interfaces\TrickBuilderInterface;
-use App\Domain\DTO\Interfaces\Trick\NewTrickDTOInterface;
+use App\Domain\DTO\Trick\NewTrickDTO;
 use App\Domain\Model\Trick;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -39,7 +39,7 @@ class TrickBuilder implements TrickBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(NewTrickDTOInterface $datas): self
+    public function build(NewTrickDTO $datas): TrickBuilderInterface
     {
         $this->trick = new Trick(
             $this->sluggerHelper->slugify($datas->name),

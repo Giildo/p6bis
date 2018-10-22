@@ -26,13 +26,12 @@ class ProfilePictureResponder implements ProfilePictureResponderInterface
     }
 
     /**
-     * @param FormInterface $form
-     * @param UserInterface $user
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function response(FormInterface $form, UserInterface $user): Response
-    {
+    public function response(
+        FormInterface $form,
+        UserInterface $user
+    ): Response {
         return new Response($this->presenter->presentation($form, $user));
     }
 }

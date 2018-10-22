@@ -30,7 +30,8 @@ class ProfilePicturePresenter implements ProfilePicturePresenterInterface
         FormInterface $form,
         UserInterface $user
     ): string {
-        return $this->twig->render('User/pictureProfile.html.twig', [
+        return $this->twig->render(
+            'User/pictureProfile.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
         ]);

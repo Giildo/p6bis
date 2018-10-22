@@ -21,7 +21,7 @@ class VideoBuilder implements VideoBuilderInterface
     public function build(
         VideoDTOInterface $dto,
         TrickInterface $trick
-    ): self {
+    ): VideoBuilderInterface {
         $name = [];
         preg_match('/watch\?v\=([\w\-]+)$/', $dto->url, $name);
 

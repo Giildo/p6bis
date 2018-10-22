@@ -24,7 +24,7 @@ interface PictureBuilderInterface
         ?int $counter = 0,
         ?bool $headPicture = false,
         ?UserInterface $user = null
-    );
+    ): self;
 
     /**
      * @return PictureInterface

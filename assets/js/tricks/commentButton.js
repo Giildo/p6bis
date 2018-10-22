@@ -1,8 +1,16 @@
-let button = document.getElementById("comment-button");
+let button = document.getElementById("commentButton");
 let buttonText = document.getElementById("commentButtonText");
-let anchor = window.location.hash;
+let newButtonText = document.createElement("span");
+newButtonText.innerText = "Modifier le commentaire";
+newButtonText.setAttribute("id", "commentButtonText");
 
-if (anchor === "#comment-form") {
-    buttonText.innerText = "Modifier le commentaire";
-    button.replaceChild(buttonText, buttonText);
-}
+window.location.search.substr(1).split('&').forEach(function (item) {
+    let itemSplitted = item.split('=');
+
+    if (itemSplitted[0] === 'action') {
+        if (itemSplitted[1] === 'modifier') {
+            buttonText.innerText = "Modifier le commentaire";
+            button.replaceChild(newButtonText, buttonText);
+        }
+    }
+});
