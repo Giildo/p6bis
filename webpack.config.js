@@ -41,6 +41,8 @@ Encore
 
     .addStyleEntry('css/user/profilePicture', './assets/scss/user/profilePicture.scss')
 
+    .addStyleEntry('css/error/error', './assets/scss/error/error.scss')
+
     /*
      * FEATURE CONFIG
      *
