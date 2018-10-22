@@ -230,12 +230,7 @@ $sectionComCommentDateFontSize: 0.8em;
 
     div {
       background-color: $khaki;
-      padding: {
-        top: $footerSectionDivPadding;
-        right: $footerSectionDivPadding;
-        bottom: $footerSectionDivPadding;
-        left: 0;
-      }
+      padding: 7px 7px 7px 0;
 
       @media screen and (max-width: $medium) {
         margin: 10px;

@@ -18,7 +18,7 @@
             <div id="profile-picture">
                 <h2>Image de profil actuelle</h2>
                 <div>
-                    <img src="{{ asset('pic/users/' ~ user.picture.name ~ '.' ~ user.picture.extension) }}"
+                    <img src="{{ asset('pic/users/' ~user.picture.name~ '.' ~user.picture.extension) }}"
                          alt="{{ user.picture.description }}"
                          class="img-fluid"/>
                     <a href="{{ path('Profile_picture_delete_picture') }}?s={{ user.picture.name }}&t={{ user.picture.deleteToken }}"

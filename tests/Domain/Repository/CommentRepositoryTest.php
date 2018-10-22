@@ -26,11 +26,6 @@ class CommentRepositoryTest extends KernelTestCase
     private $repository;
 
     /**
-     * @var string
-     */
-    private $commentId;
-
-    /**
      * @var bool
      */
     private $initialized;
