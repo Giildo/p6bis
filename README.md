@@ -1,0 +1,2 @@
+# p6bis
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/06cd7c8c1c2041abb4b75d4f6611d17e)](https://app.codacy.com/app/Giildo/p6bis?utm_source=github.com&utm_medium=referral&utm_content=Giildo/p6bis&utm_campaign=Badge_Grade_Dashboard)
