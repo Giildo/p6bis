@@ -2,10 +2,6 @@
 
 {% block title %}{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/css/trick/new.css') }}"/>
-{% endblock %}
-
 {% block body %}
     <section class="section-form">
         <h1>Nouvelle trick</h1>
@@ -13,8 +9,4 @@
         {% form_theme form 'Form/trick_new.html.twig' %}
         {{ form(form) }}
     </section>
-{% endblock %}
-
-{% block javascripts %}
-    <script type="text/javascript" src="{{ asset('build/js/collectionTypeNewTrick.js') }}"></script>
 {% endblock %}

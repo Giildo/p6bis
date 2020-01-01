@@ -2,10 +2,6 @@
 
 {% block title %}Snowtricks{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/css/trick/home.css') }}"/>
-{% endblock %}
-
 {% block body %}
     <h1>Snow<span>Tricks</span></h1>
 
@@ -43,13 +39,4 @@
             </footer>
         </div>
     </div>
-{% endblock %}
-
-{% block javascripts %}
-    <script type="text/javascript"
-            src="{{ asset('build/js/homeAddTricks.js') }}"></script>
-    <script type="text/javascript"
-            src="{{ asset('build/js/upButton.js') }}"></script>
-    <script type="text/javascript"
-            src="{{ asset('build/js/modalWindow.js') }}"></script>
 {% endblock %}

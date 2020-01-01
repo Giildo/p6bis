@@ -2,11 +2,6 @@
 
 {% block title %}{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet"
-          href="{{ asset('build/css/trick/modification.css') }}"/>
-{% endblock %}
-
 {% block body %}
     <section class="section-form">
         <h1>Modification de {{ trick.name }}</h1>
@@ -43,9 +38,4 @@
             {% endif %}
         </aside>
     </section>
-{% endblock %}
-
-{% block javascripts %}
-    <script type="text/javascript"
-            src="{{ asset('build/js/collectionTypeTrickModification.js') }}"></script>
 {% endblock %}

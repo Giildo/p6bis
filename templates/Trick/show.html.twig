@@ -2,10 +2,6 @@
 
 {% block title %}{{ trick.name }}{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/css/trick/show.css') }}"/>
-{% endblock %}
-
 {% block body %}
     <section id="section-show">
         <header>
@@ -198,13 +194,4 @@
             </footer>
         </div>
     </div>
-{% endblock %}
-
-{% block javascripts %}
-    <script type="text/javascript"
-            src="{{ asset('build/js/tricks/modal.js') }}"></script>
-    <script type="text/javascript"
-            src="{{ asset('build/js/tricks/commentButton.js') }}"></script>
-    <script type="text/javascript"
-            src="{{ asset('build/js/modalWindow.js') }}"></script>
 {% endblock %}
