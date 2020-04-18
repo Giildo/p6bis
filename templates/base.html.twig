@@ -8,7 +8,7 @@
     <title>{% block title %}Snowtricks{% endblock %}</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('build/app.css') }}"/>
+    {{ encore_entry_link_tags('app') }}
 
     <!--GoogleIcons-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -72,6 +72,15 @@
     </div>
 </footer>
 
-<script type="text/javascript" src="{{ asset('build/app.js') }}"></script>
+
+{{ encore_entry_script_tags('app') }}
+{{ encore_entry_script_tags('collectionTypeNewTrick') }}
+{{ encore_entry_script_tags('collectionTypeTrickModification') }}
+{{ encore_entry_script_tags('homeAddTricks') }}
+{{ encore_entry_script_tags('menuButton') }}
+{{ encore_entry_script_tags('modalWindow') }}
+{{ encore_entry_script_tags('upButton') }}
+{{ encore_entry_script_tags('commentButton') }}
+{{ encore_entry_script_tags('modal') }}
 </body>
 </html>

@@ -24,6 +24,14 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
+    .addEntry('collectionTypeNewTrick', './assets/js/collectionTypeNewTrick.js')
+    .addEntry('collectionTypeTrickModification', './assets/js/collectionTypeTrickModification.js')
+    .addEntry('homeAddTricks', './assets/js/homeAddTricks.js')
+    .addEntry('menuButton', './assets/js/menuButton.js')
+    .addEntry('modalWindow', './assets/js/modalWindow.js')
+    .addEntry('upButton', './assets/js/upButton.js')
+    .addEntry('commentButton', './assets/js/tricks/commentButton.js')
+    .addEntry('modal', './assets/js/tricks/modal.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
