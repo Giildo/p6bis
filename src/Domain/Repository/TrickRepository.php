@@ -7,10 +7,10 @@ use App\Domain\Model\Interfaces\TrickInterface;
 use App\Domain\Model\Trick;
 use App\Domain\Repository\Interfaces\RepositoryCounterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
 
 class TrickRepository extends ServiceEntityRepository implements RepositoryCounterInterface
 {
@@ -29,41 +29,39 @@ class TrickRepository extends ServiceEntityRepository implements RepositoryCount
         $first = ($paging - 1) * Trick::NUMBER_OF_ITEMS;
 
         return $this->createQueryBuilder('trick')
-            ->orderBy('trick.createdAt')
-            ->where('trick.published = 1')
-            ->setFirstResult($first)
-            ->setMaxResults(Trick::NUMBER_OF_ITEMS)
-            ->orderBy('trick.updatedAt', 'DESC')
-            ->getQuery()
-            ->execute();
+                    ->orderBy('trick.createdAt')
+                    ->where('trick.published = true')
+                    ->setFirstResult($first)
+                    ->setMaxResults(Trick::NUMBER_OF_ITEMS)
+                    ->orderBy('trick.updatedAt', 'DESC')
+                    ->getQuery()
+                    ->execute();
     }
 
     /**
      * @param string $trickSlug
      *
      * @return TrickInterface|null
-     *
      * @throws NonUniqueResultException
      */
     public function loadOneTrickWithCategoryAndAuthor(string $trickSlug): ?TrickInterface
     {
         return $this->createQueryBuilder('trick')
-            ->leftJoin('trick.videos', 'videos')
-            ->leftJoin('trick.pictures', 'pictures')
-            ->addSelect('videos')
-            ->addSelect('pictures')
-            ->where('trick.slug = :slug')
-            ->setParameter('slug', $trickSlug)
-            ->getQuery()
-            ->getOneOrNullResult();
+                    ->leftJoin('trick.videos', 'videos')
+                    ->leftJoin('trick.pictures', 'pictures')
+                    ->addSelect('videos')
+                    ->addSelect('pictures')
+                    ->where('trick.slug = :slug')
+                    ->setParameter('slug', $trickSlug)
+                    ->getQuery()
+                    ->getOneOrNullResult();
     }
 
     /**
-     * @param TrickInterface $trick
+     * @param TrickInterface                $trick
      * @param CommentInterface[]|array|null $comments
      *
      * @return void
-     *
      * @throws ORMException
      * @throws OptimisticLockException
      */
@@ -111,9 +109,9 @@ class TrickRepository extends ServiceEntityRepository implements RepositoryCount
     public function countEntries(?string $identifier = null): int
     {
         return (int)$this->createQueryBuilder('trick')
-            ->select('count(trick.slug)')
-            ->where('trick.published = 1')
-            ->getQuery()
-            ->getSingleScalarResult();
+                         ->select('count(trick.slug)')
+                         ->where('trick.published = true')
+                         ->getQuery()
+                         ->getSingleScalarResult();
     }
 }

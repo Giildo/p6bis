@@ -1,0 +1,5 @@
+coverage/
+.idea/
+.gitignore
+node_modules/
+tests/

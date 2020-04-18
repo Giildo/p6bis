@@ -1,0 +1,69 @@
+version: "3.6"
+
+services:
+  # Core configuration
+  php-fpm:
+    container_name: ${CONTAINER_NAME}_php-fpm
+    build:
+      context: .
+      target: base_php
+    ports:
+      - '${PHP_PORT}:9500'
+    volumes:
+      - './:${PHP_WORKFOLDER}:rw'
+      - './docker/php/conf/php.ini:/usr/local/etc/php/php.ini'
+      # - './docker/php/conf/production/php.ini:/usr/local/etc/php/php.ini' -> Used for production.
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=${PHP_PORT}'
+      - 'traefik.docker.network=web'
+    networks:
+      - web
+
+  nginx:
+    container_name: ${CONTAINER_NAME}_nginx
+    image: nginx
+    ports:
+      - '${NGINX_PORT}:80'
+    links:
+      - php-fpm
+    volumes:
+      - './:${PHP_WORKFOLDER}:rw'
+      - './docker/nginx/conf/core/nginx.conf:/etc/nginx/nginx.conf'
+      - './docker/nginx/conf/development/jwt_server.conf:/etc/nginx/conf.d/default.conf'
+      # - './docker/nginx/conf/production/jwt_server.conf:/etc/nginx/conf.d/default.conf' -> Uncomment this line for production.
+      - './docker/nginx/logs/:/var/log/nginx'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=${NGINX_PORT}'
+      - 'traefik.http.routers.home.rule=Host(`snowtricks.jojotique.fr`)'
+      - 'traefik.http.routers.home.entrypoints=websecure,web'
+      - 'traefik.http.routers.home.tls=true'
+      - 'traefik.http.routers.home.tls.certresolver=jojotique'
+    networks:
+      - web
+
+  # DB configuration
+  postgresql:
+    container_name: ${CONTAINER_NAME}_postgresql
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_DB: '${POSTGRES_DB}'
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+    ports:
+      - '${POSTGRES_PORT}:5432'
+    volumes:
+      - 'db-data:/var/lib/postgresql/data:rw'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=web'
+    networks:
+      - web
+
+volumes:
+  db-data: {}
+
+networks:
+  web:
+    external: true
