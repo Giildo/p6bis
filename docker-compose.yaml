@@ -37,8 +37,11 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=${NGINX_PORT}'
+      - 'traefik.http.routers.redirs.rule=hostregexp(`snowtricks.jojotique.fr`)'
+      - 'traefik.http.routers.redirs.entrypoints=web'
+      - 'traefik.http.routers.redirs.middlewares=redirect-to-https'
       - 'traefik.http.routers.home.rule=Host(`snowtricks.jojotique.fr`)'
-      - 'traefik.http.routers.home.entrypoints=websecure,web'
+      - 'traefik.http.routers.home.entrypoints=websecure'
       - 'traefik.http.routers.home.tls=true'
       - 'traefik.http.routers.home.tls.certresolver=jojotique'
     networks:
