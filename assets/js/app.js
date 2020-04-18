@@ -6,27 +6,22 @@
  */
 
 // any CSS you require will output into a single css file (app.css in this case)
-require('../scss/form.scss');
-require('../scss/error/error.scss');
-require('../scss/gcu/gcu.scss');
-require('../scss/global/global.scss');
-require('../scss/security/formFrame.scss');
-require('../scss/trick/home.scss');
-require('../scss/trick/modification.scss');
-require('../scss/trick/new.scss');
-require('../scss/trick/show.scss');
-require('../scss/user/profilePicture.scss');
+import '../scss/form.scss'
+import '../scss/error/error.scss'
+import '../scss/gcu/gcu.scss'
+import '../scss/global/global.scss'
+import '../scss/security/formFrame.scss'
+import '../scss/trick/home.scss'
+import '../scss/trick/modification.scss'
+import '../scss/trick/new.scss'
+import '../scss/trick/show.scss'
+import '../scss/user/profilePicture.scss'
 
-require('./collectionTypeNewTrick');
-require('./collectionTypeTrickModification');
-require('./homeAddTricks');
-require('./menuButton');
-require('./modalWindow');
-require('./upButton');
-require('./tricks/commentButton');
-require('./tricks/modal');
-
-// Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-// const $ = require('jquery');
-
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+import './collectionTypeNewTrick'
+import './collectionTypeTrickModification'
+import './homeAddTricks'
+import './menuButton'
+import './modalWindow'
+import './upButton'
+import './tricks/commentButton'
+import './tricks/modal'
