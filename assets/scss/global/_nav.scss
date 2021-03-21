@@ -16,7 +16,7 @@ $navLinkBorderSize: 3px;
   #logo {
     width: $navElementsHeight;
     padding: $navElementsMargin;
-    background-color: $navBGColor + 50;
+    background-color: $navBGColor;
   }
 
   @media screen and (max-width: $small) {

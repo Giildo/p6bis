@@ -22,7 +22,7 @@
     "symfony/twig-bridge": "4.4.*",
     "symfony/twig-pack": "^1.0",
     "symfony/validator": "4.4.*",
-    "symfony/webpack-encore-bundle": "^1.7",
+    "symfony/webpack-encore-bundle": "^1.11",
     "symfony/yaml": "4.4.*"
   },
   "require-dev": {
