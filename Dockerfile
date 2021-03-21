@@ -1,32 +1,34 @@
 # Development build
-FROM php:7.4.3-fpm-alpine as base_php
+FROM php:7.4-apache
 
-ENV WORKPATH "/var/www/snowtricks"
+ENV WORKDIR "/var/www/html"
 
-## Installe toutes les dépendances nécessaires, voir si elles le sont toutes
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev gnupg autoconf git zlib-dev curl go \
-    && docker-php-ext-configure pgsql --with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install intl pdo_pgsql opcache json pgsql
+RUN apt-get update -y \
+  && apt-get install -y \
+        libzip-dev \
+        zip \
+        curl \
+        libxml2-dev \
+  && apt-get install -y libpq-dev \
+  && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+  && docker-php-ext-install zip pdo_pgsql pgsql xml
 
-## Récupère le fichier php.ini que j'ai dans le dossier pour le mettre dans le container
-COPY docker/php/conf/php.ini /usr/local/etc/php/php.ini
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+ENV NVM_DIR=/root/.nvm
+RUN . "$NVM_DIR/nvm.sh" && nvm install --lts
 
-# xdebug
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
+RUN a2enmod rewrite && service apache2 restart
 
-# Composer
-ENV COMPOSER_ALLOW_SUPERUSER 1
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY . ${WORKDIR}
 
-RUN mkdir -p ${WORKPATH} \
-    && mkdir -p \
-       ${WORKPATH}/var/cache \
-       ${WORKPATH}/var/logs \
-       ${WORKPATH}/var/sessions \
-    && chown -R www-data /tmp/ \
-    && chown -R www-data ${WORKPATH}/var
+RUN rm -rf ${WORKDIR}/var && rm -rf ${WORKDIR}/vendor
 
-WORKDIR ${WORKPATH}
+RUN mkdir -p \
+	${WORKDIR}/var/cache \
+	${WORKDIR}/var/logs \
+	${WORKDIR}/var/sessions \
+	&& chown -R www-data ${WORKDIR}/var
 
-COPY --chown=www-data:www-data . ./
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php \
+    && mv composer.phar /usr/bin/composer
